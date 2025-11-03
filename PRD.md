@@ -12,12 +12,12 @@ This is primarily an informational site focused on presenting projects, skills, 
 
 ## Essential Features
 
-### GitHub Integration
-- **Functionality**: Fetch and display pinned repositories from github.com/Napolitain
-- **Purpose**: Showcase best work automatically without manual updates
+### GitHub Integration - Pinned Repositories
+- **Functionality**: Fetch and display pinned repositories from github.com/Napolitain, with fallback to recent repos
+- **Purpose**: Showcase best work automatically without manual updates, prioritizing pinned repos
 - **Trigger**: On page load
-- **Progression**: Load page → Fetch GitHub API → Display repos with name/description/stars/language
-- **Success criteria**: Repos display with accurate data, graceful loading states, error handling for API failures
+- **Progression**: Load page → Fetch pinned repos from gh-pinned-repos API → Fetch detailed repo data from GitHub API → Display repos with name/description/stars/language/topics → If no pinned repos, fallback to recent repos
+- **Success criteria**: Pinned repos display with accurate data, visual indicator for pinned status, graceful loading states, error handling for API failures, fallback to recent repos if pinned unavailable
 
 ### Hero Section
 - **Functionality**: Introduce visitor to who you are and what you do
@@ -27,11 +27,11 @@ This is primarily an informational site focused on presenting projects, skills, 
 - **Success criteria**: Content is immediately readable, animation enhances without delaying, CTA is obvious
 
 ### Skills Display
-- **Functionality**: Visual representation of technical skills and proficiencies
-- **Purpose**: Quick overview of technical capabilities for recruiters and collaborators
-- **Trigger**: Scroll into view
-- **Progression**: User scrolls → Section enters viewport → Skills animate in with icons → Organized by category
-- **Success criteria**: Skills are scannable, categorized logically, visually appealing
+- **Functionality**: Dynamically extract and display technical skills from GitHub repositories and cv-overleaf repo
+- **Purpose**: Automated, accurate skill representation based on actual work and resume
+- **Trigger**: On page load (async)
+- **Progression**: Load page → Fetch all repos from GitHub → Fetch CV repo contents → Extract skills using LLM from CV text → Extract languages and topics from repos → Combine and deduplicate skills → Categorize skills using LLM → Display organized by category with icons
+- **Success criteria**: Skills accurately reflect CV and repo data, properly categorized (Languages, Frontend, Backend, Tools, Other), no duplicates, loading states shown, graceful fallback to default skills on error
 
 ### Contact Section
 - **Functionality**: Provide ways to get in touch (GitHub, email, LinkedIn, etc.)
@@ -43,10 +43,14 @@ This is primarily an informational site focused on presenting projects, skills, 
 ## Edge Case Handling
 
 - **GitHub API Failure**: Show placeholder message with link to GitHub profile directly
-- **Slow Network**: Display skeleton loaders for GitHub repos section
+- **Pinned Repos Unavailable**: Fallback to fetching recent repositories (sorted by update date)
+- **CV Repo Not Found**: Skills extraction continues with repo data only, uses fallback default skills if all fails
+- **LLM API Failure**: Use simpler categorization based on common patterns, or show uncategorized skills
+- **Slow Network**: Display skeleton loaders for GitHub repos section and skills section
 - **No JavaScript**: Core content (name, bio, contact links) remains accessible
 - **Mobile Viewport**: Single column layout, touch-friendly hit targets, readable text sizes
-- **Long Project Descriptions**: Truncate with read more option or card expansion
+- **Long Project Descriptions**: Truncate with line-clamp, shows in full on hover/click
+- **Empty Skills Category**: Category is not displayed if no skills match that category
 
 ## Design Direction
 
@@ -87,9 +91,10 @@ Animations should be purposeful and subtle - enhancing the sense of quality with
 
 - **Components**: 
   - Hero: Custom component with framer-motion for intro animation
-  - Project Cards: `Card` component with custom styling, hover effects with scale transform
-  - Skills: `Badge` components grouped in flex containers
+  - Project Cards: `Card` component with custom styling, hover effects with scale transform, PushPin icon for pinned repos
+  - Skills: `Badge` components grouped in flex containers, dynamically loaded from GitHub data
   - Contact: `Button` components for CTAs, icons from phosphor-icons
+  - Loading States: `Skeleton` components for async data loading
   - Navigation: Custom sticky header with smooth scroll behavior
 
 - **Customizations**: 
@@ -106,7 +111,8 @@ Animations should be purposeful and subtle - enhancing the sense of quality with
   - GithubLogo, LinkedinLogo, EnvelopeSimple for contact
   - ArrowRight for CTAs
   - Star, GitFork for repo stats
-  - Code, Desktop, Database for skill categories
+  - PushPin for pinned repositories
+  - Code, Desktop, Database, Wrench, GitBranch for skill categories
 
 - **Spacing**: 
   - Section padding: py-24 (mobile: py-16)
