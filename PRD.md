@@ -12,12 +12,19 @@ This is primarily an informational site focused on presenting projects, skills, 
 
 ## Essential Features
 
-### GitHub Integration - Pinned Repositories
-- **Functionality**: Fetch and display pinned repositories from github.com/Napolitain, with fallback to recent repos
+### GitHub Integration - Pinned Repositories (Featured)
+- **Functionality**: Fetch and display pinned repositories from github.com/Napolitain (non-forks only)
 - **Purpose**: Showcase best work automatically without manual updates, prioritizing pinned repos
 - **Trigger**: On page load
-- **Progression**: Load page → Fetch pinned repos from gh-pinned-repos API → Fetch detailed repo data from GitHub API → Display repos with name/description/stars/language/topics → If no pinned repos, fallback to recent repos
-- **Success criteria**: Pinned repos display with accurate data, visual indicator for pinned status, graceful loading states, error handling for API failures, fallback to recent repos if pinned unavailable
+- **Progression**: Load page → Fetch pinned repos from gh-pinned-repos API → Fetch detailed repo data from GitHub API → Filter out forks → Display repos with name/description/stars/language/topics
+- **Success criteria**: Pinned non-fork repos display with accurate data, visual indicator for pinned status, graceful loading states, error handling for API failures
+
+### GitHub Integration - All Projects (After Skills)
+- **Functionality**: Fetch and display all repositories from github.com/Napolitain and org fds-napolitain (non-forks only)
+- **Purpose**: Comprehensive view of all work across personal and organization accounts
+- **Trigger**: On page load
+- **Progression**: Load page → Fetch user repos from GitHub API → Fetch org repos from GitHub API → Combine and deduplicate → Filter out forks → Sort by update date → Display first 9 → Show More button reveals remaining
+- **Success criteria**: Combined repos display correctly, no duplicates, non-forks only, Show More/Less toggle works, owner label shows for each repo
 
 ### Hero Section
 - **Functionality**: Introduce visitor to who you are and what you do
@@ -27,11 +34,11 @@ This is primarily an informational site focused on presenting projects, skills, 
 - **Success criteria**: Content is immediately readable, animation enhances without delaying, CTA is obvious
 
 ### Skills Display
-- **Functionality**: Dynamically extract and display technical skills from GitHub repositories and cv-overleaf repo
+- **Functionality**: Dynamically extract and display technical skills from GitHub repositories (Napolitain + fds-napolitain org) and cv-overleaf repo
 - **Purpose**: Automated, accurate skill representation based on actual work and resume
 - **Trigger**: On page load (async)
-- **Progression**: Load page → Fetch all repos from GitHub → Fetch CV repo contents → Extract skills using LLM from CV text → Extract languages and topics from repos → Combine and deduplicate skills → Categorize skills using LLM → Display organized by category with icons
-- **Success criteria**: Skills accurately reflect CV and repo data, properly categorized (Languages, Frontend, Backend, Tools, Other), no duplicates, loading states shown, graceful fallback to default skills on error
+- **Progression**: Load page → Fetch all repos from personal GitHub → Fetch all repos from fds-napolitain org → Fetch CV repo contents → Extract skills using LLM from CV text → Extract languages and topics from repos → Combine and deduplicate skills → Categorize skills using LLM → Display organized by category with icons
+- **Success criteria**: Skills accurately reflect CV and repo data from both accounts, properly categorized (Languages, Frontend, Backend, Tools, Other), no duplicates, loading states shown, graceful fallback to default skills on error
 
 ### Contact Section
 - **Functionality**: Provide ways to get in touch (GitHub, email, LinkedIn, etc.)
@@ -43,14 +50,17 @@ This is primarily an informational site focused on presenting projects, skills, 
 ## Edge Case Handling
 
 - **GitHub API Failure**: Show placeholder message with link to GitHub profile directly
-- **Pinned Repos Unavailable**: Fallback to fetching recent repositories (sorted by update date)
+- **Pinned Repos Unavailable**: Show message asking user to visit GitHub profile
+- **No Pinned Repos**: Show message indicating no pinned repos found
+- **Organization Repos Unavailable**: Continue with personal repos only, no error shown
 - **CV Repo Not Found**: Skills extraction continues with repo data only, uses fallback default skills if all fails
 - **LLM API Failure**: Use simpler categorization based on common patterns, or show uncategorized skills
 - **Slow Network**: Display skeleton loaders for GitHub repos section and skills section
 - **No JavaScript**: Core content (name, bio, contact links) remains accessible
 - **Mobile Viewport**: Single column layout, touch-friendly hit targets, readable text sizes
-- **Long Project Descriptions**: Truncate with line-clamp, shows in full on hover/click
+- **Long Project Descriptions**: Truncate with line-clamp (2 lines), shows on hover with ellipsis
 - **Empty Skills Category**: Category is not displayed if no skills match that category
+- **Many Projects**: Show More button appears after 9 projects, toggles between Show More/Show Less
 
 ## Design Direction
 
@@ -91,11 +101,12 @@ Animations should be purposeful and subtle - enhancing the sense of quality with
 
 - **Components**: 
   - Hero: Custom component with framer-motion for intro animation
-  - Project Cards: `Card` component with custom styling, hover effects with scale transform, PushPin icon for pinned repos
-  - Skills: `Badge` components grouped in flex containers, dynamically loaded from GitHub data
+  - Featured Project Cards: `Card` component with custom styling, hover effects with scale transform, PushPin icon always visible
+  - Other Project Cards: `Card` component showing owner name, grouped in grid layout with Show More/Less toggle
+  - Skills: `Badge` components grouped in flex containers, dynamically loaded from GitHub data (personal + org)
   - Contact: `Button` components for CTAs, icons from phosphor-icons
   - Loading States: `Skeleton` components for async data loading
-  - Navigation: Custom sticky header with smooth scroll behavior
+  - Navigation: Smooth scroll behavior between sections
 
 - **Customizations**: 
   - Card hover states with subtle lift (shadow increase, slight scale)

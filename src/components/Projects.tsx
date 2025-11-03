@@ -4,7 +4,7 @@ import { Star, GitFork, ArrowUpRight, PushPin } from '@phosphor-icons/react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
-import { fetchPinnedRepos, fetchAllRepos } from '@/lib/github'
+import { fetchPinnedRepos } from '@/lib/github'
 
 interface Repository {
   id: number
@@ -15,13 +15,13 @@ interface Repository {
   forks_count: number
   language: string | null
   topics: string[]
+  fork: boolean
 }
 
 const USERNAME = 'Napolitain'
 
 export function Projects() {
   const [pinnedRepos, setPinnedRepos] = useState<Repository[]>([])
-  const [allRepos, setAllRepos] = useState<Repository[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
 
@@ -29,14 +29,7 @@ export function Projects() {
     async function loadRepos() {
       try {
         const pinned = await fetchPinnedRepos(USERNAME)
-        
-        if (pinned.length > 0) {
-          setPinnedRepos(pinned)
-        } else {
-          const all = await fetchAllRepos(USERNAME, 6)
-          setAllRepos(all)
-        }
-        
+        setPinnedRepos(pinned)
         setLoading(false)
       } catch (err) {
         console.error('Failed to load repos:', err)
@@ -47,8 +40,6 @@ export function Projects() {
 
     loadRepos()
   }, [])
-
-  const displayRepos = pinnedRepos.length > 0 ? pinnedRepos : allRepos
 
   return (
     <section id="projects" className="py-24 px-6">
@@ -62,9 +53,7 @@ export function Projects() {
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">Featured Projects</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {pinnedRepos.length > 0 
-              ? 'My pinned repositories showcasing my best work'
-              : 'A selection of my recent work and open source contributions'}
+            My pinned repositories showcasing my best work (non-forks)
           </p>
         </motion.div>
 
@@ -84,10 +73,13 @@ export function Projects() {
           </div>
         )}
 
-        {error && (
+        {(error || (!loading && pinnedRepos.length === 0)) && (
           <Card className="p-12 text-center">
             <p className="text-muted-foreground mb-4">
-              Unable to load projects. Please visit my GitHub profile directly.
+              {error 
+                ? 'Unable to load projects. Please visit my GitHub profile directly.'
+                : 'No pinned repositories found. Please visit my GitHub profile to see all projects.'
+              }
             </p>
             <a 
               href={`https://github.com/${USERNAME}`}
@@ -100,9 +92,9 @@ export function Projects() {
           </Card>
         )}
 
-        {!loading && !error && (
+        {!loading && !error && pinnedRepos.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {displayRepos.map((repo, index) => (
+            {pinnedRepos.map((repo, index) => (
               <motion.div
                 key={repo.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -113,15 +105,13 @@ export function Projects() {
                 <a href={repo.html_url} target="_blank" rel="noopener noreferrer">
                   <Card className="p-6 h-full hover:shadow-lg transition-all duration-300 hover:scale-[1.02] group cursor-pointer">
                     <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center gap-2">
-                        {pinnedRepos.length > 0 && (
-                          <PushPin size={16} weight="fill" className="text-accent" />
-                        )}
-                        <h3 className="text-xl font-semibold group-hover:text-primary transition-colors">
+                      <div className="flex items-center gap-2 flex-1 min-w-0">
+                        <PushPin size={16} weight="fill" className="text-accent flex-shrink-0" />
+                        <h3 className="text-xl font-semibold group-hover:text-primary transition-colors truncate">
                           {repo.name}
                         </h3>
                       </div>
-                      <ArrowUpRight size={20} className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 group-hover:-translate-y-1 transition-all flex-shrink-0" />
+                      <ArrowUpRight size={20} className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 group-hover:-translate-y-1 transition-all flex-shrink-0 ml-2" />
                     </div>
                     
                     <p className="text-muted-foreground mb-4 line-clamp-2 leading-relaxed min-h-[3rem]">

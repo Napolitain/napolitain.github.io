@@ -18,6 +18,7 @@ interface GitHubRepo {
   forks_count: number
   language: string | null
   topics: string[]
+  fork: boolean
   owner: {
     login: string
   }
@@ -44,7 +45,7 @@ export async function fetchPinnedRepos(username: string): Promise<GitHubRepo[]> 
       })
     )
     
-    return detailedRepos.filter((repo): repo is GitHubRepo => repo !== null)
+    return detailedRepos.filter((repo): repo is GitHubRepo => repo !== null && !repo.fork)
   } catch (error) {
     console.error('Error fetching pinned repos:', error)
     return []
@@ -65,6 +66,49 @@ export async function fetchAllRepos(username: string, limit: number = 100): Prom
     return repos
   } catch (error) {
     console.error('Error fetching repos:', error)
+    return []
+  }
+}
+
+export async function fetchOrgRepos(orgName: string, limit: number = 100): Promise<GitHubRepo[]> {
+  try {
+    const response = await fetch(
+      `https://api.github.com/orgs/${orgName}/repos?sort=updated&per_page=${limit}`
+    )
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch org repos')
+    }
+    
+    const repos: GitHubRepo[] = await response.json()
+    return repos
+  } catch (error) {
+    console.error('Error fetching org repos:', error)
+    return []
+  }
+}
+
+export async function fetchCombinedRepos(username: string, orgName: string, limit: number = 100): Promise<GitHubRepo[]> {
+  try {
+    const [userRepos, orgRepos] = await Promise.all([
+      fetchAllRepos(username, limit),
+      fetchOrgRepos(orgName, limit)
+    ])
+    
+    const combined = [...userRepos, ...orgRepos]
+    const uniqueRepos = combined.filter((repo, index, self) =>
+      index === self.findIndex((r) => r.id === repo.id)
+    )
+    
+    uniqueRepos.sort((a, b) => {
+      const dateA = new Date(a.html_url).getTime()
+      const dateB = new Date(b.html_url).getTime()
+      return dateB - dateA
+    })
+    
+    return uniqueRepos
+  } catch (error) {
+    console.error('Error fetching combined repos:', error)
     return []
   }
 }

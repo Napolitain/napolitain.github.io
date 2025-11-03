@@ -5,13 +5,14 @@ import { Code, Desktop, Database, GitBranch, Wrench } from '@phosphor-icons/reac
 import { Skeleton } from '@/components/ui/skeleton'
 import { Card } from '@/components/ui/card'
 import { 
-  fetchAllRepos, 
+  fetchCombinedRepos, 
   extractSkillsFromCV, 
   extractSkillsFromRepos, 
   categorizeSkills 
 } from '@/lib/github'
 
 const USERNAME = 'Napolitain'
+const ORG_NAME = 'fds-napolitain'
 const CV_REPO = 'cv-overleaf'
 
 interface SkillCategory {
@@ -28,7 +29,7 @@ export function Skills() {
     async function loadSkills() {
       try {
         const [repos, cvSkills] = await Promise.all([
-          fetchAllRepos(USERNAME, 100),
+          fetchCombinedRepos(USERNAME, ORG_NAME, 100),
           extractSkillsFromCV(USERNAME, CV_REPO)
         ])
 
@@ -125,7 +126,7 @@ export function Skills() {
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">Skills & Technologies</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Technologies extracted from my GitHub repositories and CV
+            Technologies from my repositories ({USERNAME} and {ORG_NAME}) and CV
           </p>
         </motion.div>
 

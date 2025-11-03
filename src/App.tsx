@@ -1,6 +1,7 @@
 import { Hero } from '@/components/Hero'
 import { Projects } from '@/components/Projects'
 import { Skills } from '@/components/Skills'
+import { OtherProjects } from '@/components/OtherProjects'
 import { Contact } from '@/components/Contact'
 
 function App() {
@@ -9,6 +10,7 @@ function App() {
       <Hero />
       <Projects />
       <Skills />
+      <OtherProjects />
       <Contact />
       
       <footer className="py-8 px-6 border-t border-border">
