@@ -4,7 +4,7 @@ import { Star, GitFork, ArrowUpRight, PushPin } from '@phosphor-icons/react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
-import { fetchPinnedRepos } from '@/lib/github'
+import githubData from '@/data/github-data.json'
 
 interface Repository {
   id: number
@@ -28,7 +28,8 @@ export function Projects() {
   useEffect(() => {
     async function loadRepos() {
       try {
-        const pinned = await fetchPinnedRepos(USERNAME)
+        // Use static data from JSON file instead of API calls
+        const pinned = githubData.pinnedRepos
         setPinnedRepos(pinned)
         setLoading(false)
       } catch (err) {

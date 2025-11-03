@@ -1,3 +1,16 @@
+/**
+ * @deprecated This file is no longer used for runtime API calls.
+ * 
+ * GitHub data is now fetched ahead-of-time (AOT) via GitHub Actions workflow
+ * and stored in src/data/github-data.json. Components now import static data
+ * instead of making runtime API calls.
+ * 
+ * See .github/workflows/fetch-github-data.yml and .github/scripts/fetch-github-data.cjs
+ * for the new data fetching implementation.
+ * 
+ * This file is kept for reference but should not be imported in new code.
+ */
+
 interface PinnedRepo {
   owner: string
   repo: string
