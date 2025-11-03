@@ -85,7 +85,7 @@ async function fetchPinnedRepos() {
     console.log(`Found ${validRepos.length} valid pinned repositories`);
     return validRepos;
   } catch (error) {
-    console.error('Error fetching pinned repos:', error);
+    console.error('Error fetching pinned repos:', error.message || 'Unknown error');
     return [];
   }
 }
@@ -130,7 +130,7 @@ async function fetchUserRepos(username) {
     console.log(`Found ${publicRepos.length} public repositories for ${username}`);
     return publicRepos;
   } catch (error) {
-    console.error(`Error fetching repos for ${username}:`, error);
+    console.error(`Error fetching repos for ${username}:`, error.message || 'Unknown error');
     return [];
   }
 }
@@ -175,7 +175,7 @@ async function fetchOrgRepos(orgName) {
     console.log(`Found ${publicRepos.length} public repositories for ${orgName}`);
     return publicRepos;
   } catch (error) {
-    console.error(`Error fetching repos for org ${orgName}:`, error);
+    console.error(`Error fetching repos for org ${orgName}:`, error.message || 'Unknown error');
     return [];
   }
 }
@@ -266,7 +266,7 @@ const SKILL_KEYWORDS = [
     console.log(`Extracted ${skills.length} skills from CV`);
     return skills;
   } catch (error) {
-    console.error('Error fetching CV skills:', error);
+    console.error('Error fetching CV skills:', error.message || 'Unknown error');
     return [];
   }
 }
@@ -394,13 +394,13 @@ async function main() {
     console.log(`   - Other: ${categorizedSkills.other.length}`);
     
   } catch (error) {
-    console.error('Error in main:', error);
+    console.error('Error in main:', error.message || 'Unknown error');
     process.exit(1);
   }
 }
 
 // Run the script
 main().catch(error => {
-  console.error('Fatal error:', error);
+  console.error('Fatal error:', error.message || 'Unknown error');
   process.exit(1);
 });
