@@ -29,9 +29,9 @@ jobs:
       - name: Fetch GitHub Data
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          USERNAME: 'Napolitain'
-          ORG_NAME: 'fds-napolitain'
-          CV_REPO: 'cv-overleaf'
+          USERNAME: ${{ vars.GITHUB_USERNAME || 'Napolitain' }}
+          ORG_NAME: ${{ vars.GITHUB_ORG_NAME || 'fds-napolitain' }}
+          CV_REPO: ${{ vars.CV_REPO_NAME || 'cv-overleaf' }}
         run: |
           node .github/scripts/fetch-github-data.cjs
 

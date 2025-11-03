@@ -239,21 +239,26 @@ async function fetchCVSkills() {
     
     const combinedText = fileContents.join('\n');
     
-    // Simple skill extraction - look for common technology keywords
-    const skillKeywords = [
-      'Python', 'JavaScript', 'TypeScript', 'Java', 'C\\+\\+', 'C#', 'Go', 'Rust', 'Ruby', 'PHP',
-      'React', 'Vue', 'Angular', 'Next\\.js', 'Node\\.js', 'Express', 'Django', 'Flask',
-      'PostgreSQL', 'MySQL', 'MongoDB', 'Redis', 'Docker', 'Kubernetes', 'AWS', 'Azure', 'GCP',
-      'Git', 'CI/CD', 'Linux', 'Terraform', 'GraphQL', 'REST', 'API'
-    ];
-    
+/**
+ * Simple skill extraction - look for common technology keywords
+ * Configuration object for easier maintenance
+ */
+const SKILL_KEYWORDS = [
+  'Python', 'JavaScript', 'TypeScript', 'Java', 'C\\+\\+', 'C#', 'Go', 'Rust', 'Ruby', 'PHP',
+  'React', 'Vue', 'Angular', 'Next\\.js', 'Node\\.js', 'Express', 'Django', 'Flask',
+  'PostgreSQL', 'MySQL', 'MongoDB', 'Redis', 'Docker', 'Kubernetes', 'AWS', 'Azure', 'GCP',
+  'Git', 'CI/CD', 'Linux', 'Terraform', 'GraphQL', 'REST', 'API'
+];
+
+    // Extract skills using keyword matching
     const foundSkills = new Set();
     
-    skillKeywords.forEach(keyword => {
+    SKILL_KEYWORDS.forEach(keyword => {
       const regex = new RegExp(`\\b${keyword}\\b`, 'gi');
       if (regex.test(combinedText)) {
-        // Normalize the skill name
-        foundSkills.add(keyword.replace(/\\b/g, '').replace(/\\/g, ''));
+        // Normalize: remove word boundary markers and escape characters
+        const normalizedSkill = keyword.replace(/\\[b+]/g, '');
+        foundSkills.add(normalizedSkill);
       }
     });
     
@@ -268,12 +273,14 @@ async function fetchCVSkills() {
 
 /**
  * Simple skill categorization based on common patterns
+ * Using lowercase Sets for O(1) lookup performance
  */
 function categorizeSkills(skills) {
-  const languageKeywords = ['Python', 'JavaScript', 'TypeScript', 'Java', 'C++', 'C#', 'Go', 'Rust', 'Ruby', 'PHP', 'Kotlin', 'Swift', 'Scala'];
-  const frontendKeywords = ['React', 'Vue', 'Angular', 'Next.js', 'Svelte', 'HTML', 'CSS', 'Tailwind', 'Bootstrap', 'sass', 'scss'];
-  const backendKeywords = ['Node.js', 'Express', 'Django', 'Flask', 'Spring', 'FastAPI', 'PostgreSQL', 'MySQL', 'MongoDB', 'Redis', 'GraphQL', 'REST'];
-  const toolKeywords = ['Docker', 'Kubernetes', 'AWS', 'Azure', 'GCP', 'Git', 'GitHub', 'CI/CD', 'Jenkins', 'Terraform', 'Ansible', 'Linux'];
+  // Preprocess keyword arrays to lowercase Sets for efficient lookup
+  const languageKeywords = new Set(['python', 'javascript', 'typescript', 'java', 'c++', 'c#', 'go', 'rust', 'ruby', 'php', 'kotlin', 'swift', 'scala']);
+  const frontendKeywords = new Set(['react', 'vue', 'angular', 'next.js', 'svelte', 'html', 'css', 'tailwind', 'bootstrap', 'sass', 'scss']);
+  const backendKeywords = new Set(['node.js', 'express', 'django', 'flask', 'spring', 'fastapi', 'postgresql', 'mysql', 'mongodb', 'redis', 'graphql', 'rest']);
+  const toolKeywords = new Set(['docker', 'kubernetes', 'aws', 'azure', 'gcp', 'git', 'github', 'ci/cd', 'jenkins', 'terraform', 'ansible', 'linux']);
   
   const categorized = {
     languages: [],
@@ -287,19 +294,19 @@ function categorizeSkills(skills) {
     const skillLower = skill.toLowerCase();
     let categorizedFlag = false;
     
-    if (languageKeywords.some(kw => kw.toLowerCase() === skillLower)) {
+    if (languageKeywords.has(skillLower)) {
       categorized.languages.push(skill);
       categorizedFlag = true;
     }
-    if (frontendKeywords.some(kw => kw.toLowerCase() === skillLower)) {
+    if (frontendKeywords.has(skillLower)) {
       categorized.frontend.push(skill);
       categorizedFlag = true;
     }
-    if (backendKeywords.some(kw => kw.toLowerCase() === skillLower)) {
+    if (backendKeywords.has(skillLower)) {
       categorized.backend.push(skill);
       categorizedFlag = true;
     }
-    if (toolKeywords.some(kw => kw.toLowerCase() === skillLower)) {
+    if (toolKeywords.has(skillLower)) {
       categorized.tools.push(skill);
       categorizedFlag = true;
     }

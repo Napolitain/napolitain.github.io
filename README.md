@@ -59,7 +59,16 @@ The generated `github-data.json` contains:
 
 ### Configuration
 
-Update the environment variables in `.github/workflows/fetch-github-data.yml`:
+The workflow can be configured in two ways:
+
+#### Option 1: Repository Variables (Recommended)
+Set these in your GitHub repository settings under Settings > Secrets and variables > Actions > Variables:
+- `GITHUB_USERNAME`: Your GitHub username
+- `GITHUB_ORG_NAME`: Your organization name
+- `CV_REPO_NAME`: Your CV repository name
+
+#### Option 2: Edit Workflow File
+Update the default values in `.github/workflows/fetch-github-data.yml`:
 - `USERNAME`: Your GitHub username (default: 'Napolitain')
 - `ORG_NAME`: Your organization name (default: 'fds-napolitain')
 - `CV_REPO`: Your CV repository name (default: 'cv-overleaf')
