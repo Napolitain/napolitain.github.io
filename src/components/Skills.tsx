@@ -4,12 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { Code, Desktop, Database, GitBranch, Wrench } from '@phosphor-icons/react'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Card } from '@/components/ui/card'
-import { 
-  fetchCombinedRepos, 
-  extractSkillsFromCV, 
-  extractSkillsFromRepos, 
-  categorizeSkills 
-} from '@/lib/github'
+import githubData from '@/data/github-data.json'
 
 const USERNAME = 'Napolitain'
 const ORG_NAME = 'fds-napolitain'
@@ -28,16 +23,8 @@ export function Skills() {
   useEffect(() => {
     async function loadSkills() {
       try {
-        const [repos, cvSkills] = await Promise.all([
-          fetchCombinedRepos(USERNAME, ORG_NAME, 100),
-          extractSkillsFromCV(USERNAME, CV_REPO)
-        ])
-
-        const repoSkills = await extractSkillsFromRepos(repos)
-        
-        const allSkills = [...new Set([...cvSkills, ...repoSkills])]
-        
-        const categorized = await categorizeSkills(allSkills)
+        // Use static data from JSON file instead of API calls
+        const categorized = githubData.skills.categorized
         
         const categories: SkillCategory[] = []
         

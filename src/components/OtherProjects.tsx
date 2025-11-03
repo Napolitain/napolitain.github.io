@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
-import { fetchCombinedRepos } from '@/lib/github'
+import githubData from '@/data/github-data.json'
 
 interface Repository {
   id: number
@@ -37,7 +37,8 @@ export function OtherProjects() {
   useEffect(() => {
     async function loadRepos() {
       try {
-        const allRepos = await fetchCombinedRepos(USERNAME, ORG_NAME, 100)
+        // Use static data from JSON file instead of API calls
+        const allRepos = githubData.allRepos
         const nonForkRepos = allRepos.filter(repo => !repo.fork)
         
         setRepos(nonForkRepos)
