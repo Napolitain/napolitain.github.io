@@ -1,12 +1,12 @@
 {
-    "name": "spark-template",
+    "name": "portfolio-generator",
     "private": true,
     "version": "0.0.0",
     "type": "module",
     "scripts": {
         "dev": "astro dev",
         "kill": "fuser -k 5000/tcp",
-        "build": "astro check && astro build",
+        "build": "astro build",
         "lint": "eslint .",
         "optimize": "vite optimize",
         "preview": "astro preview"

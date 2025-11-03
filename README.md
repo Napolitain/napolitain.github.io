@@ -1,6 +1,6 @@
 # ✨ Portfolio Generator
 
-A modern portfolio website generator that automatically showcases your GitHub repositories, skills, and projects.
+A modern portfolio website generator that automatically showcases your GitHub repositories, skills, and projects. Built with **Astro**, **Svelte**, and **TypeScript**.
 
 ## 🚀 Features
 
@@ -11,6 +11,16 @@ A modern portfolio website generator that automatically showcases your GitHub re
 - **Pinned Repos**: Featured projects section shows your pinned repositories
 - **Organization Support**: Includes repositories from both personal and organization accounts
 - **Fast Loading**: Optimized static build deployed to GitHub Pages CDN
+- **Modern Stack**: Built with Astro for optimal performance and Svelte for reactive components
+
+## 🔧 Tech Stack
+
+- **Framework**: [Astro](https://astro.build) - Fast, content-focused static site generator
+- **UI Components**: [Svelte](https://svelte.dev) - Reactive, component-based UI library
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS v4
+- **Icons**: Phosphor Icons (Svelte)
+- **Animations**: Svelte transitions and animations
 
 ## 🔧 How It Works
 
@@ -33,8 +43,8 @@ The repository includes a GitHub Actions workflow (`.github/workflows/fetch-gith
    - No authentication tokens stored in the frontend
    - All data is pre-fetched at build time
 
-5. Generates a static JSON file (`src/data/github-data.json`) with all the data
-6. Builds the React application as a fully static website
+4. Generates a static JSON file (`src/data/github-data.json`) with all the data
+6. Builds the Astro + Svelte application as a fully static website
 7. Deploys the static site to GitHub Pages
 8. Commits the updated data back to the repository
 
