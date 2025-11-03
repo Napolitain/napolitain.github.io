@@ -4,12 +4,13 @@ A modern portfolio website generator that automatically showcases your GitHub re
 
 ## 🚀 Features
 
-- **Automated Data Fetching**: GitHub Actions workflow that periodically fetches your repository data
-- **Static Data Generation**: All GitHub data is pre-fetched and stored as static JSON (no runtime API calls)
+- **Automated Data Fetching & Deployment**: GitHub Actions workflow that weekly fetches your repository data and deploys to GitHub Pages
+- **Fully Static Website**: All GitHub data is pre-fetched and built into a static site (no runtime API calls)
 - **Privacy First**: Only public, non-fork repositories are included - no private code ever leaks
 - **Dynamic Skills**: Skills are automatically extracted from your repositories and CV
 - **Pinned Repos**: Featured projects section shows your pinned repositories
 - **Organization Support**: Includes repositories from both personal and organization accounts
+- **Fast Loading**: Optimized static build deployed to GitHub Pages CDN
 
 ## 🔧 How It Works
 
@@ -17,7 +18,7 @@ A modern portfolio website generator that automatically showcases your GitHub re
 
 The repository includes a GitHub Actions workflow (`.github/workflows/fetch-github-data.yml`) that:
 
-1. Runs every 6 hours (configurable via cron schedule)
+1. Runs weekly on Sundays at 00:00 UTC (configurable via cron schedule)
 2. Can be manually triggered via workflow_dispatch
 3. Fetches data from:
    - Your pinned repositories (public only)
@@ -33,7 +34,9 @@ The repository includes a GitHub Actions workflow (`.github/workflows/fetch-gith
    - All data is pre-fetched at build time
 
 5. Generates a static JSON file (`src/data/github-data.json`) with all the data
-6. Automatically commits and pushes the updated data
+6. Builds the React application as a fully static website
+7. Deploys the static site to GitHub Pages
+8. Commits the updated data back to the repository
 
 ### Data Structure
 
@@ -98,14 +101,23 @@ npm run preview
 - ✅ All data is pre-generated via GitHub Actions
 - ✅ No sensitive tokens or credentials exposed to the frontend
 
-## 📝 Manual Workflow Trigger
+## 📝 Manual Workflow Trigger & Deployment
 
-You can manually trigger the data fetch workflow:
+You can manually trigger the build and deployment workflow:
 1. Go to the "Actions" tab in your GitHub repository
-2. Select "Fetch GitHub Data" workflow
+2. Select "Build and Deploy Portfolio" workflow
 3. Click "Run workflow"
 4. Wait for the workflow to complete
-5. The updated data will be committed automatically
+5. The updated site will be live on GitHub Pages and data committed to the repository
+
+### Setting up GitHub Pages
+
+To enable GitHub Pages for your repository:
+1. Go to repository Settings > Pages
+2. Under "Build and deployment", select "GitHub Actions" as the source
+3. The workflow will automatically deploy on the next run
+
+Your portfolio will be available at: `https://[username].github.io/portfolio-generator/`
 
 ## 📄 License
 
