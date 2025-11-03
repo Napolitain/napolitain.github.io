@@ -12,7 +12,7 @@ on:
       - '.github/workflows/fetch-github-data.yml'
       - 'src/**'
       - 'package.json'
-      - 'vite.config.ts'
+      - 'astro.config.mjs'
 
 permissions:
   contents: write
