@@ -1,0 +1,24 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Hero from '@/components/Hero.svelte';
+import Projects from '@/components/Projects.svelte';
+import Skills from '@/components/Skills.svelte';
+import OtherProjects from '@/components/OtherProjects.svelte';
+import Contact from '@/components/Contact.svelte';
+---
+
+<Layout>
+  <div class="min-h-screen">
+    <Hero client:load />
+    <Projects client:load />
+    <Skills client:load />
+    <OtherProjects client:load />
+    <Contact client:load />
+    
+    <footer class="py-8 px-6 border-t border-border">
+      <div class="max-w-6xl mx-auto text-center text-sm text-muted-foreground">
+        <p>&copy; {new Date().getFullYear()} Napolitain. Built with Astro, Svelte & TypeScript.</p>
+      </div>
+    </footer>
+  </div>
+</Layout>
