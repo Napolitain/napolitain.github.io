@@ -1,45 +1,13 @@
 {
-  "lastUpdated": "2025-11-03T07:24:57.901Z",
-  "pinnedRepos": [
-    {
-      "id": 1,
-      "name": "example-pinned-repo",
-      "full_name": "Napolitain/example-pinned-repo",
-      "description": "This is a placeholder for actual pinned repositories",
-      "html_url": "https://github.com/Napolitain",
-      "stargazers_count": 0,
-      "forks_count": 0,
-      "language": "TypeScript",
-      "topics": ["portfolio", "github-actions"],
-      "fork": false,
-      "owner": {
-        "login": "Napolitain"
-      }
-    }
-  ],
-  "allRepos": [
-    {
-      "id": 1,
-      "name": "example-pinned-repo",
-      "full_name": "Napolitain/example-pinned-repo",
-      "description": "This is a placeholder for actual repositories",
-      "html_url": "https://github.com/Napolitain",
-      "stargazers_count": 0,
-      "forks_count": 0,
-      "language": "TypeScript",
-      "topics": ["portfolio", "github-actions"],
-      "fork": false,
-      "owner": {
-        "login": "Napolitain"
-      }
-    }
-  ],
+  "lastUpdated": "2025-11-04T06:55:41.078Z",
+  "pinnedRepos": [],
+  "allRepos": [],
   "skills": {
-    "all": ["TypeScript", "JavaScript", "React", "Node.js"],
+    "all": [],
     "categorized": {
-      "languages": ["TypeScript", "JavaScript"],
-      "frontend": ["React"],
-      "backend": ["Node.js"],
+      "languages": [],
+      "frontend": [],
+      "backend": [],
       "tools": [],
       "other": []
     }
@@ -47,8 +15,8 @@
   "metadata": {
     "username": "Napolitain",
     "orgName": "fds-napolitain",
-    "totalRepos": 1,
-    "pinnedRepos": 1,
-    "totalSkills": 4
+    "totalRepos": 0,
+    "pinnedRepos": 0,
+    "totalSkills": 0
   }
 }
