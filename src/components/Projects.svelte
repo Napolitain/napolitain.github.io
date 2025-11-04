@@ -37,9 +37,9 @@
   });
 </script>
 
-<section id="projects" class="py-20 px-4 md:px-6 lg:px-8">
-  <div class="max-w-7xl mx-auto">
-    <div class="text-center mb-12">
+<section id="projects" class="py-24 px-6">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
       <h2 class="text-4xl md:text-5xl font-bold mb-4">Featured Projects</h2>
       <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
         My pinned repositories showcasing my best work (non-forks)
@@ -47,7 +47,7 @@
     </div>
 
     {#if loading}
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {#each [1, 2, 3, 4, 5, 6] as i}
           <Card class="p-6 space-y-4">
             <Skeleton class="h-6 w-3/4" />
@@ -78,7 +78,7 @@
         </a>
       </Card>
     {:else}
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {#each pinnedRepos as repo, index}
           <div in:fly={{ y: 20, duration: 500, delay: index * 100 }}>
             <a href={repo.html_url} target="_blank" rel="noopener noreferrer">

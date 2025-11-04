@@ -61,13 +61,13 @@
 </script>
 
 {#if loading}
-  <section class="py-20 px-4 md:px-6 lg:px-8">
-    <div class="max-w-7xl mx-auto">
-      <div class="text-center mb-12">
+  <section class="py-24 px-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16">
         <Skeleton class="h-12 w-64 mx-auto mb-4" />
         <Skeleton class="h-6 w-96 mx-auto" />
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {#each [1, 2, 3, 4, 5, 6] as i}
           <Card class="p-6 space-y-4">
             <Skeleton class="h-6 w-3/4" />
@@ -83,16 +83,16 @@
     </div>
   </section>
 {:else if !error && repos.length > 0}
-  <section class="py-20 px-4 md:px-6 lg:px-8 bg-secondary/30">
-    <div class="max-w-7xl mx-auto">
-      <div class="text-center mb-12">
+  <section class="py-24 px-6 bg-secondary/30">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16">
         <h2 class="text-4xl md:text-5xl font-bold mb-4">Other Projects</h2>
         <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
           Additional work from my personal account and {ORG_NAME} organization
         </p>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {#each displayedRepos as repo, index (repo.id)}
           <div in:fly={{ y: 20, duration: 500, delay: index * 50 }}>
             <a href={repo.html_url} target="_blank" rel="noopener noreferrer">

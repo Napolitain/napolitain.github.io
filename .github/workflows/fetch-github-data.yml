@@ -43,6 +43,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Fetch GitHub data
+        run: node .github/scripts/fetch-github-data.cjs
+
       - name: Build static site with embedded GitHub data
         env:
           GITHUB_PAGES: 'true'

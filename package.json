@@ -9,7 +9,8 @@
         "build": "astro build",
         "lint": "eslint .",
         "optimize": "vite optimize",
-        "preview": "astro preview"
+        "preview": "astro preview",
+        "fetch-data": "node .github/scripts/fetch-github-data.cjs"
     },
     "dependencies": {
         "@astrojs/svelte": "^7.2.1",
