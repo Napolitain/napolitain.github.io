@@ -97,7 +97,7 @@
                   {repo.description || 'No description available'}
                 </p>
 
-                <div class="flex flex-wrap gap-2 mb-4">
+                <div class="flex flex-wrap gap-3 mb-4">
                   {#if repo.language}
                     <Badge variant="secondary" class="text-xs">
                       {repo.language}

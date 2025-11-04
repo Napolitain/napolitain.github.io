@@ -33,3 +33,6 @@ pids
 
 .spark-workbench-id
 .astro
+
+# Screenshots for testing
+screenshots/
