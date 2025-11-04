@@ -1,7 +1,6 @@
 <script lang="ts">
   import { fade, fly } from 'svelte/transition';
   import { GithubLogo, LinkedinLogo, ArrowRight } from 'phosphor-svelte';
-  import Button from '@/components/ui/button.svelte';
 </script>
 
 <section class="min-h-screen flex items-center justify-center px-6 relative overflow-hidden">
@@ -25,23 +24,19 @@
     </div>
 
     <div in:fly={{ y: 20, duration: 600, delay: 200 }} class="flex flex-wrap items-center justify-center gap-4">
-      <Button 
-        size="lg"
-        className="bg-accent hover:bg-accent/90 text-accent-foreground group"
+      <a
+        href="#projects"
+        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all h-10 px-6 bg-accent hover:bg-accent/90 text-accent-foreground group shadow-xs"
       >
-        <a href="#projects" class="flex items-center gap-2">
-          View Projects
-          <ArrowRight class="ml-2 group-hover:translate-x-1 transition-transform" />
-        </a>
-      </Button>
-      <Button 
-        size="lg"
-        variant="outline"
+        View Projects
+        <ArrowRight class="ml-2 group-hover:translate-x-1 transition-transform" />
+      </a>
+      <a
+        href="#contact"
+        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all h-10 px-6 border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50"
       >
-        <a href="#contact">
-          Get in Touch
-        </a>
-      </Button>
+        Get in Touch
+      </a>
     </div>
 
     <div in:fade={{ duration: 600, delay: 400 }} class="flex items-center justify-center gap-4 pt-8">

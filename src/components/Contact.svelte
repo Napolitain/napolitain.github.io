@@ -20,7 +20,7 @@
             href="https://github.com/Napolitain" 
             target="_blank" 
             rel="noopener noreferrer"
-            class="h-auto flex flex-col gap-3 py-6 border rounded-md bg-background shadow-xs hover:bg-accent hover:text-accent-foreground hover:border-primary hover:bg-primary/5 transition-all items-center justify-center"
+            class="h-auto flex flex-col gap-3 py-6 border rounded-md bg-background shadow-xs hover:bg-primary/5 hover:text-accent-foreground hover:border-primary transition-all items-center justify-center"
           >
             <GithubLogo size={32} />
             <div>
@@ -33,7 +33,7 @@
             href="https://linkedin.com/in/napolitain" 
             target="_blank" 
             rel="noopener noreferrer"
-            class="h-auto flex flex-col gap-3 py-6 border rounded-md bg-background shadow-xs hover:bg-accent hover:text-accent-foreground hover:border-primary hover:bg-primary/5 transition-all items-center justify-center"
+            class="h-auto flex flex-col gap-3 py-6 border rounded-md bg-background shadow-xs hover:bg-primary/5 hover:text-accent-foreground hover:border-primary transition-all items-center justify-center"
           >
             <LinkedinLogo size={32} />
             <div>
@@ -44,7 +44,7 @@
 
           <a 
             href="mailto:hello@napolitain.dev"
-            class="h-auto flex flex-col gap-3 py-6 border rounded-md bg-background shadow-xs hover:bg-accent hover:text-accent-foreground hover:border-accent hover:bg-accent/5 transition-all items-center justify-center"
+            class="h-auto flex flex-col gap-3 py-6 border rounded-md bg-background shadow-xs hover:bg-accent/5 hover:text-accent-foreground hover:border-accent transition-all items-center justify-center"
           >
             <EnvelopeSimple size={32} />
             <div>
