@@ -30,7 +30,7 @@
           </a>
 
           <a 
-            href="https://linkedin.com/in/napolitain" 
+            href="https://linkedin.com/in/mxboucher" 
             target="_blank" 
             rel="noopener noreferrer"
             class="h-auto flex flex-col gap-3 py-6 px-6 border rounded-md bg-background shadow-xs hover:bg-primary/5 hover:text-accent-foreground hover:border-primary transition-all items-center justify-center"
@@ -38,12 +38,12 @@
             <LinkedinLogo size={32} />
             <div>
               <div class="font-semibold">LinkedIn</div>
-              <div class="text-xs text-muted-foreground">Connect with me</div>
+              <div class="text-xs text-muted-foreground">@mxboucher</div>
             </div>
           </a>
 
           <a 
-            href="mailto:hello@napolitain.dev"
+            href="mailto:mxboucher@gmail.com"
             class="h-auto flex flex-col gap-3 py-6 px-6 border rounded-md bg-background shadow-xs hover:bg-accent/5 hover:text-accent-foreground hover:border-accent transition-all items-center justify-center"
           >
             <EnvelopeSimple size={32} />
