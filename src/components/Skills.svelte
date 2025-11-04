@@ -140,7 +140,7 @@
               </div>
               <h3 class="text-xl font-semibold">{category.title}</h3>
             </div>
-            <div class="flex flex-wrap gap-2">
+            <div class="flex flex-wrap gap-3">
               {#each category.skills as skill}
                 <Badge 
                   variant="secondary"
