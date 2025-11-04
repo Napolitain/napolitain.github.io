@@ -219,22 +219,44 @@ function categorizeSkills(skillsMap) {
     tools: new Set([
       'docker', 'kubernetes', 'jenkins', 'gitlab', 'github-actions', 
       'terraform', 'ansible', 'aws', 'azure', 'gcp', 'git', 'cmake', 
-      'digital-signal-processing', 'dotenv', 'ffmpeg', 'puppeteer', 
-      'headless-chrome'
+      'dotenv', 'puppeteer', 'headless-chrome'
+    ]),
+    
+    // Game Development - game engines, graphics, and game-related technologies
+    gamedev: new Set([
+      'unity', 'game-development', 'game-engine', 'opengl', 'shaderlab', 
+      'raytracing', 'game', 'qt'
+    ]),
+    
+    // AI & Machine Learning - artificial intelligence and machine learning
+    aiml: new Set([
+      'ai', 'artificial-intelligence', 'tensorflow', 'genetic-algorithm', 
+      'linear-programming', 'operations-research'
+    ]),
+    
+    // Computer Vision & Graphics - image processing and computer vision
+    vision: new Set([
+      'opencv', 'image', 'image-processing', 'inpainting', 'hdr', 
+      'augmented-reality', 'mixed-reality', 'virtual-reality', 
+      'motion-tracking', 'object-tracking'
+    ]),
+    
+    // Multimedia & Signal Processing - audio, video, and signal processing
+    multimedia: new Set([
+      'ffmpeg', 'video-editing', 'music', 'dsp', 'signal-processing', 
+      'digital-signal-processing'
+    ]),
+    
+    // Desktop & Framework - desktop application frameworks
+    desktop: new Set([
+      'dotnet', 'tkinter', 'windows', 'uwp'
     ]),
     
     // Other Technologies - everything else
     other: new Set([
-      'html', 'tex', 'shaderlab', 'ai', 'linear-programming', 
-      'operations-research', 'total-war', 'esports', 'icalendar', 
-      'liquipedia', 'web-scraping', 'video-editing', 'keyrate', 
-      'utility', 'windows', 'bot', 'tkinter', 'university', 
-      'game-development', 'unity', 'dotnet', 'image', 'image-processing', 
-      'inpainting', 'uwp', 'augmented-reality', 'mixed-reality', 'music', 
-      'virtual-reality', 'motion-tracking', 'object-tracking', 'opencv', 
-      'game-engine', 'opengl', 'qt', 'hdr', 'tensorflow', 
-      'artificial-intelligence', 'dsp', 'signal-processing', 'raytracing', 
-      'template', 'compression', 'security', 'game', 'genetic-algorithm'
+      'html', 'tex', 'total-war', 'esports', 'icalendar', 
+      'liquipedia', 'web-scraping', 'keyrate', 'utility', 'bot', 
+      'university', 'template', 'compression', 'security'
     ])
   };
   
@@ -243,6 +265,11 @@ function categorizeSkills(skillsMap) {
     frontend: [],
     backend: [],
     tools: [],
+    gamedev: [],
+    aiml: [],
+    vision: [],
+    multimedia: [],
+    desktop: [],
     other: []
   };
   
@@ -270,6 +297,16 @@ function categorizeSkills(skillsMap) {
         categorized.backend.push({ name: skill, count });
       } else if (['docker', 'kubernetes', 'git', 'cmake', 'terraform', 'ansible'].some(kw => lowerSkill.includes(kw))) {
         categorized.tools.push({ name: skill, count });
+      } else if (['unity', 'game', 'opengl', 'raytracing'].some(kw => lowerSkill.includes(kw))) {
+        categorized.gamedev.push({ name: skill, count });
+      } else if (['tensorflow', 'ai', 'artificial-intelligence'].some(kw => lowerSkill.includes(kw))) {
+        categorized.aiml.push({ name: skill, count });
+      } else if (['opencv', 'image', 'vision', 'augmented-reality', 'virtual-reality'].some(kw => lowerSkill.includes(kw))) {
+        categorized.vision.push({ name: skill, count });
+      } else if (['video', 'audio', 'music', 'ffmpeg', 'signal'].some(kw => lowerSkill.includes(kw))) {
+        categorized.multimedia.push({ name: skill, count });
+      } else if (['dotnet', 'tkinter', 'uwp', 'qt'].some(kw => lowerSkill.includes(kw))) {
+        categorized.desktop.push({ name: skill, count });
       } else {
         categorized.other.push({ name: skill, count });
       }
