@@ -113,9 +113,9 @@
   });
 </script>
 
-<section class="py-32 px-6 bg-secondary/30">
+<section class="py-40 px-8 bg-secondary/30 mt-40">
   <div class="max-w-6xl mx-auto">
-    <div class="text-center mb-20">
+    <div class="text-center mb-24">
       <h2 class="text-4xl md:text-5xl font-bold mb-4">Skills & Technologies</h2>
       <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
         Technologies from my repositories ({USERNAME} and {ORG_NAME}) and CV
@@ -123,9 +123,9 @@
     </div>
 
     {#if loading}
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
         {#each [1, 2, 3, 4] as i}
-          <Card class="p-10 space-y-4">
+          <Card class="p-12 space-y-4">
             <Skeleton class="h-8 w-48" />
             <div class="flex flex-wrap gap-2">
               <Skeleton class="h-8 w-20" />
@@ -138,13 +138,13 @@
         {/each}
       </div>
     {:else}
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
         {#each skillCategories as category, index}
           <div 
             in:fly={{ y: 20, duration: 500, delay: index * 100 }}
-            class="bg-card rounded-lg p-10 shadow-sm"
+            class="bg-card rounded-lg p-12 shadow-sm"
           >
-            <div class="flex items-center gap-3 mb-8">
+            <div class="flex items-center gap-3 mb-10">
               <div class="p-2 rounded-lg bg-primary/10">
                 <svelte:component this={category.icon} size={24} class="text-primary" />
               </div>

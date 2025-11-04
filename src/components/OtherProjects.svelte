@@ -71,15 +71,15 @@
 </script>
 
 {#if loading}
-  <section class="py-32 px-6">
+  <section class="py-40 px-8 mt-40">
     <div class="max-w-6xl mx-auto">
-      <div class="text-center mb-20">
+      <div class="text-center mb-24">
         <Skeleton class="h-12 w-64 mx-auto mb-4" />
         <Skeleton class="h-6 w-96 mx-auto" />
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
         {#each [1, 2, 3, 4, 5, 6] as i}
-          <Card class="p-8 space-y-4">
+          <Card class="p-10 space-y-4">
             <Skeleton class="h-6 w-3/4" />
             <Skeleton class="h-4 w-full" />
             <Skeleton class="h-4 w-5/6" />
@@ -93,21 +93,21 @@
     </div>
   </section>
 {:else if !error && repos.length > 0}
-  <section class="py-32 px-6 bg-secondary/30">
+  <section class="py-40 px-8 bg-secondary/30 mt-40">
     <div class="max-w-6xl mx-auto">
-      <div class="text-center mb-20">
+      <div class="text-center mb-24">
         <h2 class="text-4xl md:text-5xl font-bold mb-4">Other Projects</h2>
         <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
           Additional work from my personal account and {ORG_NAME} organization
         </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
         {#each displayedRepos as repo, index (repo.id)}
           <div in:fly={{ y: 20, duration: 500, delay: index * 50 }}>
             <a href={repo.html_url} target="_blank" rel="noopener noreferrer">
-              <Card class="p-8 h-full hover:shadow-lg transition-all duration-300 hover:scale-[1.02] group cursor-pointer">
-                <div class="flex items-start justify-between mb-6">
+              <Card class="p-10 h-full hover:shadow-lg transition-all duration-300 hover:scale-[1.02] group cursor-pointer">
+                <div class="flex items-start justify-between mb-8">
                   <div class="flex-1 min-w-0">
                     <div class="flex items-center gap-2 mb-1">
                       <span class="text-xs text-muted-foreground">
@@ -121,11 +121,11 @@
                   <ArrowUpRight size={20} class="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 group-hover:-translate-y-1 transition-all flex-shrink-0 ml-2" />
                 </div>
                 
-                <p class="text-muted-foreground text-sm mb-6 line-clamp-2 leading-relaxed min-h-[2.5rem]">
+                <p class="text-muted-foreground text-sm mb-8 line-clamp-2 leading-relaxed min-h-[2.5rem]">
                   {repo.description || 'No description available'}
                 </p>
 
-                <div class="flex flex-wrap gap-3 mb-6">
+                <div class="flex flex-wrap gap-3 mb-8">
                   {#if repo.language}
                     <Badge variant="secondary" class="text-xs">
                       {repo.language}

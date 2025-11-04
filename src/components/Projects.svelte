@@ -45,9 +45,9 @@
   });
 </script>
 
-<section id="projects" class="py-32 px-6">
+<section id="projects" class="py-40 px-8 mt-40">
   <div class="max-w-6xl mx-auto">
-    <div class="text-center mb-20">
+    <div class="text-center mb-24">
       <h2 class="text-4xl md:text-5xl font-bold mb-4">Featured Projects</h2>
       <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
         My pinned repositories showcasing my best work (non-forks)
@@ -55,9 +55,9 @@
     </div>
 
     {#if loading}
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
         {#each [1, 2, 3, 4, 5, 6] as i}
-          <Card class="p-8 space-y-4">
+          <Card class="p-10 space-y-4">
             <Skeleton class="h-6 w-3/4" />
             <Skeleton class="h-4 w-full" />
             <Skeleton class="h-4 w-5/6" />
@@ -86,12 +86,12 @@
         </a>
       </Card>
     {:else}
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
         {#each pinnedRepos as repo, index}
           <div in:fly={{ y: 20, duration: 500, delay: index * 100 }}>
             <a href={repo.html_url} target="_blank" rel="noopener noreferrer">
-              <Card class="p-8 h-full hover:shadow-lg transition-all duration-300 hover:scale-[1.02] group cursor-pointer">
-                <div class="flex items-start justify-between mb-6">
+              <Card class="p-10 h-full hover:shadow-lg transition-all duration-300 hover:scale-[1.02] group cursor-pointer">
+                <div class="flex items-start justify-between mb-8">
                   <div class="flex items-center gap-2 flex-1 min-w-0">
                     <PushPin size={16} weight="fill" class="text-accent flex-shrink-0" />
                     <h3 class="text-xl font-semibold group-hover:text-primary transition-colors truncate">
@@ -101,11 +101,11 @@
                   <ArrowUpRight size={20} class="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 group-hover:-translate-y-1 transition-all flex-shrink-0 ml-2" />
                 </div>
                 
-                <p class="text-muted-foreground mb-6 line-clamp-2 leading-relaxed min-h-[3rem]">
+                <p class="text-muted-foreground mb-8 line-clamp-2 leading-relaxed min-h-[3rem]">
                   {repo.description || 'No description available'}
                 </p>
 
-                <div class="flex flex-wrap gap-3 mb-6">
+                <div class="flex flex-wrap gap-3 mb-8">
                   {#if repo.language}
                     <Badge variant="secondary" class="text-xs">
                       {repo.language}
