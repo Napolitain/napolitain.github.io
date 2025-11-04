@@ -12,22 +12,70 @@ const ORG_NAME = 'fds-napolitain';
 
 async function fetchGitHubData() {
   try {
-    // Fetch pinned repos
-    const pinnedResponse = await fetch(`https://gh-pinned-repos.egoist.dev/?username=${USERNAME}`);
+    // Fetch pinned repos using GitHub GraphQL API
+    const graphqlQuery = `
+      query {
+        user(login: "${USERNAME}") {
+          pinnedItems(first: 6, types: REPOSITORY) {
+            nodes {
+              ... on Repository {
+                id
+                name
+                description
+                url
+                stargazerCount
+                forkCount
+                primaryLanguage {
+                  name
+                }
+                repositoryTopics(first: 10) {
+                  nodes {
+                    topic {
+                      name
+                    }
+                  }
+                }
+                isFork
+                owner {
+                  login
+                }
+              }
+            }
+          }
+        }
+      }
+    `;
+    
+    const pinnedResponse = await fetch('https://api.github.com/graphql', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'User-Agent': 'Astro-Portfolio'
+      },
+      body: JSON.stringify({ query: graphqlQuery })
+    });
+    
     const pinnedData = await pinnedResponse.json();
     
-    // Fetch detailed info for pinned repos
-    const pinnedRepos = await Promise.all(
-      pinnedData.map(async (pinned: any) => {
-        try {
-          const repoResponse = await fetch(`https://api.github.com/repos/${pinned.owner}/${pinned.repo}`);
-          return await repoResponse.json();
-        } catch (error) {
-          console.error(`Failed to fetch ${pinned.owner}/${pinned.repo}`);
-          return null;
+    // Transform GraphQL response to match REST API format
+    const pinnedItems = pinnedData.data?.user?.pinnedItems?.nodes || [];
+    const pinnedRepos = pinnedItems
+      .filter((repo: any) => !repo.isFork)
+      .map((repo: any) => ({
+        id: Math.abs(repo.id.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0)), // Generate numeric ID from GraphQL ID
+        name: repo.name,
+        full_name: `${repo.owner.login}/${repo.name}`,
+        description: repo.description,
+        html_url: repo.url,
+        stargazers_count: repo.stargazerCount,
+        forks_count: repo.forkCount,
+        language: repo.primaryLanguage?.name || null,
+        topics: repo.repositoryTopics?.nodes?.map((node: any) => node.topic.name) || [],
+        fork: repo.isFork,
+        owner: {
+          login: repo.owner.login
         }
-      })
-    );
+      }));
     
     // Fetch user repos
     const userReposResponse = await fetch(`https://api.github.com/users/${USERNAME}/repos?sort=updated&per_page=100&type=owner`);
@@ -122,7 +170,7 @@ const githubData = await fetchGitHubData();
     <OtherProjects client:load githubData={githubData} />
     <Contact client:load />
     
-    <footer class="py-8 px-6 border-t border-border">
+    <footer class="py-16 px-8 border-t border-border mt-40">
       <div class="max-w-6xl mx-auto text-center text-sm text-muted-foreground">
         <p>© {new Date().getFullYear()} Napolitain. Built with Astro, Svelte & TypeScript.</p>
       </div>

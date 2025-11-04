@@ -33,28 +33,104 @@ function httpsGet(url, headers = {}) {
 }
 
 /**
- * Fetch pinned repositories using the gh-pinned-repos API
+ * Fetch pinned repositories using GitHub GraphQL API
  */
 async function fetchPinnedRepos() {
   try {
     console.log('Fetching pinned repos...');
-    const pinnedData = await httpsGet(`https://gh-pinned-repos.egoist.dev/?username=${USERNAME}`);
     
-    // Fetch detailed info for each pinned repo
-    const detailedRepos = await Promise.all(
-      pinnedData.map(async (pinned) => {
-        try {
-          const repoData = await httpsGet(`https://api.github.com/repos/${pinned.owner}/${pinned.repo}`);
-          return repoData;
-        } catch (error) {
-          console.error(`Failed to fetch ${pinned.owner}/${pinned.repo}:`, error.message);
-          return null;
+    // GitHub GraphQL query to fetch pinned repos
+    const query = `
+      query {
+        user(login: "${USERNAME}") {
+          pinnedItems(first: 6, types: REPOSITORY) {
+            nodes {
+              ... on Repository {
+                id
+                name
+                description
+                url
+                stargazerCount
+                forkCount
+                primaryLanguage {
+                  name
+                }
+                repositoryTopics(first: 10) {
+                  nodes {
+                    topic {
+                      name
+                    }
+                  }
+                }
+                isFork
+                owner {
+                  login
+                }
+              }
+            }
+          }
         }
-      })
-    );
+      }
+    `;
     
-    // Filter out nulls and forks
-    return detailedRepos.filter(repo => repo !== null && !repo.fork);
+    // Make GraphQL request to GitHub
+    const response = await new Promise((resolve, reject) => {
+      const postData = JSON.stringify({ query });
+      
+      const options = {
+        hostname: 'api.github.com',
+        path: '/graphql',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': Buffer.byteLength(postData),
+          'User-Agent': 'GitHub-Portfolio-Script',
+          'Accept': 'application/json'
+        }
+      };
+      
+      const req = https.request(options, (res) => {
+        let data = '';
+        res.on('data', chunk => data += chunk);
+        res.on('end', () => {
+          if (res.statusCode >= 200 && res.statusCode < 300) {
+            try {
+              resolve(JSON.parse(data));
+            } catch (e) {
+              reject(new Error('Failed to parse JSON: ' + e.message));
+            }
+          } else {
+            reject(new Error(`HTTP ${res.statusCode}: ${data}`));
+          }
+        });
+      });
+      
+      req.on('error', reject);
+      req.write(postData);
+      req.end();
+    });
+    
+    // Transform GraphQL response to match REST API format
+    const pinnedItems = response.data?.user?.pinnedItems?.nodes || [];
+    const detailedRepos = pinnedItems
+      .filter(repo => !repo.isFork)
+      .map(repo => ({
+        id: Math.abs(repo.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)), // Generate numeric ID from GraphQL ID
+        name: repo.name,
+        full_name: `${repo.owner.login}/${repo.name}`,
+        description: repo.description,
+        html_url: repo.url,
+        stargazers_count: repo.stargazerCount,
+        forks_count: repo.forkCount,
+        language: repo.primaryLanguage?.name || null,
+        topics: repo.repositoryTopics?.nodes?.map(node => node.topic.name) || [],
+        fork: repo.isFork,
+        owner: {
+          login: repo.owner.login
+        }
+      }));
+    
+    return detailedRepos;
   } catch (error) {
     console.error('Error fetching pinned repos:', error.message);
     return [];
