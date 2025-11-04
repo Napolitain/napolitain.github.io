@@ -5,7 +5,6 @@
   import Badge from '@/components/ui/badge.svelte';
   import Card from '@/components/ui/card.svelte';
   import Skeleton from '@/components/ui/skeleton.svelte';
-  import githubData from '@/data/github-data.json';
 
   const USERNAME = 'Napolitain';
   const ORG_NAME = 'fds-napolitain';
@@ -15,6 +14,9 @@
     title: string;
     skills: string[];
   }
+
+  // Accept githubData as a prop from Astro
+  export let githubData: any = null;
 
   let skillCategories: SkillCategory[] = [];
   let loading = true;
@@ -29,7 +31,15 @@
 
   onMount(async () => {
     try {
-      const categorized = githubData.skills.categorized;
+      let categorized;
+      if (githubData && githubData.skills) {
+        categorized = githubData.skills.categorized;
+      } else {
+        // Fallback to JSON file
+        const data = await import('@/data/github-data.json');
+        categorized = data.skills.categorized;
+      }
+      
       const categories: SkillCategory[] = [];
       
       if (categorized.languages.length > 0) {

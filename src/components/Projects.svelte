@@ -5,7 +5,6 @@
   import Card from '@/components/ui/card.svelte';
   import Badge from '@/components/ui/badge.svelte';
   import Skeleton from '@/components/ui/skeleton.svelte';
-  import githubData from '@/data/github-data.json';
 
   interface Repository {
     id: number;
@@ -21,13 +20,22 @@
 
   const USERNAME = 'Napolitain';
 
+  // Accept githubData as a prop from Astro
+  export let githubData: any = null;
+
   let pinnedRepos: Repository[] = [];
   let loading = true;
   let error = false;
 
   onMount(async () => {
     try {
-      pinnedRepos = githubData.pinnedRepos as Repository[];
+      if (githubData && githubData.pinnedRepos) {
+        pinnedRepos = githubData.pinnedRepos as Repository[];
+      } else {
+        // Fallback to JSON file
+        const data = await import('@/data/github-data.json');
+        pinnedRepos = data.pinnedRepos as Repository[];
+      }
       loading = false;
     } catch (err) {
       console.error('Failed to load repos:', err);

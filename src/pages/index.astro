@@ -5,14 +5,121 @@ import Projects from '@/components/Projects.svelte';
 import Skills from '@/components/Skills.svelte';
 import OtherProjects from '@/components/OtherProjects.svelte';
 import Contact from '@/components/Contact.svelte';
+
+// Fetch real GitHub data at build time
+const USERNAME = 'Napolitain';
+const ORG_NAME = 'fds-napolitain';
+
+async function fetchGitHubData() {
+  try {
+    // Fetch pinned repos
+    const pinnedResponse = await fetch(`https://gh-pinned-repos.egoist.dev/?username=${USERNAME}`);
+    const pinnedData = await pinnedResponse.json();
+    
+    // Fetch detailed info for pinned repos
+    const pinnedRepos = await Promise.all(
+      pinnedData.map(async (pinned: any) => {
+        try {
+          const repoResponse = await fetch(`https://api.github.com/repos/${pinned.owner}/${pinned.repo}`);
+          return await repoResponse.json();
+        } catch (error) {
+          console.error(`Failed to fetch ${pinned.owner}/${pinned.repo}`);
+          return null;
+        }
+      })
+    );
+    
+    // Fetch user repos
+    const userReposResponse = await fetch(`https://api.github.com/users/${USERNAME}/repos?sort=updated&per_page=100&type=owner`);
+    const userRepos = await userReposResponse.json();
+    
+    // Fetch org repos
+    let orgRepos = [];
+    try {
+      const orgReposResponse = await fetch(`https://api.github.com/orgs/${ORG_NAME}/repos?sort=updated&per_page=100`);
+      orgRepos = await orgReposResponse.json();
+    } catch (error) {
+      console.error('Failed to fetch org repos');
+    }
+    
+    // Combine and deduplicate
+    const allRepos = [...userRepos, ...orgRepos];
+    const uniqueRepos = Array.from(
+      new Map(allRepos.map((repo: any) => [repo.id, repo])).values()
+    ).filter((repo: any) => !repo.fork);
+    
+    // Extract skills
+    const languages = new Set<string>();
+    const topics = new Set<string>();
+    
+    uniqueRepos.forEach((repo: any) => {
+      if (repo.language) languages.add(repo.language);
+      if (repo.topics) repo.topics.forEach((topic: string) => topics.add(topic));
+    });
+    
+    const allSkills = [...languages, ...topics];
+    
+    return {
+      pinnedRepos: pinnedRepos.filter((r: any) => r !== null && !r.fork),
+      allRepos: uniqueRepos,
+      skills: {
+        all: allSkills,
+        categorized: categorizeSkills(allSkills)
+      }
+    };
+  } catch (error) {
+    console.error('Error fetching GitHub data:', error);
+    // Fallback to JSON file if fetch fails
+    const githubData = await import('@/data/github-data.json');
+    return {
+      pinnedRepos: githubData.pinnedRepos,
+      allRepos: githubData.allRepos,
+      skills: githubData.skills
+    };
+  }
+}
+
+function categorizeSkills(skills: string[]) {
+  const languageKeywords = ['javascript', 'typescript', 'python', 'java', 'c++', 'c#', 'ruby', 'go', 'rust', 'php', 'swift', 'kotlin', 'scala'];
+  const frontendKeywords = ['react', 'vue', 'angular', 'svelte', 'next', 'nuxt', 'gatsby', 'astro', 'tailwind', 'bootstrap'];
+  const backendKeywords = ['node', 'express', 'django', 'flask', 'spring', 'rails', 'postgresql', 'mysql', 'mongodb', 'redis'];
+  const toolsKeywords = ['docker', 'kubernetes', 'jenkins', 'gitlab', 'github-actions', 'terraform', 'aws', 'azure', 'gcp', 'git'];
+  
+  const categorized = {
+    languages: [] as string[],
+    frontend: [] as string[],
+    backend: [] as string[],
+    tools: [] as string[],
+    other: [] as string[]
+  };
+  
+  skills.forEach(skill => {
+    const lower = skill.toLowerCase();
+    if (languageKeywords.some(kw => lower.includes(kw))) {
+      categorized.languages.push(skill);
+    } else if (frontendKeywords.some(kw => lower.includes(kw))) {
+      categorized.frontend.push(skill);
+    } else if (backendKeywords.some(kw => lower.includes(kw))) {
+      categorized.backend.push(skill);
+    } else if (toolsKeywords.some(kw => lower.includes(kw))) {
+      categorized.tools.push(skill);
+    } else {
+      categorized.other.push(skill);
+    }
+  });
+  
+  return categorized;
+}
+
+const githubData = await fetchGitHubData();
 ---
 
 <Layout>
   <div class="min-h-screen">
     <Hero client:load />
-    <Projects client:load />
-    <Skills client:load />
-    <OtherProjects client:load />
+    <Projects client:load githubData={githubData} />
+    <Skills client:load githubData={githubData} />
+    <OtherProjects client:load githubData={githubData} />
     <Contact client:load />
     
     <footer class="py-8 px-6 border-t border-border">
