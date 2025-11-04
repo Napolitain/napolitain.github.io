@@ -127,33 +127,119 @@ async function fetchGitHubData() {
   }
 }
 
-function categorizeSkills(skills: string[]) {
-  const languageKeywords = ['javascript', 'typescript', 'python', 'java', 'c++', 'c#', 'ruby', 'go', 'rust', 'php', 'swift', 'kotlin', 'scala'];
-  const frontendKeywords = ['react', 'vue', 'angular', 'svelte', 'next', 'nuxt', 'gatsby', 'astro', 'tailwind', 'bootstrap'];
-  const backendKeywords = ['node', 'express', 'django', 'flask', 'spring', 'rails', 'postgresql', 'mysql', 'mongodb', 'redis'];
-  const toolsKeywords = ['docker', 'kubernetes', 'jenkins', 'gitlab', 'github-actions', 'terraform', 'aws', 'azure', 'gcp', 'git'];
+function categorizeSkills(skillsArray: any[]) {
+  // Create a Map from the skills array
+  const skillsMap = new Map();
+  skillsArray.forEach((item: any) => {
+    if (typeof item === 'string') {
+      // Old format - assume count of 1
+      skillsMap.set(item, 1);
+    } else {
+      // New format with name and count
+      skillsMap.set(item.name, item.count);
+    }
+  });
   
-  const categorized = {
-    languages: [] as string[],
-    frontend: [] as string[],
-    backend: [] as string[],
-    tools: [] as string[],
-    other: [] as string[]
+  // Filter skills that appear at least twice
+  const filteredSkills = new Map();
+  skillsMap.forEach((count, skill) => {
+    if (count >= 2) {
+      filteredSkills.set(skill, count);
+    }
+  });
+  
+  // Comprehensive categorization based on the issue requirements
+  const categories = {
+    // Languages - programming languages
+    languages: new Set([
+      'typescript', 'python', 'go', 'c++', 'javascript', 'c#', 'java', 'kotlin', 
+      'netlogo', 'c', 'cpp', 'csharp', 'js'
+    ]),
+    
+    // Frontend - UI/UX frameworks and libraries
+    frontend: new Set([
+      'svelte', 'nextjs', 'react', 'next', 'vue', 'angular', 'astro', 
+      'tailwind', 'bootstrap', 'canvas'
+    ]),
+    
+    // Backend & Databases - server-side and data storage
+    backend: new Set([
+      'flask', 'redis', 'node', 'express', 'django', 'spring', 'rails', 
+      'laravel', 'fastapi', 'nestjs', 'postgresql', 'mysql', 'mongodb', 
+      'elasticsearch', 'graphql', 'caldav-server', 'network'
+    ]),
+    
+    // Tools & DevOps - development tools, build systems, and DevOps
+    tools: new Set([
+      'docker', 'kubernetes', 'jenkins', 'gitlab', 'github-actions', 
+      'terraform', 'ansible', 'aws', 'azure', 'gcp', 'git', 'cmake', 
+      'digital-signal-processing', 'dotenv', 'ffmpeg', 'puppeteer', 
+      'headless-chrome'
+    ]),
+    
+    // Other Technologies - everything else
+    other: new Set([
+      'html', 'tex', 'shaderlab', 'ai', 'linear-programming', 
+      'operations-research', 'total-war', 'esports', 'icalendar', 
+      'liquipedia', 'web-scrapping', 'video-editing', 'keyrate', 
+      'utility', 'windows', 'bot', 'tkinter', 'university', 
+      'game-development', 'unity', 'dotnet', 'image', 'image-processing', 
+      'inpainting', 'uwp', 'augmented-reality', 'mixed-reality', 'music', 
+      'virtual-reality', 'motion-tracking', 'object-tracking', 'opencv', 
+      'game-engine', 'opengl', 'qt', 'hdr', 'tensorflow', 
+      'artificial-intelligence', 'dsp', 'signal-processing', 'raytracing', 
+      'template', 'compression', 'security', 'game', 'genetic-algorithm'
+    ])
   };
   
-  skills.forEach(skill => {
-    const lower = skill.toLowerCase();
-    if (languageKeywords.some(kw => lower.includes(kw))) {
-      categorized.languages.push(skill);
-    } else if (frontendKeywords.some(kw => lower.includes(kw))) {
-      categorized.frontend.push(skill);
-    } else if (backendKeywords.some(kw => lower.includes(kw))) {
-      categorized.backend.push(skill);
-    } else if (toolsKeywords.some(kw => lower.includes(kw))) {
-      categorized.tools.push(skill);
-    } else {
-      categorized.other.push(skill);
+  const categorized = {
+    languages: [] as Array<{name: string, count: number}>,
+    frontend: [] as Array<{name: string, count: number}>,
+    backend: [] as Array<{name: string, count: number}>,
+    tools: [] as Array<{name: string, count: number}>,
+    other: [] as Array<{name: string, count: number}>
+  };
+  
+  filteredSkills.forEach((count, skill) => {
+    const lowerSkill = skill.toLowerCase();
+    
+    // Check exact matches first
+    let categorizedFlag = false;
+    
+    for (const [category, keywords] of Object.entries(categories)) {
+      if (keywords.has(lowerSkill)) {
+        (categorized as any)[category].push({ name: skill, count });
+        categorizedFlag = true;
+        break;
+      }
     }
+    
+    // If no exact match, try partial matches for complex names
+    if (!categorizedFlag) {
+      if (categories.languages.has(lowerSkill) || 
+          ['typescript', 'javascript', 'python', 'java', 'kotlin', 'c++', 'c#', 'go'].some(kw => lowerSkill.includes(kw))) {
+        categorized.languages.push({ name: skill, count });
+      } else if (categories.frontend.has(lowerSkill) || 
+                 ['react', 'vue', 'svelte', 'next', 'angular', 'tailwind'].some(kw => lowerSkill.includes(kw))) {
+        categorized.frontend.push({ name: skill, count });
+      } else if (categories.backend.has(lowerSkill) || 
+                 ['flask', 'redis', 'django', 'mongodb', 'postgresql', 'mysql', 'graphql'].some(kw => lowerSkill.includes(kw))) {
+        categorized.backend.push({ name: skill, count });
+      } else if (categories.tools.has(lowerSkill) || 
+                 ['docker', 'kubernetes', 'git', 'cmake', 'terraform', 'ansible'].some(kw => lowerSkill.includes(kw))) {
+        categorized.tools.push({ name: skill, count });
+      } else {
+        categorized.other.push({ name: skill, count });
+      }
+    }
+  });
+  
+  // Sort each category by count (descending) then by name
+  Object.keys(categorized).forEach(category => {
+    (categorized as any)[category].sort((a: any, b: any) => {
+      if (b.count !== a.count) return b.count - a.count;
+      return a.name.localeCompare(b.name);
+    });
   });
   
   return categorized;

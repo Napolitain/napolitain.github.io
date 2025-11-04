@@ -12,7 +12,7 @@
   interface SkillCategory {
     icon: any;
     title: string;
-    skills: string[];
+    skills: Array<{name: string, count: number}>;
   }
 
   // Accept githubData as a prop from Astro
@@ -90,22 +90,22 @@
         {
           icon: Code,
           title: 'Languages',
-          skills: ['TypeScript', 'JavaScript', 'Python', 'Java']
+          skills: ['TypeScript', 'JavaScript', 'Python', 'Java'].map(s => ({name: s, count: 1}))
         },
         {
           icon: Desktop,
           title: 'Frontend',
-          skills: ['React', 'Next.js', 'Tailwind CSS']
+          skills: ['React', 'Next.js', 'Tailwind CSS'].map(s => ({name: s, count: 1}))
         },
         {
           icon: Database,
           title: 'Backend & Databases',
-          skills: ['Node.js', 'PostgreSQL', 'MongoDB']
+          skills: ['Node.js', 'PostgreSQL', 'MongoDB'].map(s => ({name: s, count: 1}))
         },
         {
           icon: GitBranch,
           title: 'Tools & DevOps',
-          skills: ['Git', 'Docker', 'CI/CD']
+          skills: ['Git', 'Docker', 'CI/CD'].map(s => ({name: s, count: 1}))
         }
       ];
       loading = false;
@@ -156,7 +156,7 @@
                   variant="secondary"
                   class="text-sm py-1.5 px-3 hover:bg-primary hover:text-primary-foreground transition-colors cursor-default"
                 >
-                  {skill}
+                  {skill.name} <span class="ml-1.5 text-xs opacity-70">({skill.count})</span>
                 </Badge>
               {/each}
             </div>

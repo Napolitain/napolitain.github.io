@@ -166,35 +166,77 @@ async function fetchOrgRepos(orgName, perPage = 100) {
 }
 
 /**
- * Extract skills from repositories
+ * Extract skills from repositories with occurrence counts
  */
 function extractSkillsFromRepos(repos) {
-  const languages = new Set();
-  const topics = new Set();
+  const languageCounts = new Map();
+  const topicCounts = new Map();
   
   repos.forEach(repo => {
     if (repo.language) {
-      languages.add(repo.language);
+      const lang = repo.language;
+      languageCounts.set(lang, (languageCounts.get(lang) || 0) + 1);
     }
     if (repo.topics && Array.isArray(repo.topics)) {
-      repo.topics.forEach(topic => topics.add(topic));
+      repo.topics.forEach(topic => {
+        topicCounts.set(topic, (topicCounts.get(topic) || 0) + 1);
+      });
     }
   });
   
   return {
-    languages: Array.from(languages).sort(),
-    topics: Array.from(topics).sort()
+    languageCounts,
+    topicCounts
   };
 }
 
 /**
- * Categorize skills into predefined categories
+ * Categorize skills into predefined categories with occurrence counts
  */
-function categorizeSkills(allSkills) {
-  const languageKeywords = ['javascript', 'typescript', 'python', 'java', 'c++', 'c#', 'ruby', 'go', 'rust', 'php', 'swift', 'kotlin', 'scala', 'r', 'perl', 'shell', 'bash', 'powershell', 'html', 'css', 'sql'];
-  const frontendKeywords = ['react', 'vue', 'angular', 'svelte', 'next', 'nuxt', 'gatsby', 'astro', 'tailwind', 'bootstrap', 'sass', 'less', 'webpack', 'vite', 'rollup'];
-  const backendKeywords = ['node', 'express', 'django', 'flask', 'spring', 'rails', 'laravel', 'asp.net', 'fastapi', 'nestjs', 'postgresql', 'mysql', 'mongodb', 'redis', 'elasticsearch', 'graphql', 'rest', 'api'];
-  const toolsKeywords = ['docker', 'kubernetes', 'jenkins', 'gitlab', 'github-actions', 'terraform', 'ansible', 'aws', 'azure', 'gcp', 'git', 'ci/cd', 'devops', 'nginx', 'apache'];
+function categorizeSkills(skillsMap) {
+  // Comprehensive categorization based on the issue requirements
+  const categories = {
+    // Languages - programming languages
+    languages: new Set([
+      'typescript', 'python', 'go', 'c++', 'javascript', 'c#', 'java', 'kotlin', 
+      'netlogo', 'c', 'cpp', 'csharp', 'js'
+    ]),
+    
+    // Frontend - UI/UX frameworks and libraries
+    frontend: new Set([
+      'svelte', 'nextjs', 'react', 'next', 'vue', 'angular', 'astro', 
+      'tailwind', 'bootstrap', 'canvas'
+    ]),
+    
+    // Backend & Databases - server-side and data storage
+    backend: new Set([
+      'flask', 'redis', 'node', 'express', 'django', 'spring', 'rails', 
+      'laravel', 'fastapi', 'nestjs', 'postgresql', 'mysql', 'mongodb', 
+      'elasticsearch', 'graphql', 'caldav-server', 'network'
+    ]),
+    
+    // Tools & DevOps - development tools, build systems, and DevOps
+    tools: new Set([
+      'docker', 'kubernetes', 'jenkins', 'gitlab', 'github-actions', 
+      'terraform', 'ansible', 'aws', 'azure', 'gcp', 'git', 'cmake', 
+      'digital-signal-processing', 'dotenv', 'ffmpeg', 'puppeteer', 
+      'headless-chrome'
+    ]),
+    
+    // Other Technologies - everything else
+    other: new Set([
+      'html', 'tex', 'shaderlab', 'ai', 'linear-programming', 
+      'operations-research', 'total-war', 'esports', 'icalendar', 
+      'liquipedia', 'web-scrapping', 'video-editing', 'keyrate', 
+      'utility', 'windows', 'bot', 'tkinter', 'university', 
+      'game-development', 'unity', 'dotnet', 'image', 'image-processing', 
+      'inpainting', 'uwp', 'augmented-reality', 'mixed-reality', 'music', 
+      'virtual-reality', 'motion-tracking', 'object-tracking', 'opencv', 
+      'game-engine', 'opengl', 'qt', 'hdr', 'tensorflow', 
+      'artificial-intelligence', 'dsp', 'signal-processing', 'raytracing', 
+      'template', 'compression', 'security', 'game', 'genetic-algorithm'
+    ])
+  };
   
   const categorized = {
     languages: [],
@@ -204,20 +246,46 @@ function categorizeSkills(allSkills) {
     other: []
   };
   
-  allSkills.forEach(skill => {
+  skillsMap.forEach((count, skill) => {
     const lowerSkill = skill.toLowerCase();
     
-    if (languageKeywords.some(kw => lowerSkill.includes(kw))) {
-      categorized.languages.push(skill);
-    } else if (frontendKeywords.some(kw => lowerSkill.includes(kw))) {
-      categorized.frontend.push(skill);
-    } else if (backendKeywords.some(kw => lowerSkill.includes(kw))) {
-      categorized.backend.push(skill);
-    } else if (toolsKeywords.some(kw => lowerSkill.includes(kw))) {
-      categorized.tools.push(skill);
-    } else {
-      categorized.other.push(skill);
+    // Check exact matches first
+    let categorizedFlag = false;
+    
+    for (const [category, keywords] of Object.entries(categories)) {
+      if (keywords.has(lowerSkill)) {
+        categorized[category].push({ name: skill, count });
+        categorizedFlag = true;
+        break;
+      }
     }
+    
+    // If no exact match, try partial matches for complex names
+    if (!categorizedFlag) {
+      if (categories.languages.has(lowerSkill) || 
+          ['typescript', 'javascript', 'python', 'java', 'kotlin', 'c++', 'c#', 'go'].some(kw => lowerSkill.includes(kw))) {
+        categorized.languages.push({ name: skill, count });
+      } else if (categories.frontend.has(lowerSkill) || 
+                 ['react', 'vue', 'svelte', 'next', 'angular', 'tailwind'].some(kw => lowerSkill.includes(kw))) {
+        categorized.frontend.push({ name: skill, count });
+      } else if (categories.backend.has(lowerSkill) || 
+                 ['flask', 'redis', 'django', 'mongodb', 'postgresql', 'mysql', 'graphql'].some(kw => lowerSkill.includes(kw))) {
+        categorized.backend.push({ name: skill, count });
+      } else if (categories.tools.has(lowerSkill) || 
+                 ['docker', 'kubernetes', 'git', 'cmake', 'terraform', 'ansible'].some(kw => lowerSkill.includes(kw))) {
+        categorized.tools.push({ name: skill, count });
+      } else {
+        categorized.other.push({ name: skill, count });
+      }
+    }
+  });
+  
+  // Sort each category by count (descending) then by name
+  Object.keys(categorized).forEach(category => {
+    categorized[category].sort((a, b) => {
+      if (b.count !== a.count) return b.count - a.count;
+      return a.name.localeCompare(b.name);
+    });
   });
   
   return categorized;
@@ -251,10 +319,21 @@ async function main() {
     // Sort by updated date
     nonForkRepos.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
     
-    // Extract skills
-    const { languages, topics } = extractSkillsFromRepos(uniqueRepos);
-    const allSkills = [...languages, ...topics];
-    const categorizedSkills = categorizeSkills(allSkills);
+    // Extract skills with occurrence counts
+    const { languageCounts, topicCounts } = extractSkillsFromRepos(uniqueRepos);
+    
+    // Combine all skills with their counts
+    const allSkillsMap = new Map([...languageCounts, ...topicCounts]);
+    
+    // Filter skills that appear at least twice
+    const filteredSkills = new Map();
+    allSkillsMap.forEach((count, skill) => {
+      if (count >= 2) {
+        filteredSkills.set(skill, count);
+      }
+    });
+    
+    const categorizedSkills = categorizeSkills(filteredSkills);
     
     // Prepare the output data
     const output = {
@@ -262,7 +341,8 @@ async function main() {
       pinnedRepos: pinnedRepos,
       allRepos: nonForkRepos,
       skills: {
-        all: allSkills,
+        all: Array.from(allSkillsMap.entries()).map(([name, count]) => ({ name, count })),
+        filtered: Array.from(filteredSkills.entries()).map(([name, count]) => ({ name, count })),
         categorized: categorizedSkills
       },
       metadata: {
@@ -270,7 +350,8 @@ async function main() {
         orgName: ORG_NAME,
         totalRepos: nonForkRepos.length,
         pinnedRepos: pinnedRepos.length,
-        totalSkills: allSkills.length
+        totalSkills: allSkillsMap.size,
+        filteredSkills: filteredSkills.size
       }
     };
     
@@ -281,7 +362,8 @@ async function main() {
     console.log('✅ Successfully fetched and saved GitHub data!');
     console.log(`   - Pinned repos: ${pinnedRepos.length}`);
     console.log(`   - Total repos: ${nonForkRepos.length}`);
-    console.log(`   - Skills: ${allSkills.length}`);
+    console.log(`   - Total skills: ${allSkillsMap.size}`);
+    console.log(`   - Filtered skills (≥2 occurrences): ${filteredSkills.size}`);
     
   } catch (error) {
     console.error('❌ Error in main:', error);
