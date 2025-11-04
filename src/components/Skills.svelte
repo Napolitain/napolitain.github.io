@@ -103,9 +103,9 @@
   });
 </script>
 
-<section class="py-24 px-6 bg-secondary/30">
-  <div class="max-w-6xl mx-auto">
-    <div class="text-center mb-16">
+<section class="py-20 px-4 md:px-6 lg:px-8 bg-secondary/30">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-12">
       <h2 class="text-4xl md:text-5xl font-bold mb-4">Skills & Technologies</h2>
       <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
         Technologies from my repositories ({USERNAME} and {ORG_NAME}) and CV
@@ -113,7 +113,7 @@
     </div>
 
     {#if loading}
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
         {#each [1, 2, 3, 4] as i}
           <Card class="p-8 space-y-4">
             <Skeleton class="h-8 w-48" />
@@ -128,19 +128,19 @@
         {/each}
       </div>
     {:else}
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
         {#each skillCategories as category, index}
           <div 
             in:fly={{ y: 20, duration: 500, delay: index * 100 }}
-            class="bg-card rounded-lg p-8 shadow-sm"
+            class="bg-card rounded-lg p-6 shadow-sm border"
           >
-            <div class="flex items-center gap-3 mb-6">
+            <div class="flex items-center gap-3 mb-4">
               <div class="p-2 rounded-lg bg-primary/10">
                 <svelte:component this={category.icon} size={24} class="text-primary" />
               </div>
               <h3 class="text-xl font-semibold">{category.title}</h3>
             </div>
-            <div class="flex flex-wrap gap-3">
+            <div class="flex flex-wrap gap-2">
               {#each category.skills as skill}
                 <Badge 
                   variant="secondary"
