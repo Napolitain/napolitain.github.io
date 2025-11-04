@@ -115,7 +115,7 @@
     {#if loading}
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
         {#each [1, 2, 3, 4] as i}
-          <Card class="p-8 space-y-4">
+          <Card class="p-6 space-y-4">
             <Skeleton class="h-8 w-48" />
             <div class="flex flex-wrap gap-2">
               <Skeleton class="h-8 w-20" />
