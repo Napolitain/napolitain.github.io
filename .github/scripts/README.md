@@ -8,7 +8,7 @@ This script fetches real data from the GitHub API and saves it to `src/data/gith
 
 ### What it fetches:
 
-1. **Pinned Repositories**: Uses gh-pinned-repos API to get pinned repos
+1. **Pinned Repositories**: Uses GitHub GraphQL API to get pinned repos (official GitHub API)
 2. **User Repositories**: Fetches all repos from the main GitHub user (Napolitain)
 3. **Organization Repositories**: Fetches all repos from the organization (fds-napolitain)
 4. **Skills**: Extracts programming languages and topics from all repositories

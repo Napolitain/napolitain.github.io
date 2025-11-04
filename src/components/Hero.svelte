@@ -9,12 +9,12 @@
     <div class="absolute bottom-1/4 -right-48 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
   </div>
   
-  <div class="max-w-4xl w-full text-center space-y-8">
+  <div class="max-w-4xl w-full text-center space-y-12">
     <div in:fly={{ y: 20, duration: 600 }}>
-      <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground mb-4">
+      <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground mb-6">
         Napolitain
       </h1>
-      <p class="text-2xl md:text-3xl text-muted-foreground font-medium mb-6">
+      <p class="text-2xl md:text-3xl text-muted-foreground font-medium mb-8">
         Software Engineer
       </p>
       <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
@@ -23,7 +23,7 @@
       </p>
     </div>
 
-    <div in:fly={{ y: 20, duration: 600, delay: 200 }} class="flex flex-wrap items-center justify-center gap-4">
+    <div in:fly={{ y: 20, duration: 600, delay: 200 }} class="flex flex-wrap items-center justify-center gap-6">
       <a
         href="#projects"
         class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all h-10 px-6 bg-accent hover:bg-accent/90 text-accent-foreground group shadow-xs"
@@ -39,7 +39,7 @@
       </a>
     </div>
 
-    <div in:fade={{ duration: 600, delay: 400 }} class="flex items-center justify-center gap-4 pt-8">
+    <div in:fade={{ duration: 600, delay: 400 }} class="flex items-center justify-center gap-6 pt-12">
       <a 
         href="https://github.com/Napolitain" 
         target="_blank" 
