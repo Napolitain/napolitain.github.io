@@ -20,6 +20,7 @@
             href="https://github.com/Napolitain" 
             target="_blank" 
             rel="noopener noreferrer"
+            aria-label="Visit my GitHub profile: Napolitain"
             class="h-auto flex flex-col gap-5 py-10 px-10 border rounded-md bg-background shadow-xs hover:bg-primary/5 hover:text-accent-foreground hover:border-primary transition-all items-center justify-center"
           >
             <GithubLogo size={32} />
@@ -33,6 +34,7 @@
             href="https://linkedin.com/in/mxboucher" 
             target="_blank" 
             rel="noopener noreferrer"
+            aria-label="Connect with me on LinkedIn: mxboucher"
             class="h-auto flex flex-col gap-5 py-10 px-10 border rounded-md bg-background shadow-xs hover:bg-primary/5 hover:text-accent-foreground hover:border-primary transition-all items-center justify-center"
           >
             <LinkedinLogo size={32} />
@@ -44,6 +46,7 @@
 
           <a 
             href="mailto:mxboucher@gmail.com"
+            aria-label="Send me an email at mxboucher@gmail.com"
             class="h-auto flex flex-col gap-5 py-10 px-10 border rounded-md bg-background shadow-xs hover:bg-accent/5 hover:text-accent-foreground hover:border-accent transition-all items-center justify-center"
           >
             <EnvelopeSimple size={32} />

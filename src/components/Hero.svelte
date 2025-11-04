@@ -44,6 +44,7 @@
         href="https://github.com/Napolitain" 
         target="_blank" 
         rel="noopener noreferrer"
+        aria-label="Visit my GitHub profile"
         class="p-3 rounded-full bg-card hover:bg-secondary transition-colors shadow-sm"
       >
         <GithubLogo size={24} class="text-foreground" />
@@ -52,6 +53,7 @@
         href="https://linkedin.com/in/napolitain" 
         target="_blank" 
         rel="noopener noreferrer"
+        aria-label="Visit my LinkedIn profile"
         class="p-3 rounded-full bg-card hover:bg-secondary transition-colors shadow-sm"
       >
         <LinkedinLogo size={24} class="text-foreground" />
