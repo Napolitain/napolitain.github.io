@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { fly } from 'svelte/transition';
-  import { Code, Desktop, Database, GitBranch, Wrench } from 'phosphor-svelte';
+  import { Code, Desktop, Database, GitBranch, Wrench, GameController, Brain, Eye, Video, MonitorPlay } from 'phosphor-svelte';
   import Badge from '@/components/ui/badge.svelte';
   import Card from '@/components/ui/card.svelte';
   import Skeleton from '@/components/ui/skeleton.svelte';
@@ -12,7 +12,7 @@
   interface SkillCategory {
     icon: any;
     title: string;
-    skills: string[];
+    skills: Array<{name: string, count: number}>;
   }
 
   // Accept githubData as a prop from Astro
@@ -74,6 +74,46 @@
         });
       }
       
+      if (categorized.gamedev && categorized.gamedev.length > 0) {
+        categories.push({
+          icon: GameController,
+          title: 'Game Development',
+          skills: categorized.gamedev
+        });
+      }
+      
+      if (categorized.aiml && categorized.aiml.length > 0) {
+        categories.push({
+          icon: Brain,
+          title: 'AI & Machine Learning',
+          skills: categorized.aiml
+        });
+      }
+      
+      if (categorized.vision && categorized.vision.length > 0) {
+        categories.push({
+          icon: Eye,
+          title: 'Computer Vision & Graphics',
+          skills: categorized.vision
+        });
+      }
+      
+      if (categorized.multimedia && categorized.multimedia.length > 0) {
+        categories.push({
+          icon: Video,
+          title: 'Multimedia & Signal Processing',
+          skills: categorized.multimedia
+        });
+      }
+      
+      if (categorized.desktop && categorized.desktop.length > 0) {
+        categories.push({
+          icon: MonitorPlay,
+          title: 'Desktop & Frameworks',
+          skills: categorized.desktop
+        });
+      }
+      
       if (categorized.other.length > 0) {
         categories.push({
           icon: GitBranch,
@@ -90,22 +130,22 @@
         {
           icon: Code,
           title: 'Languages',
-          skills: ['TypeScript', 'JavaScript', 'Python', 'Java']
+          skills: ['TypeScript', 'JavaScript', 'Python', 'Java'].map(s => ({name: s, count: 1}))
         },
         {
           icon: Desktop,
           title: 'Frontend',
-          skills: ['React', 'Next.js', 'Tailwind CSS']
+          skills: ['React', 'Next.js', 'Tailwind CSS'].map(s => ({name: s, count: 1}))
         },
         {
           icon: Database,
           title: 'Backend & Databases',
-          skills: ['Node.js', 'PostgreSQL', 'MongoDB']
+          skills: ['Node.js', 'PostgreSQL', 'MongoDB'].map(s => ({name: s, count: 1}))
         },
         {
           icon: GitBranch,
           title: 'Tools & DevOps',
-          skills: ['Git', 'Docker', 'CI/CD']
+          skills: ['Git', 'Docker', 'CI/CD'].map(s => ({name: s, count: 1}))
         }
       ];
       loading = false;
@@ -156,7 +196,7 @@
                   variant="secondary"
                   class="text-sm py-1.5 px-3 hover:bg-primary hover:text-primary-foreground transition-colors cursor-default"
                 >
-                  {skill}
+                  {skill.name} <span class="ml-1.5 text-xs opacity-70">({skill.count})</span>
                 </Badge>
               {/each}
             </div>
