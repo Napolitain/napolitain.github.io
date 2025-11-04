@@ -1,11 +1,118 @@
 {
-  "lastUpdated": "2025-11-04T07:41:42.473Z",
-  "pinnedRepos": [],
-  "allRepos": [],
+  "lastUpdated": "2025-11-04T19:00:00.000Z",
+  "pinnedRepos": [
+    {
+      "id": 1,
+      "name": "twoptimizer",
+      "full_name": "Napolitain/twoptimizer",
+      "description": "Total War optimizer and build tool",
+      "html_url": "https://github.com/Napolitain/twoptimizer",
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "language": "Python",
+      "topics": ["total-war", "optimization", "gaming"],
+      "fork": false,
+      "owner": {
+        "login": "Napolitain"
+      }
+    },
+    {
+      "id": 2,
+      "name": "liquipedia-calendar",
+      "full_name": "Napolitain/liquipedia-calendar",
+      "description": "Calendar integration for Liquipedia esports events",
+      "html_url": "https://github.com/Napolitain/liquipedia-calendar",
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "language": "Python",
+      "topics": ["esports", "calendar", "liquipedia", "icalendar"],
+      "fork": false,
+      "owner": {
+        "login": "Napolitain"
+      }
+    },
+    {
+      "id": 3,
+      "name": "go-creator",
+      "full_name": "Napolitain/go-creator",
+      "description": "Creator tool built with Go",
+      "html_url": "https://github.com/Napolitain/go-creator",
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "language": "Go",
+      "topics": ["go", "creator", "tool"],
+      "fork": false,
+      "owner": {
+        "login": "Napolitain"
+      }
+    }
+  ],
+  "allRepos": [
+    {
+      "id": 1,
+      "name": "twoptimizer",
+      "full_name": "Napolitain/twoptimizer",
+      "description": "Total War optimizer and build tool",
+      "html_url": "https://github.com/Napolitain/twoptimizer",
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "language": "Python",
+      "topics": ["total-war", "optimization", "gaming"],
+      "fork": false,
+      "owner": {
+        "login": "Napolitain"
+      }
+    },
+    {
+      "id": 2,
+      "name": "liquipedia-calendar",
+      "full_name": "Napolitain/liquipedia-calendar",
+      "description": "Calendar integration for Liquipedia esports events",
+      "html_url": "https://github.com/Napolitain/liquipedia-calendar",
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "language": "Python",
+      "topics": ["esports", "calendar", "liquipedia", "icalendar"],
+      "fork": false,
+      "owner": {
+        "login": "Napolitain"
+      }
+    },
+    {
+      "id": 3,
+      "name": "go-creator",
+      "full_name": "Napolitain/go-creator",
+      "description": "Creator tool built with Go",
+      "html_url": "https://github.com/Napolitain/go-creator",
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "language": "Go",
+      "topics": ["go", "creator", "tool"],
+      "fork": false,
+      "owner": {
+        "login": "Napolitain"
+      }
+    }
+  ],
   "skills": {
-    "all": [],
+    "all": [
+      {"name": "Python", "count": 2},
+      {"name": "Go", "count": 1},
+      {"name": "total-war", "count": 1},
+      {"name": "optimization", "count": 1},
+      {"name": "gaming", "count": 1},
+      {"name": "esports", "count": 1},
+      {"name": "calendar", "count": 1},
+      {"name": "liquipedia", "count": 1},
+      {"name": "icalendar", "count": 1},
+      {"name": "creator", "count": 1},
+      {"name": "tool", "count": 1}
+    ],
     "categorized": {
-      "languages": [],
+      "languages": [
+        {"name": "Python", "count": 2},
+        {"name": "Go", "count": 1}
+      ],
       "frontend": [],
       "backend": [],
       "tools": [],
@@ -14,14 +121,24 @@
       "vision": [],
       "multimedia": [],
       "desktop": [],
-      "other": []
+      "other": [
+        {"name": "total-war", "count": 1},
+        {"name": "optimization", "count": 1},
+        {"name": "gaming", "count": 1},
+        {"name": "esports", "count": 1},
+        {"name": "calendar", "count": 1},
+        {"name": "liquipedia", "count": 1},
+        {"name": "icalendar", "count": 1},
+        {"name": "creator", "count": 1},
+        {"name": "tool", "count": 1}
+      ]
     }
   },
   "metadata": {
     "username": "Napolitain",
     "orgName": "fds-napolitain",
-    "totalRepos": 0,
-    "pinnedRepos": 0,
-    "totalSkills": 0
+    "totalRepos": 3,
+    "pinnedRepos": 3,
+    "totalSkills": 11
   }
 }
