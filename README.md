@@ -127,7 +127,13 @@ To enable GitHub Pages for your repository:
 2. Under "Build and deployment", select "GitHub Actions" as the source
 3. The workflow will automatically deploy on the next run
 
-Your portfolio will be available at: `https://[username].github.io/portfolio-generator/`
+**For User Sites (username.github.io repositories):**
+Your portfolio will be available at: `https://[username].github.io/`
+
+**For Project Sites (any other repository name):**
+Your portfolio will be available at: `https://[username].github.io/[repository-name]/`
+
+Note: This repository is configured as a user site. If you're using it as a project site, you'll need to add the `base` configuration in `astro.config.mjs` to match your repository name.
 
 ## 📄 License
 
