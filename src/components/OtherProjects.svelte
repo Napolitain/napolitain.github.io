@@ -6,7 +6,6 @@
   import Badge from '@/components/ui/badge.svelte';
   import Skeleton from '@/components/ui/skeleton.svelte';
   import Button from '@/components/ui/button.svelte';
-  import githubData from '@/data/github-data.json';
 
   interface Repository {
     id: number;
@@ -28,6 +27,9 @@
   const ORG_NAME = 'fds-napolitain';
   const INITIAL_DISPLAY = 9;
 
+  // Accept githubData as a prop from Astro
+  export let githubData: any = null;
+
   let repos: Repository[] = [];
   let displayedRepos: Repository[] = [];
   let loading = true;
@@ -36,7 +38,15 @@
 
   onMount(async () => {
     try {
-      const allRepos = githubData.allRepos as Repository[];
+      let allRepos;
+      if (githubData && githubData.allRepos) {
+        allRepos = githubData.allRepos as Repository[];
+      } else {
+        // Fallback to JSON file
+        const data = await import('@/data/github-data.json');
+        allRepos = data.allRepos as Repository[];
+      }
+      
       const nonForkRepos = allRepos.filter(repo => !repo.fork);
       
       repos = nonForkRepos;
