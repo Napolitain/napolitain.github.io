@@ -26,6 +26,9 @@
   const USERNAME = 'Napolitain';
   const ORG_NAME = 'fds-napolitain';
   const INITIAL_DISPLAY = 9;
+  
+  // Featured repos that should be excluded from this section
+  const FEATURED_REPOS = ['twoptimizer', 'liquipedia-calendar', 'go-creator'];
 
   // Accept githubData as a prop from Astro
   export let githubData: any = null;
@@ -47,7 +50,10 @@
         allRepos = data.allRepos as Repository[];
       }
       
-      const nonForkRepos = allRepos.filter(repo => !repo.fork);
+      // Filter out forks AND featured repos to avoid duplication
+      const nonForkRepos = allRepos.filter(repo => 
+        !repo.fork && !FEATURED_REPOS.includes(repo.name)
+      );
       
       repos = nonForkRepos;
       displayedRepos = nonForkRepos.slice(0, INITIAL_DISPLAY);
