@@ -13,7 +13,7 @@
         "fetch-data": "node .github/scripts/fetch-github-data.cjs"
     },
     "dependencies": {
-        "@astrojs/svelte": "^7.2.1",
+        "@astrojs/svelte": "^7.2.2",
         "@tailwindcss/vite": "^4.1.11",
         "astro": "^5.15.3",
         "class-variance-authority": "^0.7.1",
