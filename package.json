@@ -27,7 +27,7 @@
         "@tailwindcss/postcss": "^4.1.8",
         "eslint": "^9.39.1",
         "globals": "^16.0.0",
-        "tailwindcss": "^4.1.11",
+        "tailwindcss": "^4.1.17",
         "typescript": "~5.9.3"
     }
 }
