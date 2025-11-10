@@ -368,6 +368,13 @@ async function main() {
     
     const categorizedSkills = categorizeSkills(filteredSkills);
     
+    // Validate that we actually fetched data before writing to file
+    if (nonForkRepos.length === 0) {
+      console.error('❌ Error: No repositories were fetched. This likely indicates an API rate limit or authentication issue.');
+      console.error('   The workflow should not proceed with empty data.');
+      process.exit(1);
+    }
+    
     // Prepare the output data
     const output = {
       lastUpdated: new Date().toISOString(),
