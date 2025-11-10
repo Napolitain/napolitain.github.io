@@ -398,6 +398,13 @@ async function main() {
     console.log(`   - Total skills: ${allSkillsMap.size}`);
     console.log(`   - Filtered skills (≥2 occurrences): ${filteredSkills.size}`);
     
+    // Validate that we actually fetched data
+    if (nonForkRepos.length === 0) {
+      console.error('❌ Error: No repositories were fetched. This likely indicates an API rate limit or authentication issue.');
+      console.error('   The workflow should not proceed with empty data.');
+      process.exit(1);
+    }
+    
   } catch (error) {
     console.error('❌ Error in main:', error);
     process.exit(1);
