@@ -19,7 +19,7 @@
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "phosphor-svelte": "^3.0.1",
-        "svelte": "^5.43.4",
+        "svelte": "^5.43.5",
         "tailwind-merge": "^3.0.2"
     },
     "devDependencies": {
