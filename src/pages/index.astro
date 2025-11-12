@@ -5,6 +5,7 @@ import Projects from '@/components/Projects.svelte';
 import Skills from '@/components/Skills.svelte';
 import OtherProjects from '@/components/OtherProjects.svelte';
 import Contact from '@/components/Contact.svelte';
+import ThemeToggle from '@/components/ThemeToggle.svelte';
 
 // Hardcoded featured repositories
 const USERNAME = 'Napolitain';
@@ -254,12 +255,15 @@ const githubData = await fetchGitHubData();
 ---
 
 <Layout>
+  <ThemeToggle client:load />
   <div class="min-h-screen">
-    <Hero client:load />
-    <Projects client:load githubData={githubData} />
-    <Skills client:load githubData={githubData} />
-    <OtherProjects client:load githubData={githubData} />
-    <Contact client:load />
+    <main id="main-content">
+      <Hero client:load />
+      <Projects client:load githubData={githubData} />
+      <Skills client:load githubData={githubData} />
+      <OtherProjects client:load githubData={githubData} />
+      <Contact client:load />
+    </main>
     
     <footer class="py-16 px-8 border-t border-border mt-40">
       <div class="max-w-6xl mx-auto text-center text-sm text-muted-foreground">

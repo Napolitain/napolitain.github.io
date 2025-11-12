@@ -4,7 +4,7 @@
 </script>
 
 <section class="min-h-screen flex items-center justify-center px-6 relative overflow-hidden">
-  <div class="absolute inset-0 -z-10">
+  <div class="absolute inset-0 -z-10" aria-hidden="true">
     <div class="absolute top-1/4 -left-48 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
     <div class="absolute bottom-1/4 -right-48 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
   </div>
@@ -50,7 +50,7 @@
         <GithubLogo size={24} class="text-foreground" />
       </a>
       <a 
-        href="https://linkedin.com/in/napolitain" 
+        href="https://linkedin.com/in/mxboucher" 
         target="_blank" 
         rel="noopener noreferrer"
         aria-label="Visit my LinkedIn profile"
