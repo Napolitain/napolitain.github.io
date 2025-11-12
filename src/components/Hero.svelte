@@ -1,6 +1,6 @@
 <script lang="ts">
   import { fade, fly } from 'svelte/transition';
-  import { GithubLogo, LinkedinLogo, ArrowRight } from 'phosphor-svelte';
+  import { GithubLogo, LinkedinLogo, ArrowRight, Article } from 'phosphor-svelte';
 </script>
 
 <section class="min-h-screen flex items-center justify-center px-6 relative overflow-hidden">
@@ -30,6 +30,13 @@
       >
         View Projects
         <ArrowRight class="ml-2 group-hover:translate-x-1 transition-transform" />
+      </a>
+      <a
+        href="/blog"
+        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all h-10 px-6 border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50"
+      >
+        <Article size={20} />
+        Blog
       </a>
       <a
         href="#contact"

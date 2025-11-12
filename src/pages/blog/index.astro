@@ -1,0 +1,59 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import BlogCard from '@/components/BlogCard.svelte';
+import { getCollection } from 'astro:content';
+
+// Get all blog posts and sort by date (newest first)
+const allPosts = await getCollection('blog', ({ data }) => {
+  // Filter out drafts in production
+  return import.meta.env.PROD ? data.draft !== true : true;
+});
+
+const sortedPosts = allPosts.sort((a, b) => 
+  b.data.date.valueOf() - a.data.date.valueOf()
+);
+---
+
+<Layout title="Blog - Napolitain" description="Thoughts and writings about software engineering and technology">
+  <div class="min-h-screen">
+    <!-- Hero Section -->
+    <section class="py-40 px-8 mt-20">
+      <div class="max-w-6xl mx-auto text-center">
+        <h1 class="text-5xl md:text-6xl font-bold mb-6">Blog</h1>
+        <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
+          Thoughts, tutorials, and insights about software engineering
+        </p>
+      </div>
+    </section>
+
+    <!-- Blog Posts Grid -->
+    <section class="pb-40 px-8">
+      <div class="max-w-6xl mx-auto">
+        {sortedPosts.length === 0 ? (
+          <div class="text-center py-20">
+            <p class="text-muted-foreground text-lg">No blog posts yet. Check back soon!</p>
+          </div>
+        ) : (
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {sortedPosts.map((post) => (
+              <BlogCard
+                client:load
+                title={post.data.title}
+                description={post.data.description}
+                date={post.data.date}
+                tags={post.data.tags}
+                slug={post.slug}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+
+    <footer class="py-16 px-8 border-t border-border">
+      <div class="max-w-6xl mx-auto text-center text-sm text-muted-foreground">
+        <p>© {new Date().getFullYear()} Napolitain. Built with Astro, Svelte & TypeScript.</p>
+      </div>
+    </footer>
+  </div>
+</Layout>

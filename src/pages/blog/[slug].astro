@@ -1,0 +1,107 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import { Calendar, Tag, ArrowLeft } from 'phosphor-svelte';
+import Badge from '@/components/ui/badge.svelte';
+
+export async function getStaticPaths() {
+  const blogEntries = await getCollection('blog', ({ data }) => {
+    return import.meta.env.PROD ? data.draft !== true : true;
+  });
+  return blogEntries.map(entry => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'blog'>;
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+
+function formatDate(date: Date): string {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }).format(date);
+}
+---
+
+<Layout title={`${entry.data.title} - Napolitain`} description={entry.data.description}>
+  <div class="min-h-screen">
+    <!-- Back to Blog -->
+    <div class="max-w-4xl mx-auto px-8 pt-20">
+      <a 
+        href="/blog" 
+        class="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-12"
+      >
+        <ArrowLeft client:load size={20} />
+        Back to Blog
+      </a>
+    </div>
+
+    <!-- Article Header -->
+    <article class="max-w-4xl mx-auto px-8 py-20">
+      <header class="mb-16 space-y-8">
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
+          {entry.data.title}
+        </h1>
+        
+        <p class="text-xl text-muted-foreground leading-relaxed">
+          {entry.data.description}
+        </p>
+
+        <div class="flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
+          <div class="flex items-center gap-2">
+            <Calendar client:load size={16} />
+            <time datetime={entry.data.date.toISOString()}>
+              {formatDate(entry.data.date)}
+            </time>
+          </div>
+
+          {entry.data.tags.length > 0 && (
+            <div class="flex items-center gap-2">
+              <Tag client:load size={16} />
+              <div class="flex flex-wrap gap-2">
+                {entry.data.tags.map((tag) => (
+                  <Badge client:load variant="secondary" class="text-xs">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </header>
+
+      <!-- Article Content -->
+      <div class="prose prose-lg prose-slate dark:prose-invert max-w-none
+        prose-headings:font-bold prose-headings:text-foreground
+        prose-h1:text-4xl prose-h1:mb-8
+        prose-h2:text-3xl prose-h2:mt-16 prose-h2:mb-6
+        prose-h3:text-2xl prose-h3:mt-12 prose-h3:mb-4
+        prose-p:text-muted-foreground prose-p:leading-relaxed prose-p:mb-6
+        prose-a:text-primary prose-a:no-underline hover:prose-a:underline
+        prose-strong:text-foreground prose-strong:font-semibold
+        prose-code:text-primary prose-code:bg-secondary prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-sm prose-code:before:content-none prose-code:after:content-none
+        prose-pre:bg-card prose-pre:border prose-pre:border-border prose-pre:shadow-sm
+        prose-ul:my-6 prose-ol:my-6
+        prose-li:text-muted-foreground prose-li:my-2
+        prose-blockquote:border-l-primary prose-blockquote:bg-secondary/30 prose-blockquote:py-1 prose-blockquote:px-6 prose-blockquote:italic
+      ">
+        <Content />
+      </div>
+    </article>
+
+    <!-- Footer -->
+    <footer class="py-16 px-8 border-t border-border mt-20">
+      <div class="max-w-6xl mx-auto text-center text-sm text-muted-foreground">
+        <p>© {new Date().getFullYear()} Napolitain. Built with Astro, Svelte & TypeScript.</p>
+      </div>
+    </footer>
+  </div>
+</Layout>
