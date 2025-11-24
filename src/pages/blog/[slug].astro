@@ -134,4 +134,39 @@ const schema = {
       </div>
     </footer>
   </div>
+  </div>
 </Layout>
+
+<script>
+  import mermaid from 'mermaid';
+
+  mermaid.initialize({ 
+    startOnLoad: false, 
+    theme: 'neutral',
+    fontFamily: 'Inter, sans-serif'
+  });
+
+  async function renderMermaid() {
+    // Target the pre element directly, as Shiki puts the language there
+    const graphs = document.querySelectorAll('pre[data-language="mermaid"]');
+    
+    for (const graph of graphs) {
+      const content = graph.textContent;
+      
+      if (content) {
+        const div = document.createElement('div');
+        div.classList.add('mermaid');
+        div.textContent = content;
+        div.style.textAlign = 'center';
+        graph.replaceWith(div);
+      }
+    }
+
+    await mermaid.run({
+      querySelector: '.mermaid'
+    });
+  }
+
+  renderMermaid();
+  document.addEventListener('astro:page-load', renderMermaid);
+</script>
