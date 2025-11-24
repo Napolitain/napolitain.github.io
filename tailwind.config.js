@@ -1,4 +1,5 @@
 import fs from "fs";
+import typography from '@tailwindcss/typography';
 
 /** @type {import('tailwindcss').Config} */
 
@@ -100,6 +101,10 @@ const defaultTheme = {
       "2xl": "var(--radius-2xl)",
       full: "var(--radius-full)",
     },
+    fontFamily: {
+      serif: ['Merriweather', 'serif'],
+      sans: ['Inter', 'sans-serif'],
+    },
   },
   spacing: {
     px: "var(--size-px)",
@@ -143,5 +148,92 @@ const defaultTheme = {
 
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
-  theme: { ...defaultTheme, ...theme },
+  plugins: [
+    typography,
+  ],
+  theme: {
+    ...defaultTheme,
+    ...theme,
+    extend: {
+      ...defaultTheme.extend,
+      ...theme.extend,
+      typography: (theme) => ({
+        DEFAULT: {
+          css: {
+            maxWidth: '65ch',
+            color: theme('colors.foreground'),
+            '[class~="lead"]': {
+              color: theme('colors.muted.foreground'),
+            },
+            a: {
+              color: theme('colors.primary.DEFAULT'),
+              textDecoration: 'none',
+              '&:hover': {
+                textDecoration: 'underline',
+              },
+            },
+            strong: {
+              color: theme('colors.foreground'),
+              fontWeight: '600',
+            },
+            'h1, h2, h3, h4': {
+              color: theme('colors.foreground'),
+              fontFamily: theme('fontFamily.sans'),
+              fontWeight: '700',
+            },
+            blockquote: {
+              borderLeftWidth: '0',
+              fontFamily: theme('fontFamily.serif'),
+              fontWeight: '500',
+              fontStyle: 'normal',
+              fontSize: '2.25rem', // text-4xl
+              lineHeight: '1.2',
+              color: theme('colors.muted.foreground'),
+              padding: '3rem 2rem',
+              textAlign: 'center',
+              quotes: 'none',
+            },
+            code: {
+              color: theme('colors.primary.DEFAULT'),
+              backgroundColor: theme('colors.secondary.DEFAULT'),
+              borderRadius: '0.25rem',
+              padding: '0.25rem 0.5rem',
+              fontWeight: '500',
+            },
+            'code::before': {
+              content: '""',
+            },
+            'code::after': {
+              content: '""',
+            },
+            pre: {
+              backgroundColor: theme('colors.zinc.100'),
+              color: theme('colors.zinc.900'),
+              borderRadius: '0.75rem', // rounded-xl
+              padding: '1.5rem',
+              borderWidth: '1px',
+              borderColor: theme('colors.border'),
+              boxShadow: theme('boxShadow.sm'),
+            },
+          },
+        },
+        invert: {
+          css: {
+            color: theme('colors.zinc.300'),
+            'h1, h2, h3, h4': {
+              color: theme('colors.zinc.100'),
+            },
+            blockquote: {
+              color: theme('colors.zinc.400'),
+            },
+            pre: {
+              backgroundColor: theme('colors.zinc.900'),
+              color: theme('colors.zinc.100'),
+              borderColor: theme('colors.zinc.800'),
+            },
+          },
+        },
+      }),
+    },
+  },
 };

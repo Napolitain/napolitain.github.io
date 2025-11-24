@@ -2,24 +2,28 @@
 import Layout from '@/layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
-import { Calendar, Tag, ArrowLeft } from 'phosphor-svelte';
+import { Calendar, Tag, ArrowLeft, Clock } from 'phosphor-svelte';
 import Badge from '@/components/ui/badge.svelte';
+import RelatedPosts from '@/components/RelatedPosts.svelte';
+import { getReadingTime, getRelatedPosts } from '@/lib/blog-utils';
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection('blog', ({ data }) => {
     return import.meta.env.PROD ? data.draft !== true : true;
   });
+  
   return blogEntries.map(entry => ({
     params: { slug: entry.slug },
-    props: { entry },
+    props: { entry, allPosts: blogEntries },
   }));
 }
 
 interface Props {
   entry: CollectionEntry<'blog'>;
+  allPosts: CollectionEntry<'blog'>[];
 }
 
-const { entry } = Astro.props;
+const { entry, allPosts } = Astro.props;
 const { Content } = await entry.render();
 
 function formatDate(date: Date): string {
@@ -29,12 +33,36 @@ function formatDate(date: Date): string {
     day: 'numeric'
   }).format(date);
 }
+
+const readingTime = getReadingTime(entry.body);
+const relatedPosts = getRelatedPosts(entry, allPosts);
+
+// Schema.org JSON-LD
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": entry.data.title,
+  "description": entry.data.description,
+  "datePublished": entry.data.date.toISOString(),
+  "author": {
+    "@type": "Person",
+    "name": entry.data.author
+  },
+  "image": entry.data.coverImage ? `https://napolitain.github.io${entry.data.coverImage}` : undefined
+};
 ---
 
-<Layout title={`${entry.data.title} - Napolitain`} description={entry.data.description}>
+<Layout 
+  title={`${entry.data.title} - Napolitain`} 
+  description={entry.data.description}
+  image={entry.data.coverImage}
+  type="article"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  
   <div class="min-h-screen">
     <!-- Back to Blog -->
-    <div class="max-w-4xl mx-auto px-8 pt-20">
+    <div class="max-w-3xl mx-auto px-6 pt-20">
       <a 
         href="/blog" 
         class="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-12"
@@ -45,22 +73,27 @@ function formatDate(date: Date): string {
     </div>
 
     <!-- Article Header -->
-    <article class="max-w-4xl mx-auto px-8 py-20">
+    <article class="max-w-3xl mx-auto px-6 py-20">
       <header class="mb-16 space-y-8">
-        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight font-sans">
           {entry.data.title}
         </h1>
         
-        <p class="text-xl text-muted-foreground leading-relaxed">
+        <p class="text-xl text-muted-foreground leading-relaxed font-serif">
           {entry.data.description}
         </p>
 
-        <div class="flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
+        <div class="flex flex-wrap items-center gap-6 text-sm text-muted-foreground font-sans">
           <div class="flex items-center gap-2">
             <Calendar client:load size={16} />
             <time datetime={entry.data.date.toISOString()}>
               {formatDate(entry.data.date)}
             </time>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <Clock client:load size={16} />
+            <span>{readingTime}</span>
           </div>
 
           {entry.data.tags.length > 0 && (
@@ -78,23 +111,20 @@ function formatDate(date: Date): string {
         </div>
       </header>
 
-      <!-- Article Content -->
-      <div class="prose prose-lg prose-slate dark:prose-invert max-w-none
-        prose-headings:font-bold prose-headings:text-foreground
-        prose-h1:text-4xl prose-h1:mb-8
-        prose-h2:text-3xl prose-h2:mt-16 prose-h2:mb-6
-        prose-h3:text-2xl prose-h3:mt-12 prose-h3:mb-4
-        prose-p:text-muted-foreground prose-p:leading-relaxed prose-p:mb-6
-        prose-a:text-primary prose-a:no-underline hover:prose-a:underline
-        prose-strong:text-foreground prose-strong:font-semibold
-        prose-code:text-primary prose-code:bg-secondary prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-sm prose-code:before:content-none prose-code:after:content-none
-        prose-pre:bg-card prose-pre:border prose-pre:border-border prose-pre:shadow-sm
-        prose-ul:my-6 prose-ol:my-6
-        prose-li:text-muted-foreground prose-li:my-2
-        prose-blockquote:border-l-primary prose-blockquote:bg-secondary/30 prose-blockquote:py-1 prose-blockquote:px-6 prose-blockquote:italic
-      ">
+    <!-- Article Content -->
+    <!-- Article Content -->
+      <div class="prose prose-xl prose-slate dark:prose-invert max-w-3xl mx-auto whitespace-pre-wrap font-serif">
         <Content />
       </div>
+
+      <RelatedPosts client:load posts={relatedPosts.map(post => ({
+        title: post.data.title,
+        description: post.data.description,
+        date: post.data.date,
+        tags: post.data.tags,
+        slug: post.slug,
+        readingTime: getReadingTime(post.body)
+      }))} />
     </article>
 
     <!-- Footer -->

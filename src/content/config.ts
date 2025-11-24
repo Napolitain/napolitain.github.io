@@ -9,6 +9,7 @@ const blog = defineCollection({
     author: z.string().default('Napolitain'),
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
+    coverImage: z.string().optional(),
   }),
 });
 

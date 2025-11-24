@@ -2,6 +2,7 @@
 import Layout from '@/layouts/Layout.astro';
 import BlogCard from '@/components/BlogCard.svelte';
 import { getCollection } from 'astro:content';
+import { getReadingTime } from '@/lib/blog-utils';
 
 // Get all blog posts and sort by date (newest first)
 const allPosts = await getCollection('blog', ({ data }) => {
@@ -43,6 +44,7 @@ const sortedPosts = allPosts.sort((a, b) =>
                 date={post.data.date}
                 tags={post.data.tags}
                 slug={post.slug}
+                readingTime={getReadingTime(post.body)}
               />
             ))}
           </div>

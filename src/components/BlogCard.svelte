@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Calendar, Tag, ArrowUpRight } from 'phosphor-svelte';
+  import { Calendar, Tag, ArrowUpRight, Clock } from 'phosphor-svelte';
   import Card from '@/components/ui/card.svelte';
   import Badge from '@/components/ui/badge.svelte';
 
@@ -8,6 +8,7 @@
   export let date: Date;
   export let tags: string[] = [];
   export let slug: string;
+  export let readingTime: string = '';
 
   function formatDate(date: Date): string {
     return new Intl.DateTimeFormat('en-US', {
@@ -32,11 +33,20 @@
         {description}
       </p>
 
-      <div class="flex items-center gap-2 text-sm text-muted-foreground">
-        <Calendar size={16} />
-        <time datetime={date.toISOString()}>
-          {formatDate(date)}
-        </time>
+      <div class="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+        <div class="flex items-center gap-2">
+          <Calendar size={16} />
+          <time datetime={date.toISOString()}>
+            {formatDate(date)}
+          </time>
+        </div>
+        
+        {#if readingTime}
+          <div class="flex items-center gap-2">
+            <Clock size={16} />
+            <span>{readingTime}</span>
+          </div>
+        {/if}
       </div>
 
       {#if tags.length > 0}

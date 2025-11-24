@@ -5,15 +5,19 @@ import '@/index.css'
 interface Props {
   title?: string;
   description?: string;
+  image?: string;
+  type?: 'website' | 'article';
 }
 
 const { 
   title = 'Napolitain - Software Engineer',
-  description = 'Portfolio website showcasing projects and skills'
+  description = 'Portfolio website showcasing projects and skills',
+  image,
+  type = 'website'
 } = Astro.props;
 
 const siteUrl = 'https://napolitain.github.io';
-const ogImage = `${siteUrl}/og-image.png`; // Will need to be created
+const ogImage = image ? (image.startsWith('http') ? image : `${siteUrl}${image}`) : `${siteUrl}/og-image.png`;
 ---
 
 <!DOCTYPE html>
@@ -32,8 +36,8 @@ const ogImage = `${siteUrl}/og-image.png`; // Will need to be created
   <link rel="manifest" href="/site.webmanifest" />
   
   <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content={siteUrl} />
+  <meta property="og:type" content={type} />
+  <meta property="og:url" content={Astro.url} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:image" content={ogImage} />
@@ -50,9 +54,9 @@ const ogImage = `${siteUrl}/og-image.png`; // Will need to be created
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <noscript>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
   </noscript>
 </head>
 <body>
