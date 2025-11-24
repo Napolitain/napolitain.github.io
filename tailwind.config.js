@@ -184,21 +184,46 @@ export default {
               marginTop: '0.75em',
               marginBottom: '0.75em',
             },
-          },
-          'h1, h2, h3, h4': {
-            color: theme('colors.zinc.100'),
-          },
-          blockquote: {
-            color: theme('colors.zinc.400'),
-          },
-          pre: {
-            backgroundColor: theme('colors.zinc.900'),
-            color: theme('colors.zinc.100'),
-            borderColor: theme('colors.zinc.800'),
+            'h1, h2, h3, h4': {
+              color: theme('colors.foreground'),
+              marginTop: '1.5em',
+              marginBottom: '0.75em',
+              lineHeight: '1.3',
+            },
+            pre: {
+              backgroundColor: theme('colors.zinc.100'),
+              color: theme('colors.zinc.900'),
+              borderRadius: '0.75rem', // rounded-xl
+              padding: '1.5rem',
+              borderWidth: '1px',
+              borderColor: theme('colors.border'),
+              boxShadow: theme('boxShadow.sm'),
+            },
+            '.katex': {
+              whiteSpace: 'nowrap',
+            },
           },
         },
-      },
+        invert: {
+          css: {
+            color: theme('colors.zinc.300'),
+            'ul > li::marker': {
+              color: theme('colors.zinc.300'),
+            },
+            'h1, h2, h3, h4': {
+              color: theme('colors.zinc.100'),
+            },
+            blockquote: {
+              color: theme('colors.zinc.400'),
+            },
+            pre: {
+              backgroundColor: theme('colors.zinc.900'),
+              color: theme('colors.zinc.100'),
+              borderColor: theme('colors.zinc.800'),
+            },
+          },
+        },
       }),
+    },
   },
-},
 };
