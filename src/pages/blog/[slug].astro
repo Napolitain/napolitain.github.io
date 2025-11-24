@@ -142,8 +142,16 @@ const schema = {
 
   mermaid.initialize({ 
     startOnLoad: false, 
-    theme: 'neutral',
-    fontFamily: 'Inter, sans-serif'
+    theme: 'base',
+    themeVariables: {
+      fontFamily: 'Inter, sans-serif',
+      primaryColor: '#f4f4f5', // zinc-100
+      primaryTextColor: '#18181b', // zinc-900
+      primaryBorderColor: '#e4e4e7', // zinc-200
+      lineColor: '#71717a', // zinc-500
+      secondaryColor: '#fafafa', // zinc-50
+      tertiaryColor: '#ffffff', // white
+    }
   });
 
   async function renderMermaid() {

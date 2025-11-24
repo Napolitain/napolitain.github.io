@@ -72,7 +72,7 @@ The max execution time for a single Go run is smaller than the max time for the 
 
 #### 🧪 CPU-Heavy Workload Benchmark (Bubble Sort)
 
-| Benchmark | Command | Mean Time ($\pm \sigma$) |
+| Benchmark | Command | Mean Time (± σ) |
 | :--- | :--- | :--- |
 | **Go** | `go run ./cmd/bubblesort/go` | $190.8 \text{ ms} \pm 8.1 \text{ ms}$ |
 | **Node.js** | `node ./cmd/bubblesort/node/bubblesort.js` | $314.3 \text{ ms} \pm 19.9 \text{ ms}$ |

@@ -166,35 +166,39 @@ export default {
               color: theme('colors.muted.foreground'),
             },
             a: {
+              color: theme('colors.primary'),
+              textDecoration: 'underline',
+              fontWeight: '500',
             },
-            pre: {
-              backgroundColor: theme('colors.zinc.100'),
-              color: theme('colors.zinc.900'),
-              borderRadius: '0.75rem', // rounded-xl
-              padding: '1.5rem',
-              borderWidth: '1px',
-              borderColor: theme('colors.border'),
-              boxShadow: theme('boxShadow.sm'),
+            'ul > li': {
+              position: 'relative',
             },
-          },
-        },
-        invert: {
-          css: {
-            color: theme('colors.zinc.300'),
-            'h1, h2, h3, h4': {
-              color: theme('colors.zinc.100'),
+            'ul > li::marker': {
+              color: theme('colors.foreground'),
             },
-            blockquote: {
-              color: theme('colors.zinc.400'),
+            'ul > li > p': {
+              marginTop: '0',
+              marginBottom: '0.5em',
             },
-            pre: {
-              backgroundColor: theme('colors.zinc.900'),
-              color: theme('colors.zinc.100'),
-              borderColor: theme('colors.zinc.800'),
+            p: {
+              marginTop: '0.75em',
+              marginBottom: '0.75em',
             },
           },
+          'h1, h2, h3, h4': {
+            color: theme('colors.zinc.100'),
+          },
+          blockquote: {
+            color: theme('colors.zinc.400'),
+          },
+          pre: {
+            backgroundColor: theme('colors.zinc.900'),
+            color: theme('colors.zinc.100'),
+            borderColor: theme('colors.zinc.800'),
+          },
         },
+      },
       }),
-    },
   },
+},
 };
