@@ -170,8 +170,13 @@ export default {
               textDecoration: 'underline',
               fontWeight: '500',
             },
+            ul: {
+              paddingLeft: '1.5em',
+              listStylePosition: 'outside',
+            },
             'ul > li': {
               position: 'relative',
+              paddingLeft: '0.375em',
             },
             'ul > li::marker': {
               color: theme('colors.foreground'),
@@ -179,6 +184,13 @@ export default {
             'ul > li > p': {
               marginTop: '0',
               marginBottom: '0.5em',
+            },
+            ol: {
+              paddingLeft: '1.5em',
+              listStylePosition: 'outside',
+            },
+            'ol > li': {
+              paddingLeft: '0.375em',
             },
             p: {
               marginTop: '0.75em',
