@@ -64,69 +64,71 @@ Go offers several distinct advantages:
 
 ### Performance Benchmarks: Go vs. Interpreted Languages
 
-A simple benchmark—a bubble sort on a $10,000$ array of $\text{float}32$ (fixed, randomly pre-generated)—shows how Go simply outperforms the others in short-runtime scenarios.
+A simple benchmark—a bubble sort on a $10,000$ array of $\text{float}32$ (fixed, randomly pre-generated)—shows how Go simply outperforms the others in compute-heavy scenarios. The bubblesort is so simple that JavaScript's V8 likely compiles it to similar assembly as Go, yet the results speak for themselves.
 
-The max execution time for a single Go run is smaller than the max time for the others (avoiding a cache-miss scenario). This proves that even with a cold build and run, **Go is faster than interpreted languages in a scripting context**. If this is true for a short bubblesort, imagine the impact in CI/CD pipelines or microservices.
-
-*(Note: Go may show CPU usage over $100\%$ by default because the runtime multiplexes, even if the application logic is single-threaded.)*
-
-#### CPU-Heavy Workload Benchmark (Bubble Sort)
+#### CPU-Heavy Workload Benchmark (Bubble Sort - Compiled Binary)
 
 | Benchmark | Command | Mean Time (± σ) |
 | :--- | :--- | :--- |
-| **Go** | `go run ./cmd/bubblesort/go` | $190.8 \text{ ms} \pm 8.1 \text{ ms}$ |
-| **Node.js** | `node ./cmd/bubblesort/node/bubblesort.js` | $314.3 \text{ ms} \pm 19.9 \text{ ms}$ |
-| **Python** | `python ./cmd/bubblesort/py/bubblesort.py` | $6.902 \text{ s} \pm 0.034 \text{ s}$ |
+| **Go** | `./bubblesort` | $30.6 \text{ ms} \pm 1.6 \text{ ms}$ |
+| **Node.js** | `node bubblesort.js` | $64.6 \text{ ms} \pm 2.5 \text{ ms}$ |
+| **Node.js (minified)** | `node bubblesort.min.js` | $64.1 \text{ ms} \pm 3.1 \text{ ms}$ |
+| **Python** | `python3 bubblesort.py` | $1.897 \text{ s} \pm 0.014 \text{ s}$ |
 
-The results speak for themselves: **Go is dramatically faster** than both Node.js and Python for CPU-intensive tasks.
+**Summary:** Go ran **2.1x** faster than Node.js and **62x** faster than Python.
 
-### Cold Build: Go Still Wins
+### Cold Build: Go Still Competitive
 
 "But what about compilation time?" you might ask. Let's include a **cold build** scenario—deleting the binary before each run—to measure the true cost of Go's compilation step against interpreted languages:
 
-#### Cold Build Benchmark (Including Compilation)
+#### Cold Build Benchmark (Bubble Sort - Including Compilation)
 
-| Benchmark | Command | Mean Time (± σ) | Range |
-| :--- | :--- | :--- | :--- |
-| **Go (cold build)** | `rm bubblesort && go build bubblesort.go && ./bubblesort` | $94.2 \text{ ms} \pm 6.4 \text{ ms}$ | $79.6 \text{ ms} \rightarrow 112.3 \text{ ms}$ |
-| **Node.js** | `node bubblesort.js` | $101.7 \text{ ms} \pm 2.5 \text{ ms}$ | $96.6 \text{ ms} \rightarrow 108.0 \text{ ms}$ |
-| **Python** | `python3 bubblesort.py` | $1.897 \text{ s} \pm 0.014 \text{ s}$ | $1.879 \text{ s} \rightarrow 1.921 \text{ s}$ |
-
-Even when **including a full recompilation from scratch**, Go beats Node.js and absolutely demolishes Python. This means for any slightly compute-heavy project—CI scripts, data processing, tooling—Go is the superior choice even if you never cache your binaries.
-
-Furthermore, we can level the playing field by disabling Go's multithreading runtime (`GOMAXPROCS=1`). The results remain identical, with less CPU usage, reinforcing that Go's basic execution speed is superior.
-
-```
-time GOMAXPROCS=1 go run ./cmd/bubblesort/go
-0.16s user 0.03s system 99% cpu 0.194 total
-```
-
-## I/O Bound: The Final Nail in the Coffin
-
-You might ask, "What about I/O?" The following benchmark compares a moderately I/O-bound application (CLI argument parsing + YAML file parsing).
-
-#### I/O-Bound Workload Benchmark (CLI + YAML Parsing)
-
-| Benchmark | Command | Mean Time ($\pm \sigma$) |
+| Benchmark | Command | Mean Time (± σ) |
 | :--- | :--- | :--- |
-| **Go** | `go run -f ./../rectangle.yaml` | $77.4 \text{ ms} \pm 6.9 \text{ ms}$ |
-| **Python** | `python ./python/main.py ../../rectangle.yaml` | $75.8 \text{ ms} \pm 6.4 \text{ ms}$ |
-| **Node.js** | `node ./node/main.js -f ../../rectangle.yaml` | $124.7 \text{ ms} \pm 9.5 \text{ ms}$ |
+| **Go** | `go build && ./bubblesort` | $77.5 \text{ ms} \pm 3.6 \text{ ms}$ |
+| **Node.js** | `node bubblesort.js` | $63.3 \text{ ms} \pm 1.8 \text{ ms}$ |
+| **Node.js (bundled)** | `npx esbuild ... && node bubblesort.min.js` | $169.3 \text{ ms} \pm 2.9 \text{ ms}$ |
+| **Python** | `python3 bubblesort.py` | $1.933 \text{ s} \pm 0.035 \text{ s}$ |
 
-This shows that Go is **not dramatically slower** than Python or Node.js for an I/O-bound CLI application, even *with* the compilation step included in the runtime. The code for this benchmark is not $1:1$, and they rely on packages of different qualities. While some Python packages are decent, the interpreted languages still don't gain a significant edge over a Go program that includes the compile/run step.
+Node.js direct execution (plain JavaScript, no TypeScript) beats Go by a small margin. However, Go **still outperforms the typical Node workflow** that includes bundling—and absolutely demolishes Python. This means for any compute-heavy project—CI scripts, data processing, tooling—Go remains a superior choice.
 
-### The Ultimate Test: Compiled Binary
+## CLI Applications: The Real-World Test
 
-Of course, if we were to include a **pre-compiled binary** in the comparison, I can assure you there is only one winner.
+You might ask, "What about typical I/O-bound applications?" The following benchmarks compare a CLI application using common argparser and YAML parsing libraries—representative of real-world tooling.
 
-#### Compiled Binary Benchmark
+#### CLI Benchmark (Compiled Binary)
 
-| Benchmark | Command | Mean Time ($\pm \sigma$) |
+| Benchmark | Command | Mean Time (± σ) |
 | :--- | :--- | :--- |
-| **Go (Compiled Binary)** | `./main -f ../../rectangle.yaml` | $4.8 \text{ ms} \pm 1.6 \text{ ms}$ |
-| **Python** | `python ../python/main.py ../../rectangle.yaml` | $75.8 \text{ ms} \pm 6.4 \text{ ms}$ |
-| **Node.js** | `node ./node/main.js -f ../../rectangle.yaml` | $124.7 \text{ ms} \pm 9.5 \text{ ms}$ |
+| **Go** | `./rectangle test.yaml` | $1.1 \text{ ms} \pm 0.1 \text{ ms}$ |
+| **Node.js (minified)** | `node rectangle.min.js test.yaml` | $19.6 \text{ ms} \pm 1.1 \text{ ms}$ |
+| **Python** | `python3 rectangle.py test.yaml` | $19.9 \text{ ms} \pm 1.5 \text{ ms}$ |
+| **Node.js** | `node rectangle.js test.yaml` | $23.2 \text{ ms} \pm 2.1 \text{ ms}$ |
 
-**Summary:** The compiled Go binary ran $\mathbf{15.82}$ times faster than Python and $\mathbf{26.02}$ times faster than Node.js.
+**Summary:** Go ran **17-20x** faster than all interpreted alternatives. Despite claims of I/O bottlenecks leveling the playing field, Go dominates—likely due to both library quality and interpreter initialization overhead exceeding the actual workload.
 
-The numbers are undeniable. The insistence on using Python or Node for everything is a fantasy rooted in convenience, not performance or maintainability. While Go might not be C++ or Rust, it provides a crucial and pragmatic solution that interpreted languages cannot touch.
+#### CLI Cold Build Benchmark (Including Compilation)
+
+| Benchmark | Command | Mean Time (± σ) |
+| :--- | :--- | :--- |
+| **Python** | `python3 rectangle.py test.yaml` | $19.6 \text{ ms} \pm 1.2 \text{ ms}$ |
+| **Node.js** | `node rectangle.js test.yaml` | $24.1 \text{ ms} \pm 2.7 \text{ ms}$ |
+| **Go** | `go build && ./rectangle test.yaml` | $107.1 \text{ ms} \pm 4.9 \text{ ms}$ |
+| **Node.js (bundled)** | `npx esbuild ... && node rectangle.min.js test.yaml` | $128.3 \text{ ms} \pm 2.7 \text{ ms}$ |
+
+In this worst-case scenario (cold build for a trivial workload), Python wins. Go's compilation overhead shows—yet it remains decent and still beats the typical Node.js bundling workflow.
+
+#### CLI Hot Cache Benchmark (go run)
+
+| Benchmark | Command | Mean Time (± σ) |
+| :--- | :--- | :--- |
+| **Python** | `python3 rectangle.py test.yaml` | $20.2 \text{ ms} \pm 2.0 \text{ ms}$ |
+| **Node.js** | `node rectangle.js test.yaml` | $23.7 \text{ ms} \pm 1.4 \text{ ms}$ |
+| **Go** | `go run rectangle.go test.yaml` | $53.4 \text{ ms} \pm 13.6 \text{ ms}$ |
+| **Node.js (bundled)** | `npx esbuild ... && node rectangle.min.js test.yaml` | $127.0 \text{ ms} \pm 2.2 \text{ ms}$ |
+
+In an interactive exploration scenario (using `go run` with cached build artifacts), Go closes the gap with interpreted languages—running at **2.6x** Python's time rather than **5.5x** in cold builds.
+
+### The Verdict
+
+The numbers are undeniable. The insistence on using Python or Node for everything is a fantasy rooted in convenience, not performance or maintainability. While Go might not be C++ or Rust, it provides a crucial and pragmatic solution that interpreted languages cannot touch—especially in production where compiled binaries dominate.
