@@ -6,8 +6,6 @@ tags: ["go", "python", "nodejs", "zig"]
 draft: false
 ---
 
-## Choose a Scripting Language. Choose Go. (or Zig)
-
 Many in the development world constantly push for **Python** or **Node.js** for virtually everything, suggesting that using a "compiled" language, or, heaven forbid, attempting to optimize anything "prematurely" is the root of all evil. **What a farce\!**
 
 This craze for "easiness" and the immediate availability of packages has directly led to the heavily bloated ecosystems of PyPI and NPM. This, in turn, has resulted in an overwhelming amount of **security issues** due to supply chain attacks and massive runtime costs (both memory and compute). Developer cost increases due to the reliance on extra tooling for linting and rule enforcement that isn't built into the languages themselves, and lengthy package installation times in CI/CD pipelines.
@@ -18,11 +16,9 @@ Another farce is the claim that Python and Node are inherently easier to use tha
 
   * **Python's Package Manager Nightmare:** If you want to solve the inherent problems of **Python** and `pip`, you need to use newer tooling like **`uv`**. While `uv` is undeniably awesome (precisely because it's built with a compiled language\!), now you have the burden of knowing the potential drawbacks of using an alternate package manager.
 
-  * **Node's Module Mess:** The story is even worse with **Node.js** and `npm`. Developers must choose between **CJS** (CommonJS) and **ESM** (ECMAScript Modules). Switching between these standard often necessitates changing your code (e.g. `require` vs. `import`\!). A CJS library cannot load an ESM library, forcing developers to constantly be aware of module compatibility.
+  * **Node's Module Mess:** The story is even worse with **Node.js** and `npm`. Developers must choose between **CJS** (CommonJS) and **ESM** (ECMAScript Modules). Switching between these standards often necessitates changing your code (e.g. `require` vs. `import`!). A CJS library cannot load an ESM library, forcing developers to constantly be aware of module compatibility. Sometimes, libraries don't fully support either CJS or ESM, leading developers to **bundle** their entire application using tools like `esbuild` into a single JavaScript file to remove all `require` or `import` statements entirely. Of course, you should also **minify** your JS code for optimization, so I guess you still have a compilation phase after all.
 
-    Sometimes, libraries don't fully support either CJS or ESM, leading developers to **bundle** their entire application using tools like `esbuild` into a single JavaScript file to remove all `require` or `import` statements entirely. Of course, you should also **minify** your JS code for optimization, so I guess you still have a compilation phase after all.
-
-    By the way, I haven't even mentioned **TypeScript** yet (which should be mandatory), and it itself also requires a compilation step. So your workflow looks roughly like this:
+    And we haven't even mentioned **TypeScript** yet—which should be mandatory for any serious project. TypeScript adds another compilation step on top of bundling, so now you're compiling code that provides zero runtime performance benefit. You pay the compilation tax without the speed dividend. Your workflow looks roughly like this:
 
     ```mermaid
     graph TB
@@ -108,21 +104,6 @@ You might ask, "What about typical I/O-bound applications?" The following benchm
 
 **Summary:** Go ran **17-20x** faster than all interpreted alternatives. Despite claims of I/O bottlenecks leveling the playing field, Go dominates—likely due to both library quality and interpreter initialization overhead exceeding the actual workload.
 
-#### CLI Cold Build with TypeScript (The Real Node.js Workflow)
-
-Let's be honest: nobody in their right mind would use JavaScript without typing anymore. TypeScript is the de facto standard—but it requires compilation. Unlike Go, this compilation provides **zero runtime performance benefit**. You pay the compilation tax without the speed dividend.
-
-| Benchmark | Command | Mean Time (± σ) |
-| :--- | :--- | :--- |
-| **Python** | `python3 rectangle.py test.yaml` | $20.1 \text{ ms} \pm 1.1 \text{ ms}$ |
-| **Go** | `go build && ./rectangle test.yaml` | $107.5 \text{ ms} \pm 7.9 \text{ ms}$ |
-| **TypeScript** | `npx tsc && node dist/rectangle.js test.yaml` | $414.8 \text{ ms} \pm 7.8 \text{ ms}$ |
-| **TypeScript (bundled)** | `npx tsc --noEmit && npx esbuild ... && node rectangle.min.cjs test.yaml` | $505.5 \text{ ms} \pm 6.0 \text{ ms}$ |
-
-**Summary:** Go obliterates TypeScript—running **3.9x** faster than the basic TypeScript workflow and **4.7x** faster than the bundled version. Python demolishes both, running **20x** faster than TypeScript. The Node.js ecosystem's compilation overhead is staggering, yet delivers none of the runtime benefits that Go's compilation provides.
-
-> **The TypeScript Paradox:** You adopt TypeScript because you need types. But if you need types, why not use a language that gives you types *and* performance? TypeScript's 400-500ms cold start vs Go's 107ms is indefensible. You're paying the compilation tax with zero runtime dividend.
-
 #### CLI Cold Build (Including Compilation)
 
 | Benchmark | Command | Mean Time (± σ) |
@@ -137,6 +118,21 @@ In this worst-case scenario (cold build for a trivial workload), Python wins. Go
 Python's cold-start "win" is misleading. Yes, ~20ms beats Go's 107ms for trivial workloads—but this encourages a dangerous pattern: writing slow glue code around fast native libraries (NumPy, etc.). You end up optimizing the wrong thing. The hotpath gets abstracted into C bindings while your actual logic—the part *you* control—runs at 62x slower. Why not write in a language where *your* code is also fast? Go compiles quickly, has excellent libraries, and the syntax learning curve is trivial compared to the ongoing cost of Python's performance ceiling.
 
 To be fair, bundling *does* help Node.js—minification improves runtime slightly. But step back: you're now maintaining a TypeScript → JavaScript → bundled/minified JavaScript pipeline, complete with tsconfig, esbuild config, and build scripts. After all that, you still have JIT compilation, an embedded runtime, and interpreter overhead. Go gives you a single `go build` command, produces a static binary, and runs faster. Same compilation step count, vastly simpler toolchain, better result.
+
+#### CLI Cold Build with TypeScript (The Real Node.js Workflow)
+
+Let's be honest: nobody in their right mind would use JavaScript without typing anymore. TypeScript is the de facto standard—but it requires compilation. Unlike Go, this compilation provides **zero runtime performance benefit**. You pay the compilation tax without the speed dividend.
+
+| Benchmark | Command | Mean Time (± σ) |
+| :--- | :--- | :--- |
+| **Python** | `python3 rectangle.py test.yaml` | $20.1 \text{ ms} \pm 1.1 \text{ ms}$ |
+| **Go** | `go build && ./rectangle test.yaml` | $107.5 \text{ ms} \pm 7.9 \text{ ms}$ |
+| **TypeScript** | `npx tsc && node dist/rectangle.js test.yaml` | $414.8 \text{ ms} \pm 7.8 \text{ ms}$ |
+| **TypeScript (bundled)** | `npx tsc --noEmit && npx esbuild ... && node rectangle.min.cjs test.yaml` | $505.5 \text{ ms} \pm 6.0 \text{ ms}$ |
+
+**Summary:** Go obliterates TypeScript—running **3.9x** faster than the basic TypeScript workflow and **4.7x** faster than the bundled version. Python demolishes both, running **20x** faster than TypeScript. The Node.js ecosystem's compilation overhead is staggering, yet delivers none of the runtime benefits that Go's compilation provides.
+
+> **The TypeScript Paradox:** You adopt TypeScript because you need types. But if you need types, why not use a language that gives you types *and* performance? TypeScript's 400-500ms cold start vs Go's 107ms is indefensible. You're paying the compilation tax with zero runtime dividend.
 
 #### CLI Hot Cache (go run)
 
