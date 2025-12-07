@@ -70,7 +70,5 @@ Actually that's really a **dumb** idea. You will rebase n commits from your bran
 You worked on a version A2 of main, added features, and somehow while resolving conflicts you are telling me that adding commits A3, A4 and A5 from main in between your code will work? Did you actually check?
 I know, you didn't check, you won't check, and CI/CD will not check every individual commit. You kept a linear history of **garbage commits**.
 
-Rebasing latest main onto your feature branch is stupid because if you later squash, then it is wasted time and work, thrown away.
-Rebasing your feature branch onto main (final merge) makes no fucking sense since none of the commits but the last one will be guaranteed to work. You just keep a linear history of trash.
-
-I hope you don't one day assume main at commit B1 works. But if you are still not convinced, feel free to continue using garbage practices.
+- Rebasing the latest main into your feature branch is wasted effort if you later squash the PR — all that extra conflict resolution is thrown away. You took unnecessary risk for the same **exact** result.
+- Rebasing your feature branch on top of main rather than squashing adds untested commits on the main branch.
