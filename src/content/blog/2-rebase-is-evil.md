@@ -16,6 +16,10 @@ When you rebase a branch that others have based work on, you force them to deal 
 
 With merge, you resolve conflicts once. With rebase, you resolve the same conflict multiple times, once for each commit being replayed.
 
+Rebase destroys tooling. `git bisect` points to commits that never existed in actual development. `git blame` shows rewritten commits, losing true authorship context. After a code review, reviewers cannot see what changed since their last review because the commits they reviewed no longer exist. Force-pushed branches break GitHub and GitLab review tools.
+
+Merge commits are informative. They show when features were integrated and by whom. Squash merge achieves linearity without rewriting history. A history that lies about what happened is worse than an honest one.
+
 ```mermaid
 gitGraph
    commit id: "A1"
@@ -28,11 +32,20 @@ gitGraph
    commit id: "A3"
 ```
 
-Consider this scenario: main is ahead of feature by one commit, feature is ahead of main by one commit. No conflicts. If you want to rebase your feature branch on top of main, you need to force push. This is already overhead for zero benefit.
+In this visual, it is simple. branch main is ahead of feature by 1 commit, and branch feature is ahead of main by one commit.
+In a scenario with no conflict, if you want to rebase your feature branch commits on top of main, you will NEED to force push. Thats already super dumb workflow.
+Then, if we imagine n commits with n conflicts, which should not happen in a good communicative team, but it will happen if your collaborators do not know you (e.g. open source).
+You will then need to resolve conflicts for EVERY COMMITS. Thats a shit ton of work for a shit ton of nothing. Zero productivity boost and zero gains from it.
 
-Now consider n commits with n conflicts. You resolve conflicts for every single commit. If you later squash merge to main, because you want your main history to show features rather than individual commits, all that conflict resolution work is discarded. You resolved n conflicts but there is only one commit at the end.
+The worst has yet to come, as you will likely squash your PR to main at some point, if you want the main history to show a list of features (rather than a list of useless commits).
+That means all that extra work is actually thrown in the bin. Thats right. You resolved n conflicts but there will be only one commit anyway at the end.
+And I know what a few people will think. What if we rebase then the PR branch directly to main (thus keeping all the commits). Fantastic idea!
+Actually thats really really not a good idea. You will merge n commits from your branch, but you will merge your branch only assuming the LATEST commit compiles and passes tests. Actually, all the conflicts you resolved before do not make any sense anyway.
+You worked on a version A1 of main, added features, and somehow while resolving conflicts you are telling me that adding commits A2 and A3 from main in between your code will work? Did you actually check ?
+Thats the point, you didnt check, you wont check, and CI/CD will not check every individual commits. You kept a linear history of garbage commits.
 
-Some argue: rebase the feature branch directly to main and keep all the commits. This does not work either. CI/CD only validates the latest commit. All intermediate commits are unverified. You worked on version A1 of main, added features, then while resolving conflicts you inserted commits A2 and A3 from main in between your code. These intermediate states were never tested.
+Rebasing latest main onto your feature branch is stupid because if you later squash, then it is wasted time and work, thrown away.
+Rebasing your feature branch onto main (final merge) makes no fucking sense since none of the commits but the last one will be guaranteed to work. You just keep a linear history of trash.
 
 ```mermaid
 gitGraph
@@ -41,13 +54,5 @@ gitGraph
    commit id: "B1"
    commit id: "A3"
 ```
-
-This is your "clean" history. A sequence of commits where only the last one is guaranteed to work. The rest are untested, unreviewed, and ahistorical.
-
-Merge commits are informative. They show when features were integrated and by whom. Squash merge achieves linearity without rewriting history. A history that lies about what happened is worse than an honest one. If you want to go back to any commit in a linear history, CI/CD must test every single commit. Otherwise the linearity is meaningless.
-
-Rebase destroys tooling. `git bisect` points to commits that never existed in actual development. `git blame` shows rewritten commits, losing true authorship context. After a code review, reviewers cannot see what changed since their last review because the commits they reviewed no longer exist. Force-pushed branches break GitHub and GitLab review tools.
-
-GitHub defaults to merge commits. GitLab provides merge options prominently. Most CI/CD systems expect merge-based workflows. Squash merge exists specifically to provide a linear main branch without rewriting history.
 
 Use merge when you want to preserve full feature branch history. Use squash merge when you want a linear main branch. Never use rebase for branches that have been pushed or shared.
