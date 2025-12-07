@@ -132,7 +132,7 @@ Let's be honest: nobody in their right mind would use JavaScript without typing 
 
 **Summary:** Go obliterates TypeScript—running **3.9x** faster than the basic TypeScript workflow and **4.7x** faster than the bundled version. Python demolishes both, running **20x** faster than TypeScript. The Node.js ecosystem's compilation overhead is staggering, yet delivers none of the runtime benefits that Go's compilation provides.
 
-> **The TypeScript Paradox:** You adopt TypeScript because you need types. But if you need types, why not use a language that gives you types *and* performance? TypeScript's 400-500ms cold start vs Go's 107ms is indefensible. You're paying the compilation tax with zero runtime dividend.
+**The TypeScript Paradox:** You adopt TypeScript because you need types. But if you need types, why not use a language that gives you types *and* performance? TypeScript's 400-500ms cold start vs Go's 107ms is indefensible. You're paying the compilation tax with zero runtime dividend.
 
 #### CLI Hot Cache (go run)
 

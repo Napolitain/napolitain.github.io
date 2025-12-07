@@ -6,7 +6,7 @@ tags: ["git"]
 draft: false
 ---
 
-"Let me just rebase this real quick"
+> "Let me just rebase this real quick"
 
 Git rebase is often sold as a way to maintain a "clean" history. The claim is that a linear sequence of commits is easier to read and understand. This is false.
 
