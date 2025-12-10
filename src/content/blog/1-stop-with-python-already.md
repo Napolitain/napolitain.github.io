@@ -1,6 +1,6 @@
 ---
-title: "Choose a Scripting Language. Choose Go. (or Zig)"
-description: ""
+title: "Choose a Scripting Language. Choose Go."
+description: "or Zig."
 date: 2025-12-03
 tags: ["go", "python", "nodejs", "zig"]
 draft: false
@@ -133,16 +133,3 @@ Let's be honest: nobody in their right mind would use JavaScript without typing 
 **Summary:** Go obliterates TypeScript—running **3.9x** faster than the basic TypeScript workflow and **4.7x** faster than the bundled version. Python demolishes both, running **20x** faster than TypeScript. The Node.js ecosystem's compilation overhead is staggering, yet delivers none of the runtime benefits that Go's compilation provides.
 
 **The TypeScript Paradox:** You adopt TypeScript because you need types. But if you need types, why not use a language that gives you types *and* performance? TypeScript's 400-500ms cold start vs Go's 107ms is indefensible. You're paying the compilation tax with zero runtime dividend.
-
-#### CLI Hot Cache (go run)
-
-| Benchmark | Command | Mean Time (± σ) |
-| :--- | :--- | :--- |
-| **Python** | `python3 rectangle.py test.yaml` | $20.2 \text{ ms} \pm 2.0 \text{ ms}$ |
-| **Node.js** | `node rectangle.js test.yaml` | $23.7 \text{ ms} \pm 1.4 \text{ ms}$ |
-| **Go** | `go run rectangle.go test.yaml` | $53.4 \text{ ms} \pm 13.6 \text{ ms}$ |
-| **Node.js (bundled)** | `npx esbuild ... && node rectangle.min.js test.yaml` | $127.0 \text{ ms} \pm 2.2 \text{ ms}$ |
-
-In an interactive exploration scenario (using `go run` with cached build artifacts), Go closes the gap with interpreted languages—running at **2.6x** Python's time rather than **5.5x** in cold builds.
-
-The numbers are undeniable. The insistence on using Python or Node for everything is a fantasy rooted in convenience, not performance or maintainability. While Go might not be C++ or Rust, it provides a crucial and pragmatic solution that interpreted languages cannot touch—especially in production where compiled binaries dominate.
