@@ -34,13 +34,14 @@ We have seen this movie before. Eggs were the villain. Cholesterol panic. A few 
 
 Look at basic fat profiles. Pork belly is not a health food. Grass-fed beef is not the bogeyman. Chicken skin can be just as fatty. The numbers:
 
-Meat & CutTotal FatSaturated (SFA)Monounsat. (MUFA)Polyunsat. (PUFA)Omega 6:3 Ratio
-Beef Ribeye (Grain-fed)22.0g8.4g9.5g0.5g9:1
-Beef Ribeye (Grass-fed)12.0g5.0g4.0g0.6g1.5:1
-Pork Belly (Bacon)42.0g19.3g18.2g4.5g15:1
-Pork Tenderloin3.5g1.0g1.3g0.5g10:1
-Duck Breast (with skin)28.0g9.7g12.5g3.5g10:1
-Duck Breast (skinless)2.5g0.5g0.8g0.4g10:1
-Chicken Thigh (w/ skin)15.0g4.5g6.0g3.5g12:1
-Chicken Breast (skinless)3.5g0.5g1.1g0.8g10:1
+| Meat & Cut | Total Fat | Saturated (SFA) | Monounsat. (MUFA) | Polyunsat. (PUFA) | Omega 6:3 Ratio |
+| --- | --- | --- | --- | --- | --- |
+| Beef Ribeye (Grain-fed) | 22.0g | 8.4g | 9.5g | 0.5g | 9:1 |
+| Beef Ribeye (Grass-fed) | 12.0g | 5.0g | 4.0g | 0.6g | 1.5:1 |
+| Pork Belly (Bacon) | 42.0g | 19.3g | 18.2g | 4.5g | 15:1 |
+| Pork Tenderloin | 3.5g | 1.0g | 1.3g | 0.5g | 10:1 |
+| Duck Breast (with skin) | 28.0g | 9.7g | 12.5g | 3.5g | 10:1 |
+| Duck Breast (skinless) | 2.5g | 0.5g | 0.8g | 0.4g | 10:1 |
+| Chicken Thigh (w/ skin) | 15.0g | 4.5g | 6.0g | 3.5g | 12:1 |
+| Chicken Breast (skinless) | 3.5g | 0.5g | 1.1g | 0.8g | 10:1 |
 
