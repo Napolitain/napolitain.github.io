@@ -33,7 +33,7 @@
         "eslint": "^9.39.1",
         "globals": "^16.0.0",
         "svelte": "^5.45.2",
-        "tailwindcss": "^4.1.17",
+        "tailwindcss": "^4.1.18",
         "typescript": "~5.9.3"
     }
 }
