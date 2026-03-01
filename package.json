@@ -19,7 +19,10 @@
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "mermaid": "^11.12.2",
+        "pdfjs-dist": "^4.0.0",
         "phosphor-svelte": "^3.0.1",
+        "protobufjs": "^8.0.0",
+        "qrcode": "^1.5.4",
         "rehype-katex": "^7.0.1",
         "remark-math": "^6.0.0",
         "tailwind-merge": "^3.4.0"
@@ -29,6 +32,7 @@
         "@eslint/js": "^9.39.1",
         "@tailwindcss/postcss": "^4.1.17",
         "@tailwindcss/typography": "^0.5.19",
+        "@types/qrcode": "^1.5.5",
         "astro": "^5.16.3",
         "eslint": "^9.39.1",
         "globals": "^16.0.0",

@@ -1,0 +1,10 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import App from '@/components/App.svelte';
+---
+
+<Layout title="Silent Blow — Remote" description="Air-gapped data extraction web interface.">
+  <main id="main-content" class="m-0 p-0 w-full h-screen overflow-hidden bg-gray-950">
+    <App client:load />
+  </main>
+</Layout>
