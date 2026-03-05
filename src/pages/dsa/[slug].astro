@@ -10,6 +10,12 @@ import DijkstraVisualization from '@/components/dsa/visualizations/DijkstraVisua
 import TopoSortVisualization from '@/components/dsa/visualizations/TopoSortVisualization.svelte';
 import UnionFindVisualization from '@/components/dsa/visualizations/UnionFindVisualization.svelte';
 import BinarySearchVisualization from '@/components/dsa/visualizations/BinarySearchVisualization.svelte';
+import MergeSortVisualization from '@/components/dsa/visualizations/MergeSortVisualization.svelte';
+import QuickSortVisualization from '@/components/dsa/visualizations/QuickSortVisualization.svelte';
+import LinkedListVisualization from '@/components/dsa/visualizations/LinkedListVisualization.svelte';
+import TwoPointersVisualization from '@/components/dsa/visualizations/TwoPointersVisualization.svelte';
+import HeapVisualization from '@/components/dsa/visualizations/HeapVisualization.svelte';
+import DpVisualization from '@/components/dsa/visualizations/DpVisualization.svelte';
 
 export async function getStaticPaths() {
   const entries = await getCollection('dsa', ({ data }) => {
@@ -106,6 +112,42 @@ const viz = entry.data.visualization;
         <section class="mb-16 p-6 rounded-xl border border-border bg-card">
           <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
           <BinarySearchVisualization client:load />
+        </section>
+      )}
+      {viz === 'MergeSortVisualization' && (
+        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
+          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
+          <MergeSortVisualization client:load />
+        </section>
+      )}
+      {viz === 'QuickSortVisualization' && (
+        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
+          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
+          <QuickSortVisualization client:load />
+        </section>
+      )}
+      {viz === 'LinkedListVisualization' && (
+        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
+          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
+          <LinkedListVisualization client:load />
+        </section>
+      )}
+      {viz === 'TwoPointersVisualization' && (
+        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
+          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
+          <TwoPointersVisualization client:load />
+        </section>
+      )}
+      {viz === 'HeapVisualization' && (
+        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
+          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
+          <HeapVisualization client:load />
+        </section>
+      )}
+      {viz === 'DpVisualization' && (
+        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
+          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
+          <DpVisualization client:load />
         </section>
       )}
 
