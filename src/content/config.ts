@@ -20,7 +20,6 @@ const dsa = defineCollection({
     description: z.string(),
     date: z.coerce.date(),
     tags: z.array(z.string()).default([]),
-    difficulty: z.enum(['easy', 'medium', 'hard']),
     draft: z.boolean().default(false),
     visualization: z.string().optional(),
   }),

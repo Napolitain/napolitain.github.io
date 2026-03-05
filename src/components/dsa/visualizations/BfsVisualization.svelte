@@ -32,14 +32,12 @@
   let queue: string[] = [];
   let visitOrder: string[] = [];
   let running = false;
-  let step = 0;
   let currentEdge: [string, string] | null = null;
 
   function reset() {
     nodeStates = Object.fromEntries(Object.keys(graph).map(n => [n, 'unvisited' as NodeState]));
     queue = [];
     visitOrder = [];
-    step = 0;
     currentEdge = null;
     running = false;
   }
@@ -63,10 +61,9 @@
 
     while (queue.length > 0 && running) {
       const node = queue.shift()!;
+      queue = [...queue];
       nodeStates[node] = 'visiting';
       nodeStates = nodeStates;
-      queue = queue;
-      step++;
       await sleep(600);
 
       for (const neighbor of graph[node]) {

@@ -6,6 +6,10 @@ import { ArrowLeft, Tag } from 'phosphor-svelte';
 import Badge from '@/components/ui/badge.svelte';
 import BfsVisualization from '@/components/dsa/visualizations/BfsVisualization.svelte';
 import DfsVisualization from '@/components/dsa/visualizations/DfsVisualization.svelte';
+import DijkstraVisualization from '@/components/dsa/visualizations/DijkstraVisualization.svelte';
+import TopoSortVisualization from '@/components/dsa/visualizations/TopoSortVisualization.svelte';
+import UnionFindVisualization from '@/components/dsa/visualizations/UnionFindVisualization.svelte';
+import BinarySearchVisualization from '@/components/dsa/visualizations/BinarySearchVisualization.svelte';
 
 export async function getStaticPaths() {
   const entries = await getCollection('dsa', ({ data }) => {
@@ -24,12 +28,6 @@ interface Props {
 
 const { entry } = Astro.props;
 const { Content } = await entry.render();
-
-const difficultyColors: Record<string, string> = {
-  easy: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400',
-  medium: 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400',
-  hard: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
-};
 
 const viz = entry.data.visualization;
 ---
@@ -51,12 +49,6 @@ const viz = entry.data.visualization;
 
     <article class="max-w-3xl mx-auto px-6 py-20">
       <header class="mb-16 space-y-6">
-        <div class="flex items-center gap-3">
-          <span class={`text-xs font-medium px-2.5 py-1 rounded-full capitalize ${difficultyColors[entry.data.difficulty]}`}>
-            {entry.data.difficulty}
-          </span>
-        </div>
-
         <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight font-serif">
           {entry.data.title}
         </h1>
@@ -90,6 +82,30 @@ const viz = entry.data.visualization;
         <section class="mb-16 p-6 rounded-xl border border-border bg-card">
           <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
           <DfsVisualization client:load />
+        </section>
+      )}
+      {viz === 'DijkstraVisualization' && (
+        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
+          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
+          <DijkstraVisualization client:load />
+        </section>
+      )}
+      {viz === 'TopoSortVisualization' && (
+        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
+          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
+          <TopoSortVisualization client:load />
+        </section>
+      )}
+      {viz === 'UnionFindVisualization' && (
+        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
+          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
+          <UnionFindVisualization client:load />
+        </section>
+      )}
+      {viz === 'BinarySearchVisualization' && (
+        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
+          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
+          <BinarySearchVisualization client:load />
         </section>
       )}
 
