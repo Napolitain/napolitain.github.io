@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import react from '@astrojs/react';
 import svelte from '@astrojs/svelte';
 import tailwindcss from '@tailwindcss/vite';
 import remarkMath from 'remark-math';
@@ -18,7 +19,7 @@ export default defineConfig({
       wrap: true,
     },
   },
-  integrations: [svelte()],
+  integrations: [svelte(), react()],
   vite: {
     plugins: [tailwindcss()],
     resolve: {

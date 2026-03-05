@@ -1,0 +1,50 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import DsaIndex from '@/components/dsa/DsaIndex.svelte';
+import { getCollection } from 'astro:content';
+
+const allProblems = await getCollection('dsa', ({ data }) => {
+  return import.meta.env.PROD ? data.draft !== true : true;
+});
+
+const sorted = allProblems.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const problems = sorted.map(p => ({
+  title: p.data.title,
+  description: p.data.description,
+  tags: p.data.tags,
+  slug: p.slug,
+  difficulty: p.data.difficulty,
+}));
+---
+
+<Layout title="DSA - Napolitain" description="Data structures and algorithms — visualized">
+  <div class="min-h-screen">
+    <section class="py-40 px-8 mt-20">
+      <div class="max-w-6xl mx-auto text-center">
+        <h1 class="text-5xl md:text-6xl font-bold mb-6">DSA</h1>
+        <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
+          Data structures &amp; algorithms — visualized and explained
+        </p>
+      </div>
+    </section>
+
+    <section class="pb-40 px-8">
+      <div class="max-w-6xl mx-auto">
+        {problems.length === 0 ? (
+          <div class="text-center py-20">
+            <p class="text-muted-foreground text-lg">No problems yet. Check back soon!</p>
+          </div>
+        ) : (
+          <DsaIndex client:load problems={problems} />
+        )}
+      </div>
+    </section>
+
+    <footer class="py-16 px-8 border-t border-border">
+      <div class="max-w-6xl mx-auto text-center text-sm text-muted-foreground">
+        <p>© {new Date().getFullYear()} Napolitain. Built with Astro, Svelte & TypeScript.</p>
+      </div>
+    </footer>
+  </div>
+</Layout>

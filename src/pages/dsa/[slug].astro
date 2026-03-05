@@ -1,0 +1,108 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import { ArrowLeft, Tag } from 'phosphor-svelte';
+import Badge from '@/components/ui/badge.svelte';
+import BfsVisualization from '@/components/dsa/visualizations/BfsVisualization.svelte';
+import DfsVisualization from '@/components/dsa/visualizations/DfsVisualization.svelte';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('dsa', ({ data }) => {
+    return import.meta.env.PROD ? data.draft !== true : true;
+  });
+
+  return entries.map(entry => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'dsa'>;
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+
+const difficultyColors: Record<string, string> = {
+  easy: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400',
+  medium: 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400',
+  hard: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
+};
+
+const viz = entry.data.visualization;
+---
+
+<Layout
+  title={`${entry.data.title} - DSA - Napolitain`}
+  description={entry.data.description}
+>
+  <div class="min-h-screen">
+    <div class="max-w-3xl mx-auto px-6 pt-20">
+      <a
+        href="/dsa"
+        class="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-12"
+      >
+        <ArrowLeft client:load size={20} />
+        Back to DSA
+      </a>
+    </div>
+
+    <article class="max-w-3xl mx-auto px-6 py-20">
+      <header class="mb-16 space-y-6">
+        <div class="flex items-center gap-3">
+          <span class={`text-xs font-medium px-2.5 py-1 rounded-full capitalize ${difficultyColors[entry.data.difficulty]}`}>
+            {entry.data.difficulty}
+          </span>
+        </div>
+
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight font-serif">
+          {entry.data.title}
+        </h1>
+
+        <p class="text-lg text-muted-foreground leading-relaxed font-serif">
+          {entry.data.description}
+        </p>
+
+        {entry.data.tags.length > 0 && (
+          <div class="flex items-center gap-2">
+            <Tag client:load size={16} class="text-muted-foreground" />
+            <div class="flex flex-wrap gap-2">
+              {entry.data.tags.map((tag: string) => (
+                <Badge client:load variant="secondary" class="text-xs">
+                  {tag}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        )}
+      </header>
+
+      <!-- Visualization -->
+      {viz === 'BfsVisualization' && (
+        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
+          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
+          <BfsVisualization client:load />
+        </section>
+      )}
+      {viz === 'DfsVisualization' && (
+        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
+          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
+          <DfsVisualization client:load />
+        </section>
+      )}
+
+      <!-- Article Content -->
+      <div class="prose prose-lg prose-slate dark:prose-invert max-w-3xl mx-auto font-serif">
+        <Content />
+      </div>
+    </article>
+
+    <footer class="py-16 px-8 border-t border-border mt-20">
+      <div class="max-w-6xl mx-auto text-center text-sm text-muted-foreground">
+        <p>© {new Date().getFullYear()} Napolitain. Built with Astro, Svelte & TypeScript.</p>
+      </div>
+    </footer>
+  </div>
+</Layout>

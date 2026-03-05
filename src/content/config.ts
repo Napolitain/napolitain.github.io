@@ -13,4 +13,17 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { blog };
+const dsa = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    date: z.coerce.date(),
+    tags: z.array(z.string()).default([]),
+    difficulty: z.enum(['easy', 'medium', 'hard']),
+    draft: z.boolean().default(false),
+    visualization: z.string().optional(),
+  }),
+});
+
+export const collections = { blog, dsa };
