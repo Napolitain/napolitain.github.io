@@ -4,6 +4,8 @@ import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import { ArrowLeft, Tag } from 'phosphor-svelte';
 import Badge from '@/components/ui/badge.svelte';
+import ReadingProgress from '@/components/ReadingProgress.svelte';
+import TableOfContents from '@/components/TableOfContents.svelte';
 import BfsVisualization from '@/components/dsa/visualizations/BfsVisualization.svelte';
 import DfsVisualization from '@/components/dsa/visualizations/DfsVisualization.svelte';
 import DijkstraVisualization from '@/components/dsa/visualizations/DijkstraVisualization.svelte';
@@ -43,6 +45,8 @@ const viz = entry.data.visualization;
   description={entry.data.description}
 >
   <div class="min-h-screen">
+    <ReadingProgress client:load />
+    <TableOfContents client:load />
     <div class="max-w-3xl mx-auto px-6 pt-20">
       <a
         href="/dsa"

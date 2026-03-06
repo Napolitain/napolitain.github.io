@@ -6,7 +6,7 @@
     "scripts": {
         "dev": "astro dev",
         "kill": "fuser -k 5000/tcp",
-        "build": "astro build",
+        "build": "astro build && npx pagefind --site dist",
         "lint": "eslint .",
         "optimize": "vite optimize",
         "preview": "astro preview",
@@ -16,6 +16,7 @@
         "@astrojs/check": "^0.9.6",
         "@astrojs/react": "^4.4.2",
         "@astrojs/rss": "^4.0.14",
+        "@astrojs/sitemap": "^3.7.0",
         "@tailwindcss/vite": "^4.1.17",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
@@ -41,6 +42,7 @@
         "astro": "^5.16.3",
         "eslint": "^9.39.1",
         "globals": "^16.0.0",
+        "pagefind": "^1.4.0",
         "svelte": "^5.45.2",
         "tailwindcss": "^4.1.17",
         "typescript": "~5.9.3"

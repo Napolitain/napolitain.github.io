@@ -2,6 +2,8 @@
   "name": "Napolitain Portfolio",
   "short_name": "Napolitain",
   "description": "Portfolio website showcasing projects and skills",
+  "start_url": "/",
+  "scope": "/",
   "icons": [
     {
       "src": "/favicon-192x192.png",

@@ -5,6 +5,8 @@ import type { CollectionEntry } from 'astro:content';
 import { Calendar, Tag, ArrowLeft, Clock } from 'phosphor-svelte';
 import Badge from '@/components/ui/badge.svelte';
 import RelatedPosts from '@/components/RelatedPosts.svelte';
+import ReadingProgress from '@/components/ReadingProgress.svelte';
+import TableOfContents from '@/components/TableOfContents.svelte';
 import { getReadingTime, getRelatedPosts } from '@/lib/blog-utils';
 
 export async function getStaticPaths() {
@@ -59,8 +61,10 @@ const schema = {
   type="article"
 >
   <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  <ReadingProgress client:load />
   
   <div class="min-h-screen">
+    <TableOfContents client:load />
     <!-- Back to Blog -->
     <div class="max-w-3xl mx-auto px-6 pt-20">
       <a 
@@ -101,9 +105,11 @@ const schema = {
               <Tag client:load size={16} />
               <div class="flex flex-wrap gap-2">
                 {entry.data.tags.map((tag) => (
-                  <Badge client:load variant="secondary" class="text-xs">
-                    {tag}
-                  </Badge>
+                  <a href={`/blog/tags/${tag}`}>
+                    <Badge client:load variant="secondary" class="text-xs hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer">
+                      {tag}
+                    </Badge>
+                  </a>
                 ))}
               </div>
             </div>

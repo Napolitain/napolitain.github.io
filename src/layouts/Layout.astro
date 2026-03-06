@@ -1,6 +1,9 @@
 ---
 import '@/main.css'
 import '@/index.css'
+import { ViewTransitions } from 'astro:transitions';
+import BackToTop from '@/components/BackToTop.svelte';
+import SearchDialog from '@/components/SearchDialog.svelte';
 
 interface Props {
   title?: string;
@@ -61,12 +64,22 @@ const ogImage = image ? (image.startsWith('http') ? image : `${siteUrl}${image}`
   
   <!-- KaTeX CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+
+  <ViewTransitions />
 </head>
 <body>
   <!-- Skip to main content link for accessibility -->
   <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-6 focus:py-3 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:shadow-lg">
     Skip to main content
   </a>
+  <SearchDialog client:load />
   <slot />
+  <BackToTop client:load />
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    }
+  </script>
 </body>
 </html>

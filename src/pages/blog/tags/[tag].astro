@@ -1,0 +1,73 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import BlogCard from '@/components/BlogCard.svelte';
+import { getCollection } from 'astro:content';
+import { getReadingTime } from '@/lib/blog-utils';
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('blog', ({ data }) => {
+    return import.meta.env.PROD ? data.draft !== true : true;
+  });
+
+  const allTags = [...new Set(allPosts.flatMap((post) => post.data.tags))];
+
+  return allTags.map((tag) => ({
+    params: { tag },
+    props: {
+      tag,
+      posts: allPosts
+        .filter((post) => post.data.tags.includes(tag))
+        .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()),
+    },
+  }));
+}
+
+interface Props {
+  tag: string;
+  posts: any[];
+}
+
+const { tag, posts } = Astro.props;
+---
+
+<Layout title={`Posts tagged "${tag}" - Napolitain`} description={`All blog posts tagged with ${tag}`}>
+  <div class="min-h-screen">
+    <section class="py-40 px-8 mt-20">
+      <div class="max-w-6xl mx-auto text-center">
+        <a href="/blog" class="text-sm text-muted-foreground hover:text-primary transition-colors mb-4 inline-block">
+          ← Back to Blog
+        </a>
+        <h1 class="text-5xl md:text-6xl font-bold mb-6">
+          <span class="text-muted-foreground">#</span>{tag}
+        </h1>
+        <p class="text-xl text-muted-foreground">
+          {posts.length} post{posts.length !== 1 ? 's' : ''}
+        </p>
+      </div>
+    </section>
+
+    <section class="pb-40 px-8">
+      <div class="max-w-6xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          {posts.map((post) => (
+            <BlogCard
+              client:load
+              title={post.data.title}
+              description={post.data.description}
+              date={post.data.date}
+              tags={post.data.tags}
+              slug={post.slug}
+              readingTime={getReadingTime(post.body)}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <footer class="py-16 px-8 border-t border-border">
+      <div class="max-w-6xl mx-auto text-center text-sm text-muted-foreground">
+        <p>© {new Date().getFullYear()} Napolitain. Built with Astro, Svelte & TypeScript.</p>
+      </div>
+    </footer>
+  </div>
+</Layout>
