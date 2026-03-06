@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
 
   // Weighted graph: adjacency list with weights
-  const graph: Record<string, [string, number][]> = {
+  let graph: Record<string, [string, number][]> = {
     A: [['B', 4], ['C', 2]],
     B: [['A', 4], ['D', 3], ['E', 1]],
     C: [['A', 2], ['D', 5], ['F', 6]],
@@ -21,7 +21,7 @@
   };
 
   // Deduplicated edges with weights
-  const edges: [string, string, number][] = [
+  let edges: [string, string, number][] = [
     ['A', 'B', 4], ['A', 'C', 2], ['B', 'D', 3], ['B', 'E', 1],
     ['C', 'D', 5], ['C', 'F', 6], ['D', 'E', 2], ['E', 'F', 4],
   ];
@@ -33,6 +33,7 @@
   let visitOrder: string[] = [];
   let running = false;
   let currentEdge: [string, string] | null = null;
+  let speed = 600;
 
   function reset() {
     nodeStates = Object.fromEntries(Object.keys(graph).map(n => [n, 'unvisited' as NodeState]));
@@ -62,7 +63,7 @@
     let pq: [number, string][] = [[0, start]];
     const visited = new Set<string>();
 
-    await sleep(600);
+    await sleep(speed);
 
     while (pq.length > 0 && running) {
       pq.sort((a, b) => a[0] - b[0]);
@@ -73,7 +74,7 @@
 
       nodeStates[node] = 'visiting';
       nodeStates = { ...nodeStates };
-      await sleep(700);
+      await sleep(speed);
 
       for (const [neighbor, weight] of graph[node]) {
         if (visited.has(neighbor)) continue;
@@ -87,17 +88,30 @@
           nodeStates = { ...nodeStates };
           pq.push([newDist, neighbor]);
         }
-        await sleep(400);
+        await sleep(speed);
         currentEdge = null;
       }
 
       nodeStates[node] = 'finalized';
       nodeStates = { ...nodeStates };
       visitOrder = [...visitOrder, node];
-      await sleep(300);
+      await sleep(speed);
     }
 
     running = false;
+  }
+
+  function randomizeWeights() {
+    reset();
+    const nodes = Object.keys(positions);
+    edges = edges.map(([a, b]) => [a, b, 1 + Math.floor(Math.random() * 10)] as [string, string, number]);
+    const newGraph: Record<string, [string, number][]> = {};
+    for (const n of nodes) newGraph[n] = [];
+    for (const [a, b, w] of edges) {
+      newGraph[a].push([b, w]);
+      newGraph[b].push([a, w]);
+    }
+    graph = newGraph;
   }
 
   const stateColors: Record<NodeState, string> = {
@@ -140,6 +154,17 @@
     >
       Reset
     </button>
+    <button
+      class="px-4 py-2 text-sm font-medium rounded-lg border border-border hover:bg-secondary transition-colors cursor-pointer"
+      on:click={randomizeWeights}
+      disabled={running}
+    >
+      Randomize
+    </button>
+    <label class="flex items-center gap-2 text-sm text-muted-foreground">
+      Speed: {speed}ms
+      <input type="range" min="100" max="1500" step="100" bind:value={speed} disabled={running} class="w-24" />
+    </label>
   </div>
 
   <svg viewBox="0 0 400 350" class="w-full max-w-md mx-auto" role="img" aria-label="Dijkstra visualization">

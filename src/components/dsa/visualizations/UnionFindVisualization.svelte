@@ -8,10 +8,11 @@
   let log: string[] = [];
 
   // Edges to union (demonstrate connectivity)
-  const unionOps: [number, number][] = [
+  let unionOps: [number, number][] = [
     [0, 1], [2, 3], [4, 5], [1, 3], [5, 6], [0, 6],
   ];
   let currentOp = -1;
+  let speed = 600;
 
   const nodePositions: { x: number; y: number }[] = [
     { x: 55, y: 50 },
@@ -98,6 +99,19 @@
 
   onMount(reset);
 
+  function randomizeOps() {
+    const ops: [number, number][] = [];
+    const count = 4 + Math.floor(Math.random() * 4); // 4–7 ops
+    for (let k = 0; k < count; k++) {
+      let a = Math.floor(Math.random() * N);
+      let b = Math.floor(Math.random() * N);
+      while (b === a) b = Math.floor(Math.random() * N);
+      ops.push([a, b]);
+    }
+    unionOps = ops;
+    reset();
+  }
+
   function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -105,7 +119,7 @@
   async function runDemo() {
     reset();
     running = true;
-    await sleep(500);
+    await sleep(speed);
 
     for (let i = 0; i < unionOps.length && running; i++) {
       const [a, b] = unionOps[i];
@@ -122,7 +136,7 @@
         log = [...log, `Union(${a}, ${b}) — merged sets`];
       }
 
-      await sleep(1000);
+      await sleep(speed);
     }
 
     currentOp = -1;
@@ -138,7 +152,7 @@
 </script>
 
 <div class="space-y-6">
-  <div class="flex items-center gap-4">
+  <div class="flex items-center gap-4 flex-wrap">
     <button
       class="px-4 py-2 text-sm font-medium rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-50 cursor-pointer"
       on:click={runDemo}
@@ -153,6 +167,17 @@
     >
       Reset
     </button>
+    <button
+      class="px-4 py-2 text-sm font-medium rounded-lg border border-border hover:bg-secondary transition-colors cursor-pointer"
+      on:click={randomizeOps}
+      disabled={running}
+    >
+      Randomize
+    </button>
+    <label class="flex items-center gap-2 text-sm">
+      <span class="text-muted-foreground">Speed:</span>
+      <input type="range" min="100" max="1500" step="100" bind:value={speed} disabled={running} class="w-24 accent-primary" />
+    </label>
   </div>
 
   <svg viewBox="0 0 400 220" class="w-full max-w-md mx-auto" role="img" aria-label="Union-Find visualization">

@@ -7,7 +7,8 @@
   let running = false;
   let log: string[] = [];
 
-  const insertValues = [42, 15, 28, 7, 35, 3, 19];
+  let insertValues = [42, 15, 28, 7, 35, 3, 19];
+  let speed = 500;
 
   function reset() {
     heap = [];
@@ -18,6 +19,12 @@
   }
 
   onMount(reset);
+
+  function randomize() {
+    const len = 5 + Math.floor(Math.random() * 5);
+    insertValues = Array.from({ length: len }, () => Math.floor(Math.random() * 99) + 1);
+    reset();
+  }
 
   function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -50,7 +57,7 @@
       heap = [...heap, val];
       highlightIdx = heap.length - 1;
       log = [...log, `Insert ${val}`];
-      await sleep(500);
+      await sleep(speed);
 
       // Bubble up
       let i = heap.length - 1;
@@ -59,21 +66,21 @@
         if (heap[i] < heap[p]) {
           swapPair = [i, p];
           log = [...log, `  Swap ${heap[i]} ↔ ${heap[p]}`];
-          await sleep(500);
+          await sleep(speed);
 
           [heap[i], heap[p]] = [heap[p], heap[i]];
           heap = [...heap];
           swapPair = null;
           i = p;
           highlightIdx = i;
-          await sleep(300);
+          await sleep(speed);
         } else {
           break;
         }
       }
 
       highlightIdx = -1;
-      await sleep(300);
+      await sleep(speed);
     }
 
     log = [...log, `Min-heap built: [${heap.join(', ')}]`];
@@ -87,13 +94,13 @@
     const min = heap[0];
     log = [...log, `Extract min: ${min}`];
     highlightIdx = 0;
-    await sleep(500);
+    await sleep(speed);
 
     // Move last to root
     heap[0] = heap[heap.length - 1];
     heap = heap.slice(0, -1);
     heap = [...heap];
-    await sleep(400);
+    await sleep(speed);
 
     // Bubble down
     let i = 0;
@@ -109,14 +116,14 @@
 
       swapPair = [i, smallest];
       log = [...log, `  Swap ${heap[i]} ↔ ${heap[smallest]}`];
-      await sleep(500);
+      await sleep(speed);
 
       [heap[i], heap[smallest]] = [heap[smallest], heap[i]];
       heap = [...heap];
       swapPair = null;
       i = smallest;
       highlightIdx = i;
-      await sleep(300);
+      await sleep(speed);
     }
 
     highlightIdx = -1;
@@ -154,6 +161,17 @@
     >
       Reset
     </button>
+    <button
+      class="px-4 py-2 text-sm font-medium rounded-lg border border-border hover:bg-secondary transition-colors cursor-pointer"
+      on:click={randomize}
+      disabled={running}
+    >
+      Randomize
+    </button>
+    <label class="flex items-center gap-2 text-sm">
+      <span class="text-muted-foreground">Speed:</span>
+      <input type="range" min="100" max="1500" step="100" bind:value={speed} class="w-24" disabled={running} />
+    </label>
   </div>
 
   <svg viewBox="0 0 400 260" class="w-full max-w-md mx-auto" role="img" aria-label="Heap visualization">

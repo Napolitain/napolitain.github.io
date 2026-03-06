@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
 
   // Graph definition: adjacency list
-  const graph: Record<string, string[]> = {
+  let graph: Record<string, string[]> = {
     A: ['B', 'C'],
     B: ['A', 'D', 'E'],
     C: ['A', 'F'],
@@ -22,7 +22,7 @@
   };
 
   // Edges (deduplicated)
-  const edges = [
+  let edges: [string, string][] = [
     ['A', 'B'], ['A', 'C'], ['B', 'D'], ['B', 'E'], ['C', 'F'], ['E', 'F'],
   ];
 
@@ -33,6 +33,7 @@
   let visitOrder: string[] = [];
   let running = false;
   let currentEdge: [string, string] | null = null;
+  let speed = 600;
 
   function reset() {
     nodeStates = Object.fromEntries(Object.keys(graph).map(n => [n, 'unvisited' as NodeState]));
@@ -57,14 +58,14 @@
     nodeStates[start] = 'queued';
     nodeStates = nodeStates;
 
-    await sleep(600);
+    await sleep(speed);
 
     while (queue.length > 0 && running) {
       const node = queue.shift()!;
       queue = [...queue];
       nodeStates[node] = 'visiting';
       nodeStates = nodeStates;
-      await sleep(600);
+      await sleep(speed);
 
       for (const neighbor of graph[node]) {
         if (nodeStates[neighbor] === 'unvisited') {
@@ -72,7 +73,7 @@
           nodeStates[neighbor] = 'queued';
           nodeStates = nodeStates;
           queue = [...queue];
-          await sleep(400);
+          await sleep(speed);
           currentEdge = null;
         }
       }
@@ -80,10 +81,36 @@
       nodeStates[node] = 'visited';
       nodeStates = nodeStates;
       visitOrder = [...visitOrder, node];
-      await sleep(300);
+      await sleep(speed);
     }
 
     running = false;
+  }
+
+  function randomizeGraph() {
+    reset();
+    const nodes = Object.keys(positions);
+    const shuffled = [...nodes].sort(() => Math.random() - 0.5);
+    const newEdges: [string, string][] = [];
+    for (let i = 1; i < shuffled.length; i++) {
+      newEdges.push([shuffled[i - 1], shuffled[i]]);
+    }
+    const extraCount = 2 + Math.floor(Math.random() * 2);
+    for (let i = 0; i < extraCount; i++) {
+      const a = nodes[Math.floor(Math.random() * nodes.length)];
+      const b = nodes[Math.floor(Math.random() * nodes.length)];
+      if (a !== b && !newEdges.some(e => (e[0] === a && e[1] === b) || (e[0] === b && e[1] === a))) {
+        newEdges.push([a, b]);
+      }
+    }
+    const newGraph: Record<string, string[]> = {};
+    for (const n of nodes) newGraph[n] = [];
+    for (const [a, b] of newEdges) {
+      newGraph[a].push(b);
+      newGraph[b].push(a);
+    }
+    graph = newGraph;
+    edges = newEdges;
   }
 
   const stateColors: Record<NodeState, string> = {
@@ -116,6 +143,17 @@
     >
       Reset
     </button>
+    <button
+      class="px-4 py-2 text-sm font-medium rounded-lg border border-border hover:bg-secondary transition-colors cursor-pointer"
+      on:click={randomizeGraph}
+      disabled={running}
+    >
+      Randomize
+    </button>
+    <label class="flex items-center gap-2 text-sm text-muted-foreground">
+      Speed: {speed}ms
+      <input type="range" min="100" max="1500" step="100" bind:value={speed} disabled={running} class="w-24" />
+    </label>
   </div>
 
   <svg viewBox="0 0 400 350" class="w-full max-w-md mx-auto" role="img" aria-label="BFS graph visualization">

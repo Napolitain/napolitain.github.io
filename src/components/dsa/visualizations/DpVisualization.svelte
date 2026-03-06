@@ -8,6 +8,7 @@
   let running = false;
   let log: string[] = [];
   let callCount = 0;
+  let speed = 500;
 
   function reset() {
     dpTable = new Array(n + 1).fill(null);
@@ -18,6 +19,11 @@
   }
 
   onMount(reset);
+
+  function randomize() {
+    n = 5 + Math.floor(Math.random() * 6);
+    reset();
+  }
 
   function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -31,17 +37,17 @@
     dpTable[1] = 1;
     dpTable = [...dpTable];
     log = ['Base cases: dp[0]=0, dp[1]=1'];
-    await sleep(500);
+    await sleep(speed);
 
     for (let i = 2; i <= n && running; i++) {
       computing = i;
       callCount++;
       log = [...log, `Computing dp[${i}] = dp[${i - 1}] + dp[${i - 2}] = ${dpTable[i - 1]} + ${dpTable[i - 2]}`];
-      await sleep(600);
+      await sleep(speed);
 
       dpTable[i] = (dpTable[i - 1] ?? 0) + (dpTable[i - 2] ?? 0);
       dpTable = [...dpTable];
-      await sleep(300);
+      await sleep(speed);
     }
 
     computing = -1;
@@ -82,6 +88,17 @@
     >
       Reset
     </button>
+    <button
+      class="px-4 py-2 text-sm font-medium rounded-lg border border-border hover:bg-secondary transition-colors cursor-pointer"
+      on:click={randomize}
+      disabled={running}
+    >
+      Randomize
+    </button>
+    <label class="flex items-center gap-2 text-sm">
+      <span class="text-muted-foreground">Speed:</span>
+      <input type="range" min="100" max="1500" step="100" bind:value={speed} class="w-24" disabled={running} />
+    </label>
     <label class="flex items-center gap-2 text-sm">
       <span class="text-muted-foreground">n:</span>
       <select bind:value={n} on:change={reset} class="rounded border border-border bg-background px-2 py-1 text-sm" disabled={running}>

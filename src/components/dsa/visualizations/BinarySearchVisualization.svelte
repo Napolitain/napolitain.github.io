@@ -11,6 +11,7 @@
   let found = -1;
   let running = false;
   let log: string[] = [];
+  let speed = 600;
 
   function reset() {
     arr = [...initialArray];
@@ -23,6 +24,23 @@
   }
 
   onMount(reset);
+
+  function randomizeArray() {
+    const size = 8 + Math.floor(Math.random() * 6); // 8–13 elements
+    const set = new Set<number>();
+    while (set.size < size) {
+      set.add(Math.floor(Math.random() * 99) + 1);
+    }
+    const sorted = [...set].sort((a, b) => a - b);
+    arr = sorted;
+    target = arr[Math.floor(Math.random() * arr.length)];
+    lo = -1;
+    hi = -1;
+    mid = -1;
+    found = -1;
+    running = false;
+    log = [];
+  }
 
   function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -37,12 +55,12 @@
     found = -1;
     log = [`Searching for ${target} in [${arr.join(', ')}]`];
 
-    await sleep(600);
+    await sleep(speed);
 
     while (lo <= hi && running) {
       mid = lo + Math.floor((hi - lo) / 2);
       log = [...log, `lo=${lo}, hi=${hi}, mid=${mid} → arr[${mid}]=${arr[mid]}`];
-      await sleep(800);
+      await sleep(speed);
 
       if (arr[mid] === target) {
         found = mid;
@@ -57,7 +75,7 @@
       }
 
       mid = -1;
-      await sleep(500);
+      await sleep(speed);
     }
 
     if (found === -1 && running) {
@@ -96,6 +114,17 @@
     >
       Reset
     </button>
+    <button
+      class="px-4 py-2 text-sm font-medium rounded-lg border border-border hover:bg-secondary transition-colors cursor-pointer"
+      on:click={randomizeArray}
+      disabled={running}
+    >
+      Randomize
+    </button>
+    <label class="flex items-center gap-2 text-sm">
+      <span class="text-muted-foreground">Speed:</span>
+      <input type="range" min="100" max="1500" step="100" bind:value={speed} disabled={running} class="w-24 accent-primary" />
+    </label>
     <label class="flex items-center gap-2 text-sm">
       <span class="text-muted-foreground">Target:</span>
       <select bind:value={target} class="rounded border border-border bg-background px-2 py-1 text-sm" disabled={running}>

@@ -2,8 +2,9 @@
   import { onMount } from 'svelte';
 
   // Two-sum on sorted array
-  const arr = [2, 7, 11, 15, 19, 23, 28, 34];
+  let arr = [2, 7, 11, 15, 19, 23, 28, 34];
   let target = 30;
+  let speed = 500;
 
   let left = -1;
   let right = -1;
@@ -21,6 +22,18 @@
 
   onMount(reset);
 
+  function randomize() {
+    const len = 6 + Math.floor(Math.random() * 4);
+    const nums = new Set<number>();
+    while (nums.size < len) nums.add(Math.floor(Math.random() * 50) + 1);
+    arr = [...nums].sort((a, b) => a - b);
+    const i = Math.floor(Math.random() * arr.length);
+    let j = Math.floor(Math.random() * arr.length);
+    while (j === i) j = Math.floor(Math.random() * arr.length);
+    target = arr[i] + arr[j];
+    reset();
+  }
+
   function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -32,12 +45,12 @@
     right = arr.length - 1;
     log = [`Finding two numbers that sum to ${target}`];
 
-    await sleep(500);
+    await sleep(speed);
 
     while (left < right && running) {
       const sum = arr[left] + arr[right];
       log = [...log, `arr[${left}]+arr[${right}] = ${arr[left]}+${arr[right]} = ${sum}`];
-      await sleep(700);
+      await sleep(speed);
 
       if (sum === target) {
         found = [left, right];
@@ -50,7 +63,7 @@
         log = [...log, `${sum} > ${target} → move right pointer left`];
         right--;
       }
-      await sleep(300);
+      await sleep(speed);
     }
 
     if (!found && running) {
@@ -89,6 +102,17 @@
     >
       Reset
     </button>
+    <button
+      class="px-4 py-2 text-sm font-medium rounded-lg border border-border hover:bg-secondary transition-colors cursor-pointer"
+      on:click={randomize}
+      disabled={running}
+    >
+      Randomize
+    </button>
+    <label class="flex items-center gap-2 text-sm">
+      <span class="text-muted-foreground">Speed:</span>
+      <input type="range" min="100" max="1500" step="100" bind:value={speed} class="w-24" disabled={running} />
+    </label>
     <label class="flex items-center gap-2 text-sm">
       <span class="text-muted-foreground">Target:</span>
       <select bind:value={target} class="rounded border border-border bg-background px-2 py-1 text-sm" disabled={running}>

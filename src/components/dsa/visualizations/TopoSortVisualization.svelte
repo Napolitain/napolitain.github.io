@@ -2,7 +2,8 @@
   import { onMount } from 'svelte';
 
   // DAG: directed edges only
-  const graph: Record<string, string[]> = {
+  const nodes = ['A', 'B', 'C', 'D', 'E', 'F'];
+  let graph: Record<string, string[]> = {
     A: ['C', 'D'],
     B: ['D', 'E'],
     C: ['F'],
@@ -20,8 +21,8 @@
     F: { x: 140, y: 300 },
   };
 
-  // Directed edges
-  const edges: [string, string][] = [
+  // Directed edges (derived from graph)
+  let edges: [string, string][] = [
     ['A', 'C'], ['A', 'D'], ['B', 'D'], ['B', 'E'], ['C', 'F'], ['D', 'F'],
   ];
 
@@ -31,6 +32,7 @@
   let result: string[] = [];
   let running = false;
   let currentEdge: [string, string] | null = null;
+  let speed = 600;
 
   function reset() {
     nodeStates = Object.fromEntries(Object.keys(graph).map(n => [n, 'unvisited' as NodeState]));
@@ -41,6 +43,24 @@
 
   onMount(reset);
 
+  function randomizeDAG() {
+    const newGraph: Record<string, string[]> = {};
+    for (const n of nodes) newGraph[n] = [];
+    const newEdges: [string, string][] = [];
+    // Use node index order to guarantee a valid DAG: only add edges from lower to higher index
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        if (Math.random() < 0.35) {
+          newGraph[nodes[i]].push(nodes[j]);
+          newEdges.push([nodes[i], nodes[j]]);
+        }
+      }
+    }
+    graph = newGraph;
+    edges = newEdges;
+    reset();
+  }
+
   function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -49,12 +69,12 @@
     if (!running) return;
     nodeStates[node] = 'exploring';
     nodeStates = { ...nodeStates };
-    await sleep(500);
+    await sleep(speed);
 
     for (const neighbor of graph[node]) {
       if (nodeStates[neighbor] === 'unvisited') {
         currentEdge = [node, neighbor];
-        await sleep(300);
+        await sleep(speed);
         await dfs(neighbor);
         currentEdge = null;
       }
@@ -63,7 +83,7 @@
     nodeStates[node] = 'finished';
     nodeStates = { ...nodeStates };
     result = [node, ...result];
-    await sleep(400);
+    await sleep(speed);
   }
 
   async function runTopoSort() {
@@ -110,7 +130,7 @@
 </script>
 
 <div class="space-y-6">
-  <div class="flex items-center gap-4">
+  <div class="flex items-center gap-4 flex-wrap">
     <button
       class="px-4 py-2 text-sm font-medium rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-50 cursor-pointer"
       on:click={runTopoSort}
@@ -125,6 +145,17 @@
     >
       Reset
     </button>
+    <button
+      class="px-4 py-2 text-sm font-medium rounded-lg border border-border hover:bg-secondary transition-colors cursor-pointer"
+      on:click={randomizeDAG}
+      disabled={running}
+    >
+      Randomize
+    </button>
+    <label class="flex items-center gap-2 text-sm">
+      <span class="text-muted-foreground">Speed:</span>
+      <input type="range" min="100" max="1500" step="100" bind:value={speed} disabled={running} class="w-24 accent-primary" />
+    </label>
   </div>
 
   <svg viewBox="0 0 400 350" class="w-full max-w-md mx-auto" role="img" aria-label="Topological sort visualization">
