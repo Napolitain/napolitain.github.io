@@ -115,7 +115,25 @@ Backtracking is the right tool when you need **exhaustive search with pruning**.
 
 Space is always proportional to the depth of the decision tree — the recursion stack holds one path from root to the current node.
 
-## Relation to other algorithms
+## Key takeaways
+
+- **Backtracking = DFS + undo** — the core loop is always: choose, recurse, unchoose. Master this template and every backtracking problem is a variation of it.
+- **Pruning is everything** — without constraint checks, backtracking is just brute force. The earlier you detect an invalid partial candidate, the more subtrees you skip.
+- **Permutations branch on unused elements, subsets branch on include/exclude** — recognizing which pattern a problem follows immediately tells you the branching factor and tree shape.
+- **State restoration must be exact** — if `apply` modifies a set, array, or board, `undo` must reverse it perfectly. Bugs here are the #1 source of wrong answers in interviews.
+- **Complexity is exponential by nature** — backtracking problems are inherently $O(n!)$ or $O(2^n)$; the goal is pruning, not polynomial time.
+
+## Practice problems
+
+| Problem | Difficulty | Key idea |
+|---|---|---|
+| [N-Queens](https://leetcode.com/problems/n-queens/) | 🔴 Hard | Place queens row by row, tracking columns and both diagonals in sets for $O(1)$ conflict checks |
+| [Permutations](https://leetcode.com/problems/permutations/) | 🟡 Medium | Classic backtracking — branch on unused elements, build the path incrementally |
+| [Subsets](https://leetcode.com/problems/subsets/) | 🟡 Medium | Include/exclude decision at each index; every node in the tree is a valid subset |
+| [Combination Sum](https://leetcode.com/problems/combination-sum/) | 🟡 Medium | Allow reusing the same element by not advancing the index after choosing it |
+| [Sudoku Solver](https://leetcode.com/problems/sudoku-solver/) | 🔴 Hard | Fill cells one at a time, pruning with row/column/box constraints; MRV heuristic helps |
+
+## Relation to other topics
 
 - **DFS on an implicit graph**: backtracking is DFS where the graph is the decision tree of all partial candidates. You never build the full graph — nodes are generated on the fly.
 - **Branch and bound**: backtracking + a cost bound. If the partial solution's lower bound exceeds the best known, prune. Used in optimization problems (TSP, integer programming).

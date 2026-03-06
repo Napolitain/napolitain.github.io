@@ -166,3 +166,27 @@ Think of it as: the left pointer is the **minimum** left boundary for the curren
 | Two pointers (converging) | $O(n)$ | $O(1)$ |
 | Fixed sliding window | $O(n)$ | $O(1)$ or $O(k)$ |
 | Variable sliding window | $O(n)$ | $O(k)$ where $k$ = alphabet/unique elements |
+
+## Key takeaways
+
+- **Each pointer moves at most n times** — this is what gives two-pointer techniques their $O(n)$ guarantee, even though it might look like nested loops.
+- **Sorting is a prerequisite** for converging two pointers on pair-sum problems. Without sorted order, use a hash map instead.
+- **Variable sliding window is the most versatile pattern** — it handles shortest/longest subarray problems with any monotonic constraint.
+- **Maintain an invariant as you slide** — when expanding breaks it, contract from the left until it's restored. This guarantees you never miss a valid window.
+- **Off-by-one errors are the #1 bug** — window size is `right - left + 1`, not `right - left`.
+
+## Practice problems
+
+| Problem | Difficulty | Key idea |
+|---|---|---|
+| [Two Sum II - Input Array Is Sorted](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/) | 🟢 Easy | Converging pointers on a sorted array to find a target sum |
+| [Container With Most Water](https://leetcode.com/problems/container-with-most-water/) | 🟡 Medium | Move the shorter side inward since width always decreases |
+| [3Sum](https://leetcode.com/problems/3sum/) | 🟡 Medium | Sort + fix one element, then use two pointers for the remaining pair |
+| [Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters/) | 🟡 Medium | Variable sliding window with a set to track duplicates |
+| [Minimum Window Substring](https://leetcode.com/problems/minimum-window-substring/) | 🔴 Hard | Expand to satisfy the constraint, then contract to minimize the window |
+
+## Relation to other topics
+
+- **Binary search**: converging two pointers on a sorted array is a generalization of binary search — both exploit sorted order to eliminate candidates.
+- **Hash maps**: for unsorted arrays, hash maps solve pair-sum in $O(n)$ where two pointers can't. They're alternative approaches to the same class of problems.
+- **Monotonic queues/deques**: sliding window max/min problems combine the sliding window framework with a monotonic deque for $O(n)$ solutions.

@@ -142,3 +142,27 @@ Most languages provide a min-heap by default. To get a max-heap, negate the valu
 | Heap sort | $O(n \log n)$ |
 
 Space is $O(n)$ for the array. No auxiliary space needed beyond the array itself.
+
+## Key takeaways
+
+- **A heap is a complete binary tree stored in an array** — parent at index $i$, children at $2i+1$ and $2i+2$, no pointers needed.
+- **Bottom-up heapify is $O(n)$, not $O(n \log n)$** — most nodes are near the bottom and bubble down only a few levels.
+- **Use a min-heap of size $k$ for top-k problems** — this gives $O(n \log k)$ time, much better than sorting when $k \ll n$.
+- **Two heaps solve the running median** — a max-heap for the lower half and a min-heap for the upper half, with the median at one of the roots.
+- **Most languages default to min-heap** — negate values for a max-heap, except C++ which defaults to max-heap.
+
+## Practice problems
+
+| Problem | Difficulty | Key idea |
+|---|---|---|
+| [Kth Largest Element in a Stream](https://leetcode.com/problems/kth-largest-element-in-a-stream/) | 🟢 Easy | Maintain a min-heap of size $k$; the root is always the answer |
+| [Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/) | 🟡 Medium | Count frequencies, then use a heap to extract the top $k$ |
+| [Find Median from Data Stream](https://leetcode.com/problems/find-median-from-data-stream/) | 🔴 Hard | Two-heap approach: max-heap for lower half, min-heap for upper half |
+| [Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/) | 🔴 Hard | Min-heap of size $k$ holding the current head of each list |
+| [Task Scheduler](https://leetcode.com/problems/task-scheduler/) | 🟡 Medium | Max-heap to always schedule the most frequent remaining task |
+
+## Relation to other topics
+
+- **Graphs**: heaps are the backbone of Dijkstra's shortest path and Prim's MST algorithms, providing efficient extract-min for greedy vertex selection.
+- **Sorting**: heap sort uses the heap structure for $O(n \log n)$ in-place sorting, though it has worse cache locality than quicksort.
+- **Binary search trees**: BSTs support the same operations plus ordered traversal and predecessor/successor queries, but with higher constant factors and pointer overhead.

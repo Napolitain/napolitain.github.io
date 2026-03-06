@@ -111,10 +111,26 @@ Both guarantee $O(\log n)$ height. The details of rotations are important but or
 
 Balanced variants (AVL, Red-Black) guarantee $O(\log n)$ worst case for search, insert, and delete.
 
-## Relation to other algorithms
+## Key takeaways
 
-**Binary search**: a BST is essentially binary search materialized as a data structure. The array gives you $O(\log n)$ search but $O(n)$ insert; the BST gives you $O(\log n)$ for both.
+- **Inorder traversal gives sorted order for free** — this single property is the basis for validation, kth-smallest, and iterator problems.
+- **Unbalanced BSTs degrade to $O(n)$** — inserting sorted data creates a linked list; always consider whether the problem guarantees balance or if you need a self-balancing variant.
+- **LCA in a BST is simpler than in a generic tree** — the BST invariant tells you exactly which direction to go, giving an $O(h)$ solution without parent pointers or preprocessing.
+- **Delete has three cases** — leaf, one child, two children. The two-children case uses the inorder successor (or predecessor) and is the most common interview follow-up.
+- **BST = binary search as a data structure** — arrays give $O(\log n)$ search but $O(n)$ insert; BSTs give $O(\log n)$ for both by trading contiguous memory for pointers.
 
-**Heaps**: both are tree-based, but heaps only guarantee a partial order (parent vs children). BSTs maintain a total order (left < node < right). You can't efficiently search a heap, and you can't efficiently extract-min from a BST without augmentation.
+## Practice problems
 
-**Balanced BSTs → sets and maps**: virtually every language's sorted set/map (`TreeSet`, `std::set`, `BTreeMap`) is a balanced BST underneath. When you need ordered iteration, range queries, or floor/ceiling operations, you're using a BST.
+| Problem | Difficulty | Key idea |
+|---|---|---|
+| [Validate Binary Search Tree](https://leetcode.com/problems/validate-binary-search-tree/) | 🟡 Medium | Pass min/max bounds recursively or check that inorder traversal is strictly increasing |
+| [Kth Smallest Element in a BST](https://leetcode.com/problems/kth-smallest-element-in-a-bst/) | 🟡 Medium | Inorder traversal with a counter; stop early once you've visited $k$ nodes |
+| [Lowest Common Ancestor of a Binary Search Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/) | 🟡 Medium | Use the BST invariant to decide left/right — split point is the LCA |
+| [Convert Sorted Array to Binary Search Tree](https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/) | 🟢 Easy | Recursively pick the middle element as root to guarantee balanced height |
+| [Delete Node in a BST](https://leetcode.com/problems/delete-node-in-a-bst/) | 🟡 Medium | Handle the three deletion cases, replacing with inorder successor for two-children nodes |
+
+## Relation to other topics
+
+- **Binary search**: a BST is essentially binary search materialized as a data structure. The array gives you $O(\log n)$ search but $O(n)$ insert; the BST gives you $O(\log n)$ for both.
+- **Heaps**: both are tree-based, but heaps only guarantee a partial order (parent vs children). BSTs maintain a total order (left < node < right). You can't efficiently search a heap, and you can't efficiently extract-min from a BST without augmentation.
+- **Balanced BSTs → sets and maps**: virtually every language's sorted set/map (`TreeSet`, `std::set`, `BTreeMap`) is a balanced BST underneath. When you need ordered iteration, range queries, or floor/ceiling operations, you're using a BST.

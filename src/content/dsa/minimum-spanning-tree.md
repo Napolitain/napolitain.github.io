@@ -98,7 +98,25 @@ For sparse graphs, Kruskal's $O(E \log E)$ dominates because $E$ is small. For d
 | Prim (array, no heap) | $O(V^2)$ | $O(V)$ |
 | Borůvka | $O(E \log V)$ | $O(V + E)$ |
 
-## Relation to other algorithms
+## Key takeaways
+
+- **Cut property is the core insight** — the lightest edge crossing any cut must be in the MST, which is why both Kruskal's and Prim's work by greedily picking minimum-weight edges.
+- **Kruskal's for sparse, Prim's for dense** — Kruskal's $O(E \log E)$ wins when $E \approx V$; Prim's $O(V^2)$ array version wins when $E \approx V^2$ because it avoids sorting all edges.
+- **Union-Find makes Kruskal's practical** — without path compression and union by rank, cycle detection would dominate the runtime.
+- **Distinct weights guarantee a unique MST** — with ties multiple MSTs may exist, but they all share the same total weight.
+- **MST ≠ shortest paths** — the MST minimizes total edge weight (and minimax path weight), while Dijkstra minimizes cumulative distance from a source.
+
+## Practice problems
+
+| Problem | Difficulty | Key idea |
+|---|---|---|
+| [Min Cost to Connect All Points](https://leetcode.com/problems/min-cost-to-connect-all-points/) | 🟡 Medium | Build MST on a complete graph of points using Kruskal's or Prim's |
+| [Connecting Cities With Minimum Cost](https://leetcode.com/problems/connecting-cities-with-minimum-cost/) | 🟡 Medium | Classic MST — sort edges and use Union-Find to connect all cities |
+| [Optimize Water Distribution in a Village](https://leetcode.com/problems/optimize-water-distribution-in-a-village/) | 🔴 Hard | Add a virtual node for wells, reducing the problem to standard MST |
+| [Find Critical and Pseudo-Critical Edges in MST](https://leetcode.com/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/) | 🔴 Hard | Force-include and force-exclude each edge to classify criticality |
+| [Network Delay Time](https://leetcode.com/problems/network-delay-time/) | 🟡 Medium | Dijkstra on weighted graph — contrasts with MST by minimizing path distance instead of total weight |
+
+## Relation to other topics
 
 - **Union-Find**: Kruskal's is the canonical use case — Union-Find provides near-$O(1)$ cycle detection.
 - **Dijkstra**: Prim's shares the same structure (greedy expansion with a priority queue), but uses edge weight rather than cumulative distance from the source.

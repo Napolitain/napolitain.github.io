@@ -105,7 +105,25 @@ Pattern recognition: if the brute force is a nested loop where the inner loop sc
 
 The $O(n)$ time for monotonic stack comes from amortized analysis: each element is pushed and popped at most once across the entire traversal.
 
-## Relation to other structures
+## Key takeaways
+
+- **Every element is pushed and popped at most once** in a monotonic stack — that's why the total work is $O(n)$ amortized, not $O(n^2)$.
+- **Monotonic stacks eliminate inner loops**: any brute-force nested loop scanning left/right for a threshold can be replaced with a monotonic stack.
+- **Maintain decreasing order for next-greater, increasing order for next-smaller** — flip the invariant to flip the query direction.
+- **Stacks map directly to recursion**: any recursive solution can be converted to iterative with an explicit stack, and vice versa.
+- **"Most recent unresolved context"** is the signal — if the problem involves matching, nesting, or backtracking to the latest open item, reach for a stack.
+
+## Practice problems
+
+| Problem | Difficulty | Key idea |
+|---|---|---|
+| [Valid Parentheses](https://leetcode.com/problems/valid-parentheses/) | 🟢 Easy | Push openers, pop and match on closers |
+| [Daily Temperatures](https://leetcode.com/problems/daily-temperatures/) | 🟡 Medium | Monotonic decreasing stack to find next warmer day |
+| [Min Stack](https://leetcode.com/problems/min-stack/) | 🟡 Medium | Auxiliary stack tracking minimum at each depth |
+| [Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water/) | 🔴 Hard | Monotonic stack to find bounding bars for each trapped section |
+| [Largest Rectangle in Histogram](https://leetcode.com/problems/largest-rectangle-in-histogram/) | 🔴 Hard | Next-smaller on both sides to determine max width per bar |
+
+## Relation to other topics
 
 **Recursion** — every recursive call pushes a frame onto the call stack. Converting DFS from recursive to iterative means replacing the call stack with an explicit stack.
 

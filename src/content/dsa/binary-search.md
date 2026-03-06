@@ -141,3 +141,27 @@ If the decision problem is solvable in $O(g(n))$, then binary search on the answ
 | With predicate | $O(\log(\text{range}) \cdot \text{predicate cost})$ | depends on predicate |
 
 The logarithmic factor is what makes it powerful. Doubling the input size adds just one more comparison.
+
+## Key takeaways
+
+- **Binary search applies to any monotonic predicate**, not just sorted arrays — if a property flips from false to true, you can binary-search the boundary.
+- **Use `mid = lo + (hi - lo) / 2`** to avoid integer overflow in languages with fixed-width integers.
+- **The `lo < hi` template with `lo = mid + 1` / `hi = mid` is the safest** — it always terminates with `lo == hi` pointing to the answer.
+- **"Binary search on the answer"** converts optimization problems into decision problems — minimize/maximize by searching the answer space.
+- **Off-by-one errors are the #1 bug source** — always be explicit about whether bounds are inclusive or exclusive and whether you want lower or upper bound.
+
+## Practice problems
+
+| Problem | Difficulty | Key idea |
+|---|---|---|
+| [Binary Search](https://leetcode.com/problems/binary-search/) | 🟢 Easy | Classic sorted-array search to nail the basic template |
+| [Search in Rotated Sorted Array](https://leetcode.com/problems/search-in-rotated-sorted-array/) | 🟡 Medium | Determine which half is sorted, then decide which half to search |
+| [Find Minimum in Rotated Sorted Array](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/) | 🟡 Medium | Binary search for the rotation pivot point |
+| [Koko Eating Bananas](https://leetcode.com/problems/koko-eating-bananas/) | 🟡 Medium | Binary search on the answer with a feasibility predicate |
+| [Median of Two Sorted Arrays](https://leetcode.com/problems/median-of-two-sorted-arrays/) | 🔴 Hard | Binary search on partition position to find the median in $O(\log n)$ |
+
+## Relation to other topics
+
+- **Two pointers** — both exploit sorted structure to skip unnecessary work; two pointers is linear while binary search is logarithmic.
+- **Divide and conquer** — binary search is the simplest divide-and-conquer algorithm, halving the problem at each step.
+- **Monotonic stack/queue** — like binary search, these techniques leverage monotonicity to efficiently find boundaries or extrema in sequences.

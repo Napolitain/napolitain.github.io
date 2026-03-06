@@ -88,7 +88,25 @@ BFS uses $O(V)$ memory for the queue. DFS uses $O(V)$ for the stack. In practice
 
 Where $V$ is the number of vertices and $E$ is the number of edges. Every vertex is enqueued and dequeued exactly once. Every edge is examined once (twice in undirected graphs, once per endpoint).
 
-## Relation to other algorithms
+## Key takeaways
+
+- **BFS explores level by level** using a queue, making it the natural choice for shortest-path problems in unweighted graphs.
+- **The first time BFS reaches a node is always via the shortest path** (in terms of edge count) — no need to revisit or update distances.
+- **Track level boundaries** by recording `queue.length` at the start of each iteration — this is the standard trick for level-order traversal problems.
+- **Skip the visited set on trees** — the acyclic structure prevents revisits, simplifying the code.
+- **Switch to Dijkstra when edges have weights** — BFS treats all edges as equal, which gives wrong results on weighted graphs.
+
+## Practice problems
+
+| Problem | Difficulty | Key idea |
+|---|---|---|
+| [Binary Tree Level Order Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal/) | 🟡 Medium | Use queue with level-size tracking to group nodes by depth |
+| [Rotting Oranges](https://leetcode.com/problems/rotting-oranges/) | 🟡 Medium | Multi-source BFS from all rotten oranges simultaneously |
+| [Word Ladder](https://leetcode.com/problems/word-ladder/) | 🔴 Hard | BFS on implicit graph where edges connect words differing by one letter |
+| [Shortest Path in Binary Matrix](https://leetcode.com/problems/shortest-path-in-binary-matrix/) | 🟡 Medium | Standard BFS on a grid with 8-directional movement |
+| [Open the Lock](https://leetcode.com/problems/open-the-lock/) | 🟡 Medium | BFS on state space where each state is a 4-digit combination |
+
+## Relation to other topics
 
 - **Dijkstra** is BFS with a priority queue — instead of processing nodes in discovery order, it processes them in order of cumulative edge weight. When all weights are 1, Dijkstra degenerates to BFS.
 - **0-1 BFS** handles graphs with edge weights of 0 or 1 using a deque instead of a priority queue — push weight-0 neighbors to the front, weight-1 neighbors to the back.

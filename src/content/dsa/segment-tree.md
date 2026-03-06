@@ -107,7 +107,25 @@ Any associative operation works. The merge function defines what your tree compu
 | Point update | $O(\log n)$ | — |
 | Range update (lazy) | $O(\log n)$ | $O(4n)$ extra |
 
-## Relation to other structures
+## Key takeaways
+
+- **Any associative operation works** as the merge function — sum, min, max, GCD, bitwise OR. Define the merge and identity, and the tree handles the rest.
+- **$O(\log n)$ for both query and update** is the sweet spot between prefix sums ($O(1)$ query, $O(n)$ update) and naive arrays ($O(n)$ query, $O(1)$ update).
+- **Lazy propagation is essential for range updates** — without it, updating a range of elements is $O(n)$. With it, both range update and query stay $O(\log n)$.
+- **Flat array of size $4n$ with 1-based indexing** — node $i$ has children $2i$ and $2i+1$. No pointers, no overhead, cache-friendly.
+- **Segment trees dominate** when you need both updates and queries — if the array is static, prefer a sparse table or prefix sums.
+
+## Practice problems
+
+| Problem | Difficulty | Key idea |
+|---|---|---|
+| [Range Sum Query - Mutable](https://leetcode.com/problems/range-sum-query-mutable/) | 🟡 Medium | Direct segment tree application for sum queries with point updates |
+| [My Calendar I](https://leetcode.com/problems/my-calendar-i/) | 🟡 Medium | Segment tree or balanced BST to detect overlapping intervals |
+| [Count of Smaller Numbers After Self](https://leetcode.com/problems/count-of-smaller-numbers-after-self/) | 🔴 Hard | Segment tree on value space, processing array right to left |
+| [The Skyline Problem](https://leetcode.com/problems/the-skyline-problem/) | 🔴 Hard | Sweep line with segment tree or priority queue for active heights |
+| [Count of Range Sum](https://leetcode.com/problems/count-of-range-sum/) | 🔴 Hard | Segment tree on prefix sums to count valid ranges |
+
+## Relation to other topics
 
 **Fenwick tree (BIT)**: simpler to implement, less memory, but only supports prefix queries natively. You can do range queries with two prefix queries, but operations like range min don't work. If all you need is range sum with point updates, a Fenwick tree is lighter.
 

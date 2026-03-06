@@ -167,3 +167,27 @@ In practice, arrays almost always win due to cache locality. Linked lists are us
 | Cycle detection | $O(n)$ | $O(1)$ |
 | Merge sorted | $O(n + m)$ | $O(1)$ (rewire pointers) |
 | Find middle | $O(n)$ | $O(1)$ |
+
+## Key takeaways
+
+- **Reversal** is the most fundamental operation — master the 3-pointer iterative technique (prev, curr, next) until it's automatic
+- **Floyd's cycle detection** uses $O(1)$ space with two pointers at different speeds; always the interview follow-up after the hash set approach
+- The **dummy node trick** eliminates edge cases when building or merging lists — use it by default
+- **Fast/slow pointer** is a versatile pattern: find middle, detect cycles, check palindromes, find k-th from end
+- Linked lists rarely beat arrays in practice due to **poor cache locality**, but excel at frequent insertion/deletion at known positions
+
+## Practice problems
+
+| Problem | Difficulty | Key idea |
+|---|---|---|
+| [Reverse Linked List](https://leetcode.com/problems/reverse-linked-list/) | 🟢 Easy | Iterative 3-pointer reversal pattern |
+| [Linked List Cycle](https://leetcode.com/problems/linked-list-cycle/) | 🟢 Easy | Floyd's tortoise and hare for O(1) space detection |
+| [Merge Two Sorted Lists](https://leetcode.com/problems/merge-two-sorted-lists/) | 🟢 Easy | Dummy node with two-pointer merge |
+| [Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list/) | 🟡 Medium | Two pointers with a gap of n nodes |
+| [LRU Cache](https://leetcode.com/problems/lru-cache/) | 🟡 Medium | Doubly linked list plus hash map for O(1) access and eviction |
+
+## Relation to other topics
+
+- **Two pointers** — fast/slow pointer on linked lists is a specialized form of the two-pointer technique used on arrays
+- **Merge sort** — merge sort is the ideal sorting algorithm for linked lists because it needs only sequential access and $O(1)$ extra space
+- **Hash maps** — combining linked lists with hash maps (as in LRU Cache) gives $O(1)$ ordered insertion, deletion, and lookup

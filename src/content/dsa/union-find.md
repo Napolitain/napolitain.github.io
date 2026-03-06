@@ -124,3 +124,27 @@ Union-Find shines when edges arrive **incrementally** and you need to answer "ar
 | Total space | — | $O(n)$ |
 
 Where $\alpha$ is the inverse Ackermann function. For all practical purposes, this is constant.
+
+## Key takeaways
+
+- **Always use both path compression and union by rank** — together they give $O(\alpha(n))$ amortized per operation, which is effectively constant.
+- **Union-Find excels at incremental connectivity** — when edges arrive over time and you need on-the-fly "are these connected?" queries, it beats DFS/BFS.
+- **Cycle detection is trivial** — if `Find(u) == Find(v)` before adding edge $(u, v)$, a cycle exists.
+- **Count components by tracking successful unions** — start with $n$ components and decrement on each union of distinct sets.
+- **Think Union-Find whenever you see equivalence classes** — grouping accounts, merging intervals, or partitioning elements by some equivalence relation.
+
+## Practice problems
+
+| Problem | Difficulty | Key idea |
+|---|---|---|
+| [Number of Provinces](https://leetcode.com/problems/number-of-provinces/) | 🟡 Medium | Count connected components by union-ing adjacent nodes |
+| [Redundant Connection](https://leetcode.com/problems/redundant-connection/) | 🟡 Medium | Find the edge that creates a cycle using union-find |
+| [Accounts Merge](https://leetcode.com/problems/accounts-merge/) | 🟡 Medium | Union accounts sharing an email, then group by root |
+| [Most Stones Removed with Same Row or Column](https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/) | 🟡 Medium | Stones in the same row/column form a connected component |
+| [Satisfiability of Equality Equations](https://leetcode.com/problems/satisfiability-of-equality-equations/) | 🟡 Medium | Union variables in equality constraints, then check inequality constraints |
+
+## Relation to other topics
+
+- **Kruskal's MST** — Union-Find is the core data structure that makes Kruskal's algorithm efficient by quickly testing whether an edge connects two different components.
+- **Graph traversal (DFS/BFS)** — for static graphs where all edges are known upfront, DFS/BFS is simpler; Union-Find wins when edges arrive incrementally.
+- **Connected components** — Union-Find and BFS/DFS both solve this, but Union-Find supports dynamic edge insertion without re-traversal.

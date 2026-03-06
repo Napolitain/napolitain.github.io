@@ -94,7 +94,25 @@ Where $L$ is word length, $N$ is word count, and $\Sigma$ is alphabet size. The 
 
 $L$ is the length of the word. Space is bounded by the total number of unique prefixes across all inserted words times the children structure size.
 
-## Relation to other algorithms
+## Key takeaways
+
+- **Every path from root is a prefix** — the trie's structure inherently encodes all prefixes, making prefix queries $O(L)$ with zero extra work.
+- **Shared prefixes share nodes** — words with common beginnings reuse the same path, which is the core reason tries beat hash sets for prefix-heavy workloads.
+- **Use an array of size 26 for interviews** — when the alphabet is lowercase English, a fixed-size array gives constant-time child access and is simpler to code under pressure.
+- **Tries enable early termination on grids** — in word search problems, walking the trie alongside the DFS lets you prune entire branches the moment no dictionary word matches the current path.
+- **Space is the tradeoff** — tries can use significantly more memory than hash sets due to per-node pointer overhead; only reach for them when prefix operations are essential.
+
+## Practice problems
+
+| Problem | Difficulty | Key idea |
+|---|---|---|
+| [Implement Trie (Prefix Tree)](https://leetcode.com/problems/implement-trie-prefix-tree/) | 🟡 Medium | Build insert, search, and startsWith from scratch using a TrieNode with children array |
+| [Design Add and Search Words Data Structure](https://leetcode.com/problems/design-add-and-search-words-data-structure/) | 🟡 Medium | Trie with DFS branching on wildcard `.` characters |
+| [Word Search II](https://leetcode.com/problems/word-search-ii/) | 🔴 Hard | Build a trie from the dictionary and DFS on the board simultaneously for early pruning |
+| [Replace Words](https://leetcode.com/problems/replace-words/) | 🟡 Medium | Insert roots into a trie, then find the shortest matching prefix for each word |
+| [Search Suggestions System](https://leetcode.com/problems/search-suggestions-system/) | 🟡 Medium | Walk the trie character by character and DFS-collect up to 3 lexicographically smallest words |
+
+## Relation to other topics
 
 - **Suffix tree** is a compressed trie of all suffixes of a string. It enables $O(M)$ substring search where $M$ is the pattern length, but construction is complex (Ukkonen's algorithm).
 - **Radix tree** (compressed trie / Patricia tree) merges single-child chains into one edge with a multi-character label. Same asymptotic complexity, but far less memory in practice. Used in Linux kernel routing tables and HTTP routers.

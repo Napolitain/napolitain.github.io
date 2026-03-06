@@ -153,7 +153,25 @@ This three-color approach is specifically for **directed** graphs. For undirecte
 
 Every vertex is visited exactly once. Every edge is examined once (twice in undirected graphs). Space is $O(V)$ for the visited set plus the stack depth, which is $O(V)$ in the worst case (a long chain) but $O(\log V)$ for balanced trees.
 
-## Relation to other algorithms
+## Key takeaways
+
+- **DFS dives deep before backtracking**, making it ideal for exhaustive exploration, cycle detection, and topological sorting.
+- **Recursive DFS maps directly to the call stack** — cleaner code, but watch for stack overflow on deep graphs.
+- **The three traversal orders (pre/in/post) differ only in when you process the node** relative to its children — this single choice unlocks very different use cases.
+- **In-order traversal on a BST visits nodes in sorted order** — a critical fact for BST problems.
+- **Use the three-color scheme (white/gray/black) for cycle detection** in directed graphs — a gray neighbor means you've found a back edge.
+
+## Practice problems
+
+| Problem | Difficulty | Key idea |
+|---|---|---|
+| [Number of Islands](https://leetcode.com/problems/number-of-islands/) | 🟡 Medium | DFS flood-fill from each unvisited land cell to count connected components |
+| [Clone Graph](https://leetcode.com/problems/clone-graph/) | 🟡 Medium | DFS with a hash map to track already-cloned nodes |
+| [Path Sum](https://leetcode.com/problems/path-sum/) | 🟢 Easy | DFS from root to leaves, subtracting node values from the target |
+| [Course Schedule](https://leetcode.com/problems/course-schedule/) | 🟡 Medium | DFS cycle detection on a directed graph using the three-color scheme |
+| [Surrounded Regions](https://leetcode.com/problems/surrounded-regions/) | 🟡 Medium | DFS from border 'O' cells to mark non-surrounded regions |
+
+## Relation to other topics
 
 - **Topological sort** is DFS where you append each node to the result **after** all its descendants are finished (post-order on the DFS tree), then reverse. Alternatively, Kahn's algorithm does this with BFS.
 - **Strongly Connected Components** (Tarjan's, Kosaraju's) rely on DFS finish times to decompose a directed graph.

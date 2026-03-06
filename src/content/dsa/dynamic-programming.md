@@ -155,3 +155,27 @@ If yes to all three, it's likely DP. The hardest part is usually **defining the 
 | LCS | $O(nm)$ | $O(\min(n,m))$ optimized |
 | Edit distance | $O(nm)$ | $O(\min(n,m))$ optimized |
 | LIS | $O(n \log n)$ with binary search | $O(n)$ |
+
+## Key takeaways
+
+- **Define the state first** — the hardest part of DP is deciding what `dp[i]` or `dp[i][j]` represents. Get this right and the transition often writes itself.
+- **Bottom-up is preferred in production** — it avoids stack overflow risks and makes space optimization straightforward by dropping old rows.
+- **Space optimization is almost always possible** — if `dp[i]` only depends on `dp[i-1]`, keep only two rows. If it depends on `dp[i-1]` and `dp[i-2]`, keep two variables.
+- **Knapsack is pseudo-polynomial** — $O(nW)$ looks polynomial but $W$ can be exponentially large in the input size. This is why knapsack is NP-complete.
+- **Look for overlapping subproblems** — if a recursive solution recomputes the same calls, memoization or tabulation will give you a massive speedup.
+
+## Practice problems
+
+| Problem | Difficulty | Key idea |
+|---|---|---|
+| [Climbing Stairs](https://leetcode.com/problems/climbing-stairs/) | 🟢 Easy | Classic 1D DP identical to Fibonacci — `dp[i] = dp[i-1] + dp[i-2]` |
+| [Longest Common Subsequence](https://leetcode.com/problems/longest-common-subsequence/) | 🟡 Medium | 2D DP on two strings — match characters or take the best of skipping either |
+| [Partition Equal Subset Sum](https://leetcode.com/problems/partition-equal-subset-sum/) | 🟡 Medium | 0/1 knapsack variant — can you fill a knapsack of capacity `sum/2`? |
+| [Edit Distance](https://leetcode.com/problems/edit-distance/) | 🟡 Medium | 2D DP with three operations: insert, delete, replace at each cell |
+| [Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/) | 🟡 Medium | 1D DP optimizable to $O(n \log n)$ with binary search on a patience-sorting array |
+
+## Relation to other topics
+
+- **Greedy algorithms**: greedy makes locally optimal choices without reconsidering, while DP considers all subproblems. When greedy fails (no greedy-choice property), DP is the fallback.
+- **Recursion and memoization**: top-down DP is just recursion with a cache. Understanding the recursive structure is often the first step toward a DP solution.
+- **Graph algorithms**: shortest-path problems (Bellman-Ford, Floyd-Warshall) are DP on graphs, where the state is the current node and the number of edges used.

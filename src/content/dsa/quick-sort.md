@@ -137,3 +137,27 @@ But merge sort wins on:
 | Quick sort | $O(n^2)$ | $O(n \log n)$ | $O(n \log n)$ | $O(\log n)$ | No |
 
 The $O(\log n)$ space is for the recursion stack. With tail-call optimization on the larger partition, this is guaranteed.
+
+## Key takeaways
+
+- Work happens in the **partitioning phase** — after partitioning, the pivot is in its final sorted position with no merge needed
+- **Pivot selection** is critical: median-of-three avoids worst case on sorted input at near-zero cost
+- **Three-way partition** (Dutch National Flag) handles duplicate-heavy arrays in $O(n)$ instead of $O(n^2)$
+- Quick sort beats merge sort in practice due to **cache locality** and no auxiliary memory allocation
+- Production sorts use **introsort**: quick sort with heap sort fallback to guarantee $O(n \log n)$ worst case
+
+## Practice problems
+
+| Problem | Difficulty | Key idea |
+|---|---|---|
+| [Sort an Array](https://leetcode.com/problems/sort-an-array/) | 🟡 Medium | Implement quick sort with randomized pivot to avoid worst case |
+| [Kth Largest Element in an Array](https://leetcode.com/problems/kth-largest-element-in-an-array/) | 🟡 Medium | Quickselect — partition without fully sorting the array |
+| [Sort Colors](https://leetcode.com/problems/sort-colors/) | 🟡 Medium | Dutch National Flag three-way partition in a single pass |
+| [Wiggle Sort II](https://leetcode.com/problems/wiggle-sort-ii/) | 🟡 Medium | Partition around median then interleave elements |
+| [Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/) | 🟡 Medium | Quickselect on frequency counts to find top-k without full sort |
+
+## Relation to other topics
+
+- **Merge sort** — same divide-and-conquer structure, but work happens during merging; stable and guaranteed $O(n \log n)$ but needs $O(n)$ space
+- **Quickselect** — uses the same partition step to find the k-th smallest element in $O(n)$ average time without fully sorting
+- **Heap sort** — $O(n \log n)$ worst case and in-place, used as fallback in introsort when quick sort recurses too deep

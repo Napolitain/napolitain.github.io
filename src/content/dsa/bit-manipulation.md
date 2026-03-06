@@ -117,6 +117,24 @@ This visits every subset of `mask` exactly once in $O(2^{\text{popcount(mask)}})
 
 All single-integer bitwise operations are $O(1)$. Brian Kernighan's bit count is $O(k)$ where $k$ is the number of set bits (at most $O(\log n)$ for value $n$). Subset enumeration with bitmask is $O(2^n)$.
 
+## Key takeaways
+
+- **XOR is the Swiss Army knife** — `a ^ a = 0` and `a ^ 0 = a` solve "find the unique element" problems in $O(1)$ space without sorting or hash maps.
+- **`n & (n - 1)` clears the lowest set bit** — this single trick powers power-of-two checks, Brian Kernighan's bit counting, and many interview one-liners.
+- **Bitmask = subset** — an $n$-bit integer naturally encodes a subset of $n$ elements, enabling $O(2^n)$ enumeration and bitmask DP for NP-hard problems on small inputs.
+- **Bitwise operations are $O(1)$** on fixed-width integers — replacing branching or looping with bit tricks can eliminate constant factors in hot paths.
+- **Isolate lowest set bit with `n & (-n)`** — essential for Fenwick trees (BIT) and for partitioning elements in the "two unique numbers" XOR pattern.
+
+## Practice problems
+
+| Problem | Difficulty | Key idea |
+|---|---|---|
+| [Single Number](https://leetcode.com/problems/single-number/) | 🟢 Easy | XOR all elements — duplicates cancel, leaving the unique value |
+| [Number of 1 Bits](https://leetcode.com/problems/number-of-1-bits/) | 🟢 Easy | Brian Kernighan's trick: `n &= n - 1` counts set bits in $O(k)$ |
+| [Counting Bits](https://leetcode.com/problems/counting-bits/) | 🟢 Easy | DP using `dp[i] = dp[i & (i-1)] + 1` to count bits for every number up to $n$ |
+| [Reverse Bits](https://leetcode.com/problems/reverse-bits/) | 🟢 Easy | Loop through 32 positions, shifting result left and extracting each bit |
+| [Subsets](https://leetcode.com/problems/subsets/) | 🟡 Medium | Use bitmask from $0$ to $2^n - 1$ to enumerate all subsets |
+
 ## Relation to other topics
 
 Bit manipulation appears inside many advanced techniques. **DP with bitmask** uses an integer to represent visited states — common in TSP and assignment problems where $dp[\text{mask}]$ tracks which elements have been used. **Hash functions** and **bloom filters** rely on bitwise mixing and bit-level addressing. XOR-based tricks show up in **randomized algorithms** and **error detection** (CRC, parity bits).

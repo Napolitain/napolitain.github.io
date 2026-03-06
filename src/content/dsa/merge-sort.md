@@ -116,3 +116,27 @@ A modified merge sort can count the number of **inversions** (pairs where $i < j
 | Merge sort | $O(n \log n)$ | $O(n \log n)$ | $O(n \log n)$ | $O(n)$ | Yes |
 
 The time complexity is always $O(n \log n)$ — there's no bad input that triggers worse behavior. The $\log n$ factor comes from the recursion depth (halving the array each time), and each level does $O(n)$ total merge work.
+
+## Key takeaways
+
+- Work happens in the **merge phase**, not the split phase — the opposite of quick sort where partitioning does the work
+- **Stability** makes merge sort the only $O(n \log n)$ comparison sort that preserves relative order of equal elements
+- **$O(n)$ auxiliary space** is the main tradeoff vs quick sort's in-place partitioning
+- Merge sort is the **best algorithm for sorting linked lists** — no random access needed, $O(1)$ extra space via pointer rewiring
+- Modified merge sort can **count inversions** in $O(n \log n)$, a classic interview pattern where you track cross-partition pairs during the merge step
+
+## Practice problems
+
+| Problem | Difficulty | Key idea |
+|---|---|---|
+| [Sort an Array](https://leetcode.com/problems/sort-an-array/) | 🟡 Medium | Implement merge sort from scratch with correct merge logic |
+| [Count of Smaller Numbers After Self](https://leetcode.com/problems/count-of-smaller-numbers-after-self/) | 🔴 Hard | Track inversions during the merge step using index mapping |
+| [Reverse Pairs](https://leetcode.com/problems/reverse-pairs/) | 🔴 Hard | Modified merge sort to count cross-partition pairs before merging |
+| [Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/) | 🔴 Hard | Divide-and-conquer pairwise merge or min-heap of k heads |
+| [Sort List](https://leetcode.com/problems/sort-list/) | 🟡 Medium | Merge sort on linked list using slow/fast split and pointer merge |
+
+## Relation to other topics
+
+- **Quick sort** — same divide-and-conquer structure, but work happens during partitioning instead of merging; in-place but not stable
+- **External sorting** — merge sort's sequential access pattern makes it the foundation for sorting data that doesn't fit in memory
+- **Binary search** — both exploit the "halving" structure; merge sort creates sorted output that enables binary search

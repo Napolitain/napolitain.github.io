@@ -88,7 +88,25 @@ Both boil down to: "we never regret the greedy choice."
 | Jump game | $O(n)$ | $O(1)$ |
 | Kruskal's MST | $O(E \log E)$ | $O(V)$ |
 
-## Relation to other approaches
+## Key takeaways
+
+- **Greedy choice property + optimal substructure** are the two conditions that must hold; if either fails, greedy produces wrong answers and you need DP or exhaustive search.
+- **Sort first** — most greedy problems start by sorting on the right criterion (earliest end time, best ratio, farthest reach). Choosing the wrong sort key is the most common mistake.
+- **Exchange argument** is the go-to proof technique: show you can swap any non-greedy choice in an optimal solution without worsening the result.
+- **Greedy is a special case of DP** where only one subproblem matters at each step — always try greedy first, then fall back to DP if the greedy choice property doesn't hold.
+- **Interval scheduling** (sort by end time) is the canonical example; master it and the pattern transfers to task scheduling, meeting rooms, and merge intervals.
+
+## Practice problems
+
+| Problem | Difficulty | Key idea |
+|---|---|---|
+| [Jump Game](https://leetcode.com/problems/jump-game/) | 🟡 Medium | Track the farthest reachable index greedily from left to right |
+| [Jump Game II](https://leetcode.com/problems/jump-game-ii/) | 🟡 Medium | BFS-like greedy using current and next reachable boundary to minimize jumps |
+| [Gas Station](https://leetcode.com/problems/gas-station/) | 🟡 Medium | Track running fuel surplus to identify the unique valid starting index |
+| [Task Scheduler](https://leetcode.com/problems/task-scheduler/) | 🟡 Medium | Greedily schedule the most frequent task first and calculate idle slots |
+| [Non-overlapping Intervals](https://leetcode.com/problems/non-overlapping-intervals/) | 🟡 Medium | Sort by end time and count overlapping intervals to remove (interval scheduling) |
+
+## Relation to other topics
 
 | | Greedy | DP | Brute force |
 |---|---|---|---|

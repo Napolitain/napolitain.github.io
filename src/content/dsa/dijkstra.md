@@ -105,6 +105,25 @@ Then walk backward from the target: `target → prev[target] → prev[prev[targe
 
 The binary heap version is the most practical. The array version is better for dense graphs ($E \approx V^2$) because the $\log V$ factor on $E$ insertions hurts more than the $V^2$ scan.
 
-## 0-1 BFS: Dijkstra's sibling
+## Key takeaways
 
-When edge weights are only 0 or 1, you can use a **deque** instead of a heap: push weight-0 neighbors to the front, weight-1 neighbors to the back. This gives $O(V + E)$ time — the same as unweighted BFS — without the $\log V$ heap overhead. This comes up in grid problems where some moves are "free."
+- **Dijkstra is BFS with a priority queue** — it processes nodes in order of cumulative distance instead of discovery order.
+- **The greedy choice is safe because weights are non-negative** — once a node is extracted from the heap, its shortest distance is finalized.
+- **Use lazy deletion** instead of decrease-key — insert duplicates into the heap and skip stale entries with a visited check.
+- **Switch to Bellman-Ford for negative weights** — Dijkstra's greedy assumption breaks when edges can reduce the total distance after a node is finalized.
+
+## Practice problems
+
+| Problem | Difficulty | Key idea |
+|---|---|---|
+| [Network Delay Time](https://leetcode.com/problems/network-delay-time/) | 🟡 Medium | Classic single-source Dijkstra — find the max of all shortest distances |
+| [Path with Minimum Effort](https://leetcode.com/problems/path-with-minimum-effort/) | 🟡 Medium | Dijkstra on a grid where edge weight is the absolute height difference |
+| [Cheapest Flights Within K Stops](https://leetcode.com/problems/cheapest-flights-within-k-stops/) | 🟡 Medium | Modified Dijkstra with a stop constraint — track (cost, stops) in the heap |
+| [Swim in Rising Water](https://leetcode.com/problems/swim-in-rising-water/) | 🔴 Hard | Dijkstra where the cost is the max cell value along the path |
+| [Minimum Cost to Make at Least One Valid Path](https://leetcode.com/problems/minimum-cost-to-make-at-least-one-valid-path-in-a-grid/) | 🔴 Hard | 0-1 BFS on a grid — free moves along arrows, cost-1 moves otherwise |
+
+## Relation to other topics
+
+- **0-1 BFS** handles the special case where edge weights are only 0 or 1 using a deque instead of a heap — push weight-0 neighbors to the front, weight-1 neighbors to the back. This gives $O(V + E)$ time without the $\log V$ heap overhead. It comes up in grid problems where some moves are "free."
+- **Bellman-Ford** handles negative edge weights by relaxing all edges $V-1$ times, at the cost of $O(VE)$ time. Use it when Dijkstra's non-negative weight assumption doesn't hold.
+- **A\*** extends Dijkstra with a heuristic that estimates remaining distance, directing the search toward the goal and reducing explored nodes.

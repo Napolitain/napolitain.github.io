@@ -115,7 +115,25 @@ Most implementations resize (typically double $m$) when $\alpha$ exceeds a thres
 
 Worst case occurs when all keys hash to the same bucket. With a good hash function and reasonable load factor, you stay firmly in $O(1)$ territory.
 
-## Relation to other structures
+## Key takeaways
+
+- **$O(1)$ average case depends on a good hash function and low load factor** — degenerate inputs can push you to $O(n)$.
+- **"Can I trade space for time with a lookup table?"** is the hash map question — if yes, hash map is almost always the answer.
+- **Frequency counting is the foundation** of many problems: group anagrams, majority element, top-k frequent — all start with a frequency map.
+- **Hash map + linked list = LRU cache** — combining data structures to get $O(1)$ for both lookup and eviction order is a classic design pattern.
+- **Beware of hash flooding**: in adversarial settings, use randomized or keyed hash functions (SipHash) to prevent worst-case $O(n)$ collisions.
+
+## Practice problems
+
+| Problem | Difficulty | Key idea |
+|---|---|---|
+| [Two Sum](https://leetcode.com/problems/two-sum/) | 🟢 Easy | Store complement in map as you iterate |
+| [Group Anagrams](https://leetcode.com/problems/group-anagrams/) | 🟡 Medium | Sorted string or character count as hash key |
+| [Subarray Sum Equals K](https://leetcode.com/problems/subarray-sum-equals-k/) | 🟡 Medium | Prefix sum frequencies in a hash map |
+| [Longest Consecutive Sequence](https://leetcode.com/problems/longest-consecutive-sequence/) | 🟡 Medium | Hash set for $O(1)$ neighbor checks, only start from sequence beginnings |
+| [LRU Cache](https://leetcode.com/problems/lru-cache/) | 🟡 Medium | Hash map + doubly linked list for $O(1)$ get and put |
+
+## Relation to other topics
 
 **Hash set**: a hash map where you only store keys (no values). Same mechanics, same complexity.
 

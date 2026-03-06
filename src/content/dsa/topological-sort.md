@@ -112,3 +112,27 @@ This is used in critical path analysis (project scheduling) and some DP problems
 |---|---|---|
 | DFS-based | $O(V + E)$ | $O(V)$ |
 | Kahn's | $O(V + E)$ | $O(V)$ |
+
+## Key takeaways
+
+- **Topological sort only works on DAGs** — a valid ordering exists if and only if the graph has no cycles.
+- **Kahn's algorithm is usually the safer interview choice** — it's iterative (no stack overflow), and cycle detection is trivial (result length < node count).
+- **DFS-based approach uses reverse post-order** — a node is appended after all reachable nodes are processed, then the result is reversed.
+- **Multiple valid orderings can exist** — any two nodes without a directed path between them can appear in either order.
+- **Think "dependency resolution"** — whenever a problem involves prerequisites, ordering constraints, or scheduling, consider topological sort.
+
+## Practice problems
+
+| Problem | Difficulty | Key idea |
+|---|---|---|
+| [Course Schedule](https://leetcode.com/problems/course-schedule/) | 🟡 Medium | Detect if a valid topological ordering exists (cycle detection) |
+| [Course Schedule II](https://leetcode.com/problems/course-schedule-ii/) | 🟡 Medium | Return an actual topological ordering using Kahn's or DFS |
+| [Alien Dictionary](https://leetcode.com/problems/alien-dictionary/) | 🔴 Hard | Build a graph from character ordering constraints, then topo-sort |
+| [Minimum Height Trees](https://leetcode.com/problems/minimum-height-trees/) | 🟡 Medium | Peel leaves iteratively (Kahn's-like approach on undirected graph) |
+| [Sequence Reconstruction](https://leetcode.com/problems/sequence-reconstruction/) | 🟡 Medium | Check if a unique topological order exists from subsequences |
+
+## Relation to other topics
+
+- **DFS** — the DFS-based topological sort is a direct application of post-order traversal; cycle detection uses the three-color DFS technique.
+- **Shortest/longest path in a DAG** — processing nodes in topological order allows single-pass relaxation, replacing Dijkstra for DAGs.
+- **Dynamic programming on DAGs** — many DP problems on graphs reduce to computing values in topological order, since each node's answer depends only on already-computed successors.
