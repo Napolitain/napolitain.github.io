@@ -18,6 +18,15 @@ import LinkedListVisualization from '@/components/dsa/visualizations/LinkedListV
 import TwoPointersVisualization from '@/components/dsa/visualizations/TwoPointersVisualization.svelte';
 import HeapVisualization from '@/components/dsa/visualizations/HeapVisualization.svelte';
 import DpVisualization from '@/components/dsa/visualizations/DpVisualization.svelte';
+import GreedyVisualization from '@/components/dsa/visualizations/GreedyVisualization.svelte';
+import TrieVisualization from '@/components/dsa/visualizations/TrieVisualization.svelte';
+import MstVisualization from '@/components/dsa/visualizations/MstVisualization.svelte';
+import MonotonicStackVisualization from '@/components/dsa/visualizations/MonotonicStackVisualization.svelte';
+import SegmentTreeVisualization from '@/components/dsa/visualizations/SegmentTreeVisualization.svelte';
+import BstVisualization from '@/components/dsa/visualizations/BstVisualization.svelte';
+import BacktrackingVisualization from '@/components/dsa/visualizations/BacktrackingVisualization.svelte';
+import BitManipulationVisualization from '@/components/dsa/visualizations/BitManipulationVisualization.svelte';
+import HashMapVisualization from '@/components/dsa/visualizations/HashMapVisualization.svelte';
 
 export async function getStaticPaths() {
   const entries = await getCollection('dsa', ({ data }) => {
@@ -152,6 +161,60 @@ const viz = entry.data.visualization;
         <section class="mb-16 p-6 rounded-xl border border-border bg-card">
           <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
           <DpVisualization client:load />
+        </section>
+      )}
+      {viz === 'GreedyVisualization' && (
+        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
+          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
+          <GreedyVisualization client:load />
+        </section>
+      )}
+      {viz === 'TrieVisualization' && (
+        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
+          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
+          <TrieVisualization client:load />
+        </section>
+      )}
+      {viz === 'MstVisualization' && (
+        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
+          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
+          <MstVisualization client:load />
+        </section>
+      )}
+      {viz === 'MonotonicStackVisualization' && (
+        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
+          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
+          <MonotonicStackVisualization client:load />
+        </section>
+      )}
+      {viz === 'SegmentTreeVisualization' && (
+        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
+          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
+          <SegmentTreeVisualization client:load />
+        </section>
+      )}
+      {viz === 'BstVisualization' && (
+        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
+          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
+          <BstVisualization client:load />
+        </section>
+      )}
+      {viz === 'BacktrackingVisualization' && (
+        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
+          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
+          <BacktrackingVisualization client:load />
+        </section>
+      )}
+      {viz === 'BitManipulationVisualization' && (
+        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
+          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
+          <BitManipulationVisualization client:load />
+        </section>
+      )}
+      {viz === 'HashMapVisualization' && (
+        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
+          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
+          <HashMapVisualization client:load />
         </section>
       )}
 
