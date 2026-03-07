@@ -8,6 +8,8 @@ export const dsaFamilyValues = [
   'strategy',
   'string',
   'lookup',
+  'systems',
+  'probabilistic',
   'bitwise',
 ] as const;
 
@@ -82,10 +84,21 @@ export const dsaFamilies: Record<DsaFamilyId, {
     description: 'Fast membership tests, key/value indexing, and amortized constant-time access.',
     order: 8,
   },
+  systems: {
+    label: 'Systems & storage',
+    description: 'Database indexes, cache policies, query operators, sharding, and external-memory algorithms.',
+    order: 9,
+  },
+  probabilistic: {
+    label: 'Probabilistic systems',
+    description: 'Approximate membership, cardinality, and frequency structures for high-volume systems.',
+    parentId: 'systems',
+    order: 10,
+  },
   bitwise: {
     label: 'Bitwise',
     description: 'Compact state, masks, parity tricks, and low-level arithmetic.',
-    order: 9,
+    order: 11,
   },
 };
 

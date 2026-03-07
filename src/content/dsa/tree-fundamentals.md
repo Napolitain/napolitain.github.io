@@ -9,8 +9,8 @@ family: "tree"
 kind: "concept"
 difficulty: "intro"
 prerequisites: ["graph-fundamentals"]
-related: ["bfs-breadth-first-search", "dfs-depth-first-search", "binary-search-tree", "heap", "trie", "segment-tree", "backtracking", "fenwick-tree", "euler-tour-technique", "binary-lifting", "treap"]
-enables: ["binary-search-tree", "heap", "trie", "segment-tree", "backtracking", "fenwick-tree", "euler-tour-technique", "binary-lifting", "treap"]
+related: ["bfs-breadth-first-search", "dfs-depth-first-search", "binary-search-tree", "heap", "trie", "segment-tree", "backtracking", "fenwick-tree", "euler-tour-technique", "binary-lifting", "lowest-common-ancestor", "heavy-light-decomposition", "b-tree", "b-plus-tree", "treap"]
+enables: ["binary-search-tree", "heap", "trie", "segment-tree", "backtracking", "fenwick-tree", "euler-tour-technique", "binary-lifting", "lowest-common-ancestor", "heavy-light-decomposition", "b-tree", "b-plus-tree", "treap"]
 ---
 
 ## Problem

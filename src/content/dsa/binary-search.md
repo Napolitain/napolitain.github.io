@@ -9,8 +9,8 @@ family: "search"
 kind: "technique"
 difficulty: "intro"
 prerequisites: []
-related: ["binary-search-tree", "merge-sort", "quick-sort"]
-enables: ["binary-search-tree", "segment-tree"]
+related: ["binary-search-tree", "merge-sort", "quick-sort", "skip-list", "b-tree", "b-plus-tree"]
+enables: ["binary-search-tree", "skip-list", "b-tree", "b-plus-tree", "segment-tree"]
 ---
 
 ## Problem

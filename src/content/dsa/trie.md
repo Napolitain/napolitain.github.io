@@ -9,7 +9,7 @@ family: "string"
 kind: "data-structure"
 difficulty: "intermediate"
 prerequisites: ["tree-fundamentals"]
-related: ["hash-map", "binary-search-tree", "segment-tree", "aho-corasick"]
+related: ["hash-map", "binary-search-tree", "segment-tree", "aho-corasick", "suffix-automaton"]
 enables: ["aho-corasick"]
 ---
 

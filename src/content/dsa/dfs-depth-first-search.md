@@ -9,8 +9,8 @@ family: "graph"
 kind: "algorithm"
 difficulty: "intro"
 prerequisites: ["graph-fundamentals", "stack"]
-related: ["tree-fundamentals", "bfs-breadth-first-search", "backtracking", "topological-sort"]
-enables: ["backtracking", "topological-sort"]
+related: ["tree-fundamentals", "bfs-breadth-first-search", "backtracking", "topological-sort", "tarjan-scc", "bridges-articulation-points", "eulerian-path", "heavy-light-decomposition"]
+enables: ["backtracking", "topological-sort", "tarjan-scc", "bridges-articulation-points", "eulerian-path", "heavy-light-decomposition"]
 ---
 
 ## Problem

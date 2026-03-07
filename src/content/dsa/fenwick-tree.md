@@ -10,7 +10,7 @@ kind: "data-structure"
 difficulty: "intermediate"
 prerequisites: ["prefix-sum"]
 related: ["prefix-sum", "difference-array", "segment-tree", "sparse-table", "euler-tour-technique"]
-enables: ["euler-tour-technique", "binary-lifting"]
+enables: ["euler-tour-technique"]
 ---
 
 ## Problem

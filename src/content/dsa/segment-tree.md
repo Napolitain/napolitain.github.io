@@ -9,8 +9,8 @@ family: "range-query"
 kind: "data-structure"
 difficulty: "advanced"
 prerequisites: ["tree-fundamentals", "prefix-sum"]
-related: ["prefix-sum", "difference-array", "fenwick-tree", "sparse-table", "euler-tour-technique", "binary-lifting", "binary-search-tree"]
-enables: ["euler-tour-technique", "binary-lifting"]
+related: ["prefix-sum", "difference-array", "fenwick-tree", "sparse-table", "euler-tour-technique", "binary-lifting", "heavy-light-decomposition", "persistent-segment-tree", "li-chao-tree", "binary-search-tree"]
+enables: ["euler-tour-technique", "heavy-light-decomposition", "persistent-segment-tree", "li-chao-tree"]
 ---
 
 ## Problem

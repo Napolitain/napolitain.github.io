@@ -9,8 +9,8 @@ family: "lookup"
 kind: "data-structure"
 difficulty: "intro"
 prerequisites: []
-related: ["linked-list", "trie", "bit-manipulation"]
-enables: []
+related: ["linked-list", "trie", "bit-manipulation", "bloom-cuckoo-filters", "count-min-sketch", "hyperloglog", "cache-eviction-strategies", "consistent-hashing", "hash-join-merge-join"]
+enables: ["bloom-cuckoo-filters", "count-min-sketch", "hyperloglog", "cache-eviction-strategies", "consistent-hashing", "hash-join-merge-join"]
 ---
 
 ## Problem

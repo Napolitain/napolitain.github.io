@@ -9,8 +9,8 @@ family: "string"
 kind: "algorithm"
 difficulty: "intermediate"
 prerequisites: []
-related: ["z-algorithm", "aho-corasick"]
-enables: ["aho-corasick"]
+related: ["z-algorithm", "aho-corasick", "rabin-karp", "suffix-array"]
+enables: ["aho-corasick", "suffix-array"]
 ---
 
 ## Problem

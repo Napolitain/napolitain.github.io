@@ -9,8 +9,8 @@ family: "range-query"
 kind: "technique"
 difficulty: "intro"
 prerequisites: []
-related: ["difference-array", "fenwick-tree", "segment-tree", "sparse-table"]
-enables: ["difference-array", "fenwick-tree", "segment-tree", "sparse-table"]
+related: ["difference-array", "fenwick-tree", "segment-tree", "sparse-table", "mos-algorithm"]
+enables: ["difference-array", "fenwick-tree", "segment-tree", "sparse-table", "mos-algorithm"]
 ---
 
 ## Problem

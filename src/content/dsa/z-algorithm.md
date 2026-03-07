@@ -9,8 +9,8 @@ family: "string"
 kind: "algorithm"
 difficulty: "intermediate"
 prerequisites: []
-related: ["kmp", "aho-corasick"]
-enables: []
+related: ["kmp", "aho-corasick", "rabin-karp", "manacher", "suffix-array"]
+enables: ["manacher"]
 ---
 
 ## Problem

@@ -9,8 +9,8 @@ family: "tree"
 kind: "data-structure"
 difficulty: "intermediate"
 prerequisites: ["tree-fundamentals"]
-related: ["binary-search-tree", "dijkstra", "minimum-spanning-tree", "greedy", "treap"]
-enables: ["dijkstra", "minimum-spanning-tree", "treap"]
+related: ["binary-search-tree", "dijkstra", "minimum-spanning-tree", "greedy", "treap", "external-merge-sort"]
+enables: ["dijkstra", "minimum-spanning-tree", "external-merge-sort", "treap"]
 ---
 
 ## Problem

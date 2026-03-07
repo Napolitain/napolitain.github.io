@@ -9,8 +9,8 @@ family: "sorting"
 kind: "algorithm"
 difficulty: "intro"
 prerequisites: []
-related: ["quick-sort", "linked-list", "binary-search"]
-enables: []
+related: ["quick-sort", "linked-list", "binary-search", "external-merge-sort", "hash-join-merge-join"]
+enables: ["external-merge-sort", "hash-join-merge-join"]
 ---
 
 ## Problem

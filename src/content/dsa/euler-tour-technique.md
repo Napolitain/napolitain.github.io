@@ -9,8 +9,8 @@ family: "tree"
 kind: "technique"
 difficulty: "advanced"
 prerequisites: ["tree-fundamentals", "dfs-depth-first-search"]
-related: ["fenwick-tree", "segment-tree", "binary-lifting"]
-enables: ["binary-lifting"]
+related: ["fenwick-tree", "segment-tree", "binary-lifting", "lowest-common-ancestor", "heavy-light-decomposition", "persistent-segment-tree"]
+enables: ["binary-lifting", "lowest-common-ancestor", "heavy-light-decomposition"]
 ---
 
 ## Problem

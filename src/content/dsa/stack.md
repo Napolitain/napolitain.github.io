@@ -9,8 +9,8 @@ family: "linear"
 kind: "data-structure"
 difficulty: "intro"
 prerequisites: []
-related: ["queue", "deque", "dfs-depth-first-search", "backtracking", "monotonic-queue"]
-enables: ["dfs-depth-first-search", "backtracking"]
+related: ["queue", "deque", "dfs-depth-first-search", "backtracking", "monotonic-queue", "eulerian-path"]
+enables: ["dfs-depth-first-search", "backtracking", "eulerian-path"]
 ---
 
 ## Problem

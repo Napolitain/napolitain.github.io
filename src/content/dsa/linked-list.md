@@ -9,8 +9,8 @@ family: "linear"
 kind: "data-structure"
 difficulty: "intro"
 prerequisites: []
-related: ["queue", "deque", "stack", "two-pointers", "hash-map"]
-enables: ["queue", "deque", "stack", "two-pointers"]
+related: ["queue", "deque", "stack", "two-pointers", "hash-map", "skip-list", "cache-eviction-strategies"]
+enables: ["queue", "deque", "stack", "two-pointers", "skip-list", "cache-eviction-strategies"]
 ---
 
 ## What is a linked list?

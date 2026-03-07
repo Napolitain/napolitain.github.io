@@ -9,7 +9,7 @@ family: "graph"
 kind: "algorithm"
 difficulty: "intermediate"
 prerequisites: ["graph-fundamentals", "bfs-breadth-first-search", "heap", "greedy"]
-related: ["minimum-spanning-tree", "heap", "zero-one-bfs"]
+related: ["minimum-spanning-tree", "heap", "zero-one-bfs", "floyd-warshall"]
 enables: []
 ---
 

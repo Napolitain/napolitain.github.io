@@ -9,8 +9,8 @@ family: "tree"
 kind: "data-structure"
 difficulty: "intermediate"
 prerequisites: ["tree-fundamentals", "binary-search"]
-related: ["heap", "segment-tree", "trie", "treap"]
-enables: ["treap"]
+related: ["heap", "segment-tree", "trie", "skip-list", "b-tree", "b-plus-tree", "treap"]
+enables: ["skip-list", "b-tree", "b-plus-tree", "treap"]
 ---
 
 ## Problem

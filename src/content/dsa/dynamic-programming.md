@@ -9,8 +9,8 @@ family: "strategy"
 kind: "technique"
 difficulty: "advanced"
 prerequisites: []
-related: ["backtracking", "greedy", "bit-manipulation", "segment-tree"]
-enables: []
+related: ["backtracking", "greedy", "bit-manipulation", "segment-tree", "convex-hull-trick"]
+enables: ["convex-hull-trick"]
 ---
 
 ## Problem

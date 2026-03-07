@@ -9,7 +9,7 @@ family: "string"
 kind: "algorithm"
 difficulty: "advanced"
 prerequisites: ["trie"]
-related: ["kmp", "z-algorithm"]
+related: ["kmp", "z-algorithm", "rabin-karp", "suffix-automaton"]
 enables: []
 ---
 

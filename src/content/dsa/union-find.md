@@ -9,8 +9,8 @@ family: "graph"
 kind: "data-structure"
 difficulty: "intermediate"
 prerequisites: ["graph-fundamentals"]
-related: ["minimum-spanning-tree", "tree-fundamentals"]
-enables: ["minimum-spanning-tree"]
+related: ["minimum-spanning-tree", "tree-fundamentals", "dsu-rollback"]
+enables: ["minimum-spanning-tree", "dsu-rollback"]
 ---
 
 ## Problem

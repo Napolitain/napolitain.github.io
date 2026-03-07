@@ -9,7 +9,7 @@ family: "graph"
 kind: "algorithm"
 difficulty: "intermediate"
 prerequisites: ["graph-fundamentals", "dfs-depth-first-search"]
-related: ["bfs-breadth-first-search", "dynamic-programming"]
+related: ["bfs-breadth-first-search", "dynamic-programming", "tarjan-scc"]
 enables: []
 ---
 

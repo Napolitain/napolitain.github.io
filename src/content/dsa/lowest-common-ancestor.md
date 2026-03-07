@@ -9,8 +9,8 @@ family: "tree"
 kind: "algorithm"
 difficulty: "advanced"
 prerequisites: ["tree-fundamentals", "dfs-depth-first-search"]
-related: ["binary-lifting", "euler-tour-technique", "sparse-table"]
-enables: []
+related: ["binary-lifting", "euler-tour-technique", "sparse-table", "heavy-light-decomposition"]
+enables: ["heavy-light-decomposition"]
 ---
 
 ## Problem

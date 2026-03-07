@@ -9,8 +9,8 @@ family: "graph"
 kind: "concept"
 difficulty: "intro"
 prerequisites: []
-related: ["tree-fundamentals", "bfs-breadth-first-search", "dfs-depth-first-search", "zero-one-bfs"]
-enables: ["tree-fundamentals", "bfs-breadth-first-search", "dfs-depth-first-search", "topological-sort", "zero-one-bfs", "dijkstra", "minimum-spanning-tree", "union-find"]
+related: ["tree-fundamentals", "bfs-breadth-first-search", "dfs-depth-first-search", "zero-one-bfs", "tarjan-scc", "bridges-articulation-points", "eulerian-path"]
+enables: ["tree-fundamentals", "bfs-breadth-first-search", "dfs-depth-first-search", "topological-sort", "zero-one-bfs", "dijkstra", "floyd-warshall", "minimum-spanning-tree", "union-find", "tarjan-scc", "bridges-articulation-points", "eulerian-path"]
 ---
 
 ## Problem

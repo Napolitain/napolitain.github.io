@@ -9,8 +9,8 @@ family: "tree"
 kind: "technique"
 difficulty: "advanced"
 prerequisites: ["tree-fundamentals"]
-related: ["euler-tour-technique", "sparse-table", "segment-tree"]
-enables: []
+related: ["euler-tour-technique", "sparse-table", "segment-tree", "lowest-common-ancestor", "heavy-light-decomposition"]
+enables: ["lowest-common-ancestor"]
 ---
 
 ## Problem
