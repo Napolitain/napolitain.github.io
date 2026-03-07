@@ -5,6 +5,12 @@ date: 2026-03-05
 tags: ["graphs", "dfs", "dag", "topological-sort"]
 draft: false
 visualization: "TopoSortVisualization"
+family: "graph"
+kind: "algorithm"
+difficulty: "intermediate"
+prerequisites: ["graph-fundamentals", "dfs-depth-first-search"]
+related: ["bfs-breadth-first-search", "dynamic-programming"]
+enables: []
 ---
 
 ## Problem

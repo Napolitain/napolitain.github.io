@@ -1,32 +1,13 @@
 ---
+import ReadingProgress from '@/components/ReadingProgress.svelte';
+import DsaVisualization from '@/components/dsa/DsaVisualization.svelte';
+import TableOfContents from '@/components/TableOfContents.svelte';
+import Badge from '@/components/ui/badge.svelte';
 import Layout from '@/layouts/Layout.astro';
+import { buildDsaDirectory } from '@/lib/dsa';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import { ArrowLeft, Tag } from 'phosphor-svelte';
-import Badge from '@/components/ui/badge.svelte';
-import ReadingProgress from '@/components/ReadingProgress.svelte';
-import TableOfContents from '@/components/TableOfContents.svelte';
-import BfsVisualization from '@/components/dsa/visualizations/BfsVisualization.svelte';
-import DfsVisualization from '@/components/dsa/visualizations/DfsVisualization.svelte';
-import DijkstraVisualization from '@/components/dsa/visualizations/DijkstraVisualization.svelte';
-import TopoSortVisualization from '@/components/dsa/visualizations/TopoSortVisualization.svelte';
-import UnionFindVisualization from '@/components/dsa/visualizations/UnionFindVisualization.svelte';
-import BinarySearchVisualization from '@/components/dsa/visualizations/BinarySearchVisualization.svelte';
-import MergeSortVisualization from '@/components/dsa/visualizations/MergeSortVisualization.svelte';
-import QuickSortVisualization from '@/components/dsa/visualizations/QuickSortVisualization.svelte';
-import LinkedListVisualization from '@/components/dsa/visualizations/LinkedListVisualization.svelte';
-import TwoPointersVisualization from '@/components/dsa/visualizations/TwoPointersVisualization.svelte';
-import HeapVisualization from '@/components/dsa/visualizations/HeapVisualization.svelte';
-import DpVisualization from '@/components/dsa/visualizations/DpVisualization.svelte';
-import GreedyVisualization from '@/components/dsa/visualizations/GreedyVisualization.svelte';
-import TrieVisualization from '@/components/dsa/visualizations/TrieVisualization.svelte';
-import MstVisualization from '@/components/dsa/visualizations/MstVisualization.svelte';
-import MonotonicStackVisualization from '@/components/dsa/visualizations/MonotonicStackVisualization.svelte';
-import SegmentTreeVisualization from '@/components/dsa/visualizations/SegmentTreeVisualization.svelte';
-import BstVisualization from '@/components/dsa/visualizations/BstVisualization.svelte';
-import BacktrackingVisualization from '@/components/dsa/visualizations/BacktrackingVisualization.svelte';
-import BitManipulationVisualization from '@/components/dsa/visualizations/BitManipulationVisualization.svelte';
-import HashMapVisualization from '@/components/dsa/visualizations/HashMapVisualization.svelte';
 
 export async function getStaticPaths() {
   const entries = await getCollection('dsa', ({ data }) => {
@@ -46,7 +27,22 @@ interface Props {
 const { entry } = Astro.props;
 const { Content } = await entry.render();
 
-const viz = entry.data.visualization;
+const allTopics = await getCollection('dsa', ({ data }) => {
+  return import.meta.env.PROD ? data.draft !== true : true;
+});
+
+const directory = buildDsaDirectory(allTopics);
+const topic = directory.topicBySlug.get(entry.slug);
+
+if (!topic) {
+  throw new Error(`Unknown DSA topic: ${entry.slug}`);
+}
+
+const pathMemberships = directory.paths.filter(path => topic.pathIds.includes(path.id));
+const familyPeers = topic.familyTopics.slice(0, 4);
+const relatedTopics = topic.relatedTopics.slice(0, 4);
+const enabledTopics = topic.enabledTopics.slice(0, 6);
+const prerequisiteTopics = topic.prerequisiteTopics.slice(0, 6);
 ---
 
 <Layout
@@ -56,18 +52,33 @@ const viz = entry.data.visualization;
   <div class="min-h-screen">
     <ReadingProgress client:load />
     <TableOfContents client:load />
-    <div class="max-w-3xl mx-auto px-6 pt-20">
+
+    <div class="max-w-5xl mx-auto px-6 pt-20">
       <a
         href="/dsa"
         class="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-12"
       >
         <ArrowLeft client:load size={20} />
-        Back to DSA
+        Back to the DSA atlas
       </a>
     </div>
 
-    <article class="max-w-3xl mx-auto px-6 py-20">
-      <header class="mb-16 space-y-6">
+    <article class="max-w-5xl mx-auto px-6 pb-24">
+      <header class="max-w-3xl mx-auto mb-14 space-y-6">
+        <div class="flex flex-wrap gap-2">
+          {topic.familyTrailLabels.map((label, index) => (
+            <Badge client:load variant={index === topic.familyTrailLabels.length - 1 ? 'default' : 'secondary'} class="text-xs">
+              {label}
+            </Badge>
+          ))}
+          <Badge client:load variant="secondary" class="text-xs">
+            {topic.kindLabel}
+          </Badge>
+          <Badge client:load variant="secondary" class="text-xs">
+            {topic.difficultyLabel}
+          </Badge>
+        </div>
+
         <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight font-serif">
           {entry.data.title}
         </h1>
@@ -75,6 +86,17 @@ const viz = entry.data.visualization;
         <p class="text-lg text-muted-foreground leading-relaxed font-serif">
           {entry.data.description}
         </p>
+
+        {topic.familyParentLabel && (
+          <p class="rounded-xl border border-border bg-card px-4 py-3 text-sm text-muted-foreground">
+            <span class="font-medium text-foreground">{topic.familyLabel}</span>
+            {' '}
+            is nested under
+            {' '}
+            <span class="font-medium text-foreground">{topic.familyParentLabel}</span>
+            , so techniques in the broader family usually still apply here.
+          </p>
+        )}
 
         {entry.data.tags.length > 0 && (
           <div class="flex items-center gap-2">
@@ -90,138 +112,184 @@ const viz = entry.data.visualization;
         )}
       </header>
 
-      <!-- Visualization -->
-      {viz === 'BfsVisualization' && (
-        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
-          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
-          <BfsVisualization client:load />
-        </section>
-      )}
-      {viz === 'DfsVisualization' && (
-        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
-          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
-          <DfsVisualization client:load />
-        </section>
-      )}
-      {viz === 'DijkstraVisualization' && (
-        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
-          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
-          <DijkstraVisualization client:load />
-        </section>
-      )}
-      {viz === 'TopoSortVisualization' && (
-        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
-          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
-          <TopoSortVisualization client:load />
-        </section>
-      )}
-      {viz === 'UnionFindVisualization' && (
-        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
-          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
-          <UnionFindVisualization client:load />
-        </section>
-      )}
-      {viz === 'BinarySearchVisualization' && (
-        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
-          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
-          <BinarySearchVisualization client:load />
-        </section>
-      )}
-      {viz === 'MergeSortVisualization' && (
-        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
-          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
-          <MergeSortVisualization client:load />
-        </section>
-      )}
-      {viz === 'QuickSortVisualization' && (
-        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
-          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
-          <QuickSortVisualization client:load />
-        </section>
-      )}
-      {viz === 'LinkedListVisualization' && (
-        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
-          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
-          <LinkedListVisualization client:load />
-        </section>
-      )}
-      {viz === 'TwoPointersVisualization' && (
-        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
-          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
-          <TwoPointersVisualization client:load />
-        </section>
-      )}
-      {viz === 'HeapVisualization' && (
-        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
-          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
-          <HeapVisualization client:load />
-        </section>
-      )}
-      {viz === 'DpVisualization' && (
-        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
-          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
-          <DpVisualization client:load />
-        </section>
-      )}
-      {viz === 'GreedyVisualization' && (
-        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
-          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
-          <GreedyVisualization client:load />
-        </section>
-      )}
-      {viz === 'TrieVisualization' && (
-        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
-          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
-          <TrieVisualization client:load />
-        </section>
-      )}
-      {viz === 'MstVisualization' && (
-        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
-          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
-          <MstVisualization client:load />
-        </section>
-      )}
-      {viz === 'MonotonicStackVisualization' && (
-        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
-          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
-          <MonotonicStackVisualization client:load />
-        </section>
-      )}
-      {viz === 'SegmentTreeVisualization' && (
-        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
-          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
-          <SegmentTreeVisualization client:load />
-        </section>
-      )}
-      {viz === 'BstVisualization' && (
-        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
-          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
-          <BstVisualization client:load />
-        </section>
-      )}
-      {viz === 'BacktrackingVisualization' && (
-        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
-          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
-          <BacktrackingVisualization client:load />
-        </section>
-      )}
-      {viz === 'BitManipulationVisualization' && (
-        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
-          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
-          <BitManipulationVisualization client:load />
-        </section>
-      )}
-      {viz === 'HashMapVisualization' && (
-        <section class="mb-16 p-6 rounded-xl border border-border bg-card">
-          <h2 class="text-lg font-semibold mb-6">Interactive Visualization</h2>
-          <HashMapVisualization client:load />
+      {entry.data.visualization && (
+        <section class="mb-14 p-6 rounded-2xl border border-border bg-card">
+          <div class="mb-6">
+            <h2 class="text-lg font-semibold">Interactive visualization</h2>
+            <p class="text-sm text-muted-foreground mt-2">
+              Use the controls to connect the idea to concrete operations before diving into the full write-up.
+            </p>
+          </div>
+          <DsaVisualization client:load name={entry.data.visualization} />
         </section>
       )}
 
-      <!-- Article Content -->
+      <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4 mb-14">
+        <div class="rounded-2xl border border-border bg-card p-5">
+          <p class="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">Family</p>
+          <p class="text-lg font-semibold">{topic.familyTrailLabels.join(' → ')}</p>
+          <p class="text-sm text-muted-foreground mt-2">{topic.familyDescription}</p>
+        </div>
+
+        <div class="rounded-2xl border border-border bg-card p-5">
+          <p class="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">Builds on</p>
+          <p class="text-lg font-semibold">{topic.prerequisiteTopics.length === 0 ? 'Foundational' : `${topic.prerequisiteTopics.length} topic${topic.prerequisiteTopics.length === 1 ? '' : 's'}`}</p>
+          <p class="text-sm text-muted-foreground mt-2">
+            {topic.prerequisiteTopics.length === 0
+              ? 'You can start here without another page first.'
+              : 'Read these first if you want the surrounding context.'}
+          </p>
+        </div>
+
+        <div class="rounded-2xl border border-border bg-card p-5">
+          <p class="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">Unlocks</p>
+          <p class="text-lg font-semibold">{topic.enabledTopics.length} next topic{topic.enabledTopics.length === 1 ? '' : 's'}</p>
+          <p class="text-sm text-muted-foreground mt-2">
+            Use these follow-ups when you want to apply the current idea in a richer setting.
+          </p>
+        </div>
+
+        <div class="rounded-2xl border border-border bg-card p-5">
+          <p class="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">Learning paths</p>
+          <p class="text-lg font-semibold">{pathMemberships.length}</p>
+          <p class="text-sm text-muted-foreground mt-2">
+            This topic appears in curated progressions so you can keep moving without guessing the next step.
+          </p>
+        </div>
+      </section>
+
       <div class="prose prose-lg prose-slate dark:prose-invert max-w-3xl mx-auto font-serif">
         <Content />
       </div>
+
+      {prerequisiteTopics.length > 0 && (
+        <section class="mt-16 space-y-6">
+          <div>
+            <h2 class="text-2xl font-semibold">Build on these first</h2>
+            <p class="text-sm text-muted-foreground mt-2">
+              These topics supply the mental model or underlying structure that this page assumes.
+            </p>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {prerequisiteTopics.map(prerequisite => (
+              <a href={`/dsa/${prerequisite.slug}`} class="block rounded-2xl border border-border bg-card p-5 transition-colors hover:border-primary/40 hover:shadow-sm">
+                <div class="flex flex-wrap gap-2 mb-3">
+                  <Badge client:load variant="outline" class="text-[11px]">{prerequisite.familyLabel}</Badge>
+                  <Badge client:load variant="secondary" class="text-[11px]">{prerequisite.kindLabel}</Badge>
+                </div>
+                <h3 class="text-base font-semibold">{prerequisite.title}</h3>
+                <p class="text-sm text-muted-foreground mt-2">{prerequisite.description}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {enabledTopics.length > 0 && (
+        <section class="mt-16 space-y-6">
+          <div>
+            <h2 class="text-2xl font-semibold">What this enables</h2>
+            <p class="text-sm text-muted-foreground mt-2">
+              Once the current idea feels natural, these are the most useful next jumps.
+            </p>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {enabledTopics.map(enabled => (
+              <a href={`/dsa/${enabled.slug}`} class="block rounded-2xl border border-border bg-card p-5 transition-colors hover:border-primary/40 hover:shadow-sm">
+                <div class="flex flex-wrap gap-2 mb-3">
+                  <Badge client:load variant="outline" class="text-[11px]">{enabled.familyLabel}</Badge>
+                  <Badge client:load variant="secondary" class="text-[11px]">{enabled.kindLabel}</Badge>
+                </div>
+                <h3 class="text-base font-semibold">{enabled.title}</h3>
+                <p class="text-sm text-muted-foreground mt-2">{enabled.description}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {relatedTopics.length > 0 && (
+        <section class="mt-16 space-y-6">
+          <div>
+            <h2 class="text-2xl font-semibold">Related directions</h2>
+            <p class="text-sm text-muted-foreground mt-2">
+              These topics live nearby conceptually, even if they are not direct prerequisites.
+            </p>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {relatedTopics.map(related => (
+              <a href={`/dsa/${related.slug}`} class="block rounded-2xl border border-border bg-card p-5 transition-colors hover:border-primary/40 hover:shadow-sm">
+                <div class="flex flex-wrap gap-2 mb-3">
+                  <Badge client:load variant="outline" class="text-[11px]">{related.familyLabel}</Badge>
+                  <Badge client:load variant="secondary" class="text-[11px]">{related.kindLabel}</Badge>
+                </div>
+                <h3 class="text-base font-semibold">{related.title}</h3>
+                <p class="text-sm text-muted-foreground mt-2">{related.description}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {familyPeers.length > 0 && (
+        <section class="mt-16 space-y-6">
+          <div>
+            <h2 class="text-2xl font-semibold">More from {topic.familyLabel}</h2>
+            <p class="text-sm text-muted-foreground mt-2">
+              Stay in the same family when you want parallel variations of the same mental model.
+            </p>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {familyPeers.map(peer => (
+              <a href={`/dsa/${peer.slug}`} class="block rounded-2xl border border-border bg-card p-5 transition-colors hover:border-primary/40 hover:shadow-sm">
+                <div class="flex flex-wrap gap-2 mb-3">
+                  <Badge client:load variant="outline" class="text-[11px]">{peer.familyLabel}</Badge>
+                  <Badge client:load variant="secondary" class="text-[11px]">{peer.kindLabel}</Badge>
+                </div>
+                <h3 class="text-base font-semibold">{peer.title}</h3>
+                <p class="text-sm text-muted-foreground mt-2">{peer.description}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {pathMemberships.length > 0 && (
+        <section class="mt-16 space-y-6">
+          <div>
+            <h2 class="text-2xl font-semibold">Paths that include this topic</h2>
+            <p class="text-sm text-muted-foreground mt-2">
+              Follow one of these sequences if you want a guided next step instead of open-ended browsing.
+            </p>
+          </div>
+
+          <div class="grid gap-4 lg:grid-cols-2">
+            {pathMemberships.map(path => (
+              <div class="rounded-2xl border border-border bg-card p-5 space-y-4">
+                <div>
+                  <h3 class="text-lg font-semibold">{path.title}</h3>
+                  <p class="text-sm text-muted-foreground mt-2">{path.description}</p>
+                </div>
+
+                <div class="flex flex-wrap gap-2">
+                  {path.steps.map(step => (
+                    <a
+                      href={`/dsa/${step.slug}`}
+                      class={`rounded-full border px-3 py-1.5 text-xs transition-colors ${step.slug === topic.slug ? 'border-primary bg-primary text-primary-foreground' : 'border-border hover:border-primary/40'}`}
+                    >
+                      {step.title}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
     </article>
 
     <footer class="py-16 px-8 border-t border-border mt-20">

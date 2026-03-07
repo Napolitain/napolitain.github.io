@@ -5,6 +5,12 @@ date: 2026-03-05
 tags: ["dynamic-programming", "recursion", "array"]
 draft: false
 visualization: "DpVisualization"
+family: "strategy"
+kind: "technique"
+difficulty: "advanced"
+prerequisites: []
+related: ["backtracking", "greedy", "bit-manipulation", "segment-tree"]
+enables: []
 ---
 
 ## Problem

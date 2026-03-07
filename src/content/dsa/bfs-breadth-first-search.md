@@ -5,6 +5,12 @@ date: 2026-03-05
 tags: ["graphs", "bfs", "shortest-path", "queue"]
 draft: false
 visualization: "BfsVisualization"
+family: "graph"
+kind: "algorithm"
+difficulty: "intro"
+prerequisites: ["graph-fundamentals", "queue"]
+related: ["tree-fundamentals", "dfs-depth-first-search", "dijkstra", "queue", "deque", "zero-one-bfs"]
+enables: ["zero-one-bfs", "dijkstra", "topological-sort", "minimum-spanning-tree"]
 ---
 
 ## Problem

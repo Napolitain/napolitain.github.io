@@ -5,6 +5,12 @@ date: 2026-03-05
 tags: ["linked-list", "two-pointers", "recursion"]
 draft: false
 visualization: "LinkedListVisualization"
+family: "linear"
+kind: "data-structure"
+difficulty: "intro"
+prerequisites: []
+related: ["queue", "deque", "stack", "two-pointers", "hash-map"]
+enables: ["queue", "deque", "stack", "two-pointers"]
 ---
 
 ## What is a linked list?

@@ -5,6 +5,12 @@ date: 2026-03-06
 tags: ["tree", "bst", "binary-search", "recursion"]
 draft: false
 visualization: "BstVisualization"
+family: "tree"
+kind: "data-structure"
+difficulty: "intermediate"
+prerequisites: ["tree-fundamentals", "binary-search"]
+related: ["heap", "segment-tree", "trie", "treap"]
+enables: ["treap"]
 ---
 
 ## Problem

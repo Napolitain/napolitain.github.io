@@ -5,6 +5,12 @@ date: 2026-03-06
 tags: ["hash-map", "hash-table", "array"]
 draft: false
 visualization: "HashMapVisualization"
+family: "lookup"
+kind: "data-structure"
+difficulty: "intro"
+prerequisites: []
+related: ["linked-list", "trie", "bit-manipulation"]
+enables: []
 ---
 
 ## Problem

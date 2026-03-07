@@ -5,6 +5,12 @@ date: 2026-03-05
 tags: ["sorting", "divide-and-conquer", "array", "recursion"]
 draft: false
 visualization: "MergeSortVisualization"
+family: "sorting"
+kind: "algorithm"
+difficulty: "intro"
+prerequisites: []
+related: ["quick-sort", "linked-list", "binary-search"]
+enables: []
 ---
 
 ## Problem

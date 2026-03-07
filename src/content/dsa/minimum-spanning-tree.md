@@ -5,6 +5,12 @@ date: 2026-03-06
 tags: ["graphs", "greedy", "mst", "union-find"]
 draft: false
 visualization: "MstVisualization"
+family: "graph"
+kind: "algorithm"
+difficulty: "intermediate"
+prerequisites: ["graph-fundamentals", "greedy", "union-find", "heap"]
+related: ["dijkstra"]
+enables: []
 ---
 
 ## Problem

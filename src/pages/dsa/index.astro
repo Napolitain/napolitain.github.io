@@ -1,41 +1,45 @@
 ---
-import Layout from '@/layouts/Layout.astro';
 import DsaIndex from '@/components/dsa/DsaIndex.svelte';
+import Layout from '@/layouts/Layout.astro';
+import { buildDsaDirectory } from '@/lib/dsa';
 import { getCollection } from 'astro:content';
 
-const allProblems = await getCollection('dsa', ({ data }) => {
+const allTopics = await getCollection('dsa', ({ data }) => {
   return import.meta.env.PROD ? data.draft !== true : true;
 });
 
-const sorted = allProblems.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-
-const problems = sorted.map(p => ({
-  title: p.data.title,
-  description: p.data.description,
-  tags: p.data.tags,
-  slug: p.slug,
-}));
+const directory = buildDsaDirectory(allTopics);
 ---
 
-<Layout title="DSA - Napolitain" description="Data structures and algorithms — visualized">
+<Layout
+  title="DSA Atlas - Napolitain"
+  description="Navigate data structures and algorithms by family, prerequisites, and what each topic enables."
+>
   <div class="min-h-screen">
-    <section class="py-40 px-8 mt-20">
-      <div class="max-w-6xl mx-auto text-center">
-        <h1 class="text-5xl md:text-6xl font-bold mb-6">DSA</h1>
-        <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Data structures &amp; algorithms — visualized and explained
+    <section class="px-8 pt-40 pb-20 mt-20">
+      <div class="max-w-6xl mx-auto text-center space-y-6">
+        <p class="text-sm uppercase tracking-[0.4em] text-muted-foreground">Data structures & algorithms</p>
+        <h1 class="text-5xl md:text-6xl font-bold">DSA Atlas</h1>
+        <p class="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          Explore concepts as a connected map instead of a flat list. Follow families, see prerequisites, and understand what each topic unlocks next.
         </p>
       </div>
     </section>
 
     <section class="pb-40 px-8">
       <div class="max-w-6xl mx-auto">
-        {problems.length === 0 ? (
+        {directory.topics.length === 0 ? (
           <div class="text-center py-20">
-            <p class="text-muted-foreground text-lg">No problems yet. Check back soon!</p>
+            <p class="text-muted-foreground text-lg">No DSA topics yet. Check back soon!</p>
           </div>
         ) : (
-          <DsaIndex client:load problems={problems} />
+          <DsaIndex
+            client:load
+            topics={directory.topics}
+            families={directory.families}
+            paths={directory.paths}
+            stats={directory.stats}
+          />
         )}
       </div>
     </section>

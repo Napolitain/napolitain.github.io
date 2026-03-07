@@ -5,6 +5,12 @@ date: 2026-03-06
 tags: ["greedy", "sorting", "optimization"]
 draft: false
 visualization: "GreedyVisualization"
+family: "strategy"
+kind: "technique"
+difficulty: "intermediate"
+prerequisites: []
+related: ["minimum-spanning-tree", "dijkstra", "heap", "dynamic-programming"]
+enables: ["minimum-spanning-tree", "dijkstra"]
 ---
 
 ## Problem

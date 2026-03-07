@@ -5,6 +5,12 @@ date: 2026-03-05
 tags: ["graphs", "dfs", "tree", "recursion", "stack"]
 draft: false
 visualization: "DfsVisualization"
+family: "graph"
+kind: "algorithm"
+difficulty: "intro"
+prerequisites: ["graph-fundamentals", "stack"]
+related: ["tree-fundamentals", "bfs-breadth-first-search", "backtracking", "topological-sort"]
+enables: ["backtracking", "topological-sort"]
 ---
 
 ## Problem

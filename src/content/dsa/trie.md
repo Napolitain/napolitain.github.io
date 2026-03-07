@@ -5,6 +5,12 @@ date: 2026-03-06
 tags: ["trie", "string", "tree", "prefix"]
 draft: false
 visualization: "TrieVisualization"
+family: "string"
+kind: "data-structure"
+difficulty: "intermediate"
+prerequisites: ["tree-fundamentals"]
+related: ["hash-map", "binary-search-tree", "segment-tree", "aho-corasick"]
+enables: ["aho-corasick"]
 ---
 
 ## Problem

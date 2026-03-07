@@ -5,6 +5,12 @@ date: 2026-03-06
 tags: ["bit-manipulation", "math", "optimization"]
 draft: false
 visualization: "BitManipulationVisualization"
+family: "bitwise"
+kind: "technique"
+difficulty: "intermediate"
+prerequisites: []
+related: ["hash-map", "dynamic-programming"]
+enables: []
 ---
 
 ## Problem

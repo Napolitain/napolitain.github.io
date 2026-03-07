@@ -5,6 +5,12 @@ date: 2026-03-06
 tags: ["stack", "monotonic-stack", "array"]
 draft: false
 visualization: "MonotonicStackVisualization"
+family: "linear"
+kind: "data-structure"
+difficulty: "intro"
+prerequisites: []
+related: ["queue", "deque", "dfs-depth-first-search", "backtracking", "monotonic-queue"]
+enables: ["dfs-depth-first-search", "backtracking"]
 ---
 
 ## Problem

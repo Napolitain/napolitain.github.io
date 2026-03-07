@@ -5,6 +5,12 @@ date: 2026-03-05
 tags: ["graphs", "union-find", "tree", "connected-components"]
 draft: false
 visualization: "UnionFindVisualization"
+family: "graph"
+kind: "data-structure"
+difficulty: "intermediate"
+prerequisites: ["graph-fundamentals"]
+related: ["minimum-spanning-tree", "tree-fundamentals"]
+enables: ["minimum-spanning-tree"]
 ---
 
 ## Problem

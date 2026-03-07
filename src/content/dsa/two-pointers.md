@@ -5,6 +5,12 @@ date: 2026-03-05
 tags: ["array", "two-pointers", "sliding-window"]
 draft: false
 visualization: "TwoPointersVisualization"
+family: "linear"
+kind: "technique"
+difficulty: "intro"
+prerequisites: []
+related: ["linked-list", "deque", "binary-search", "monotonic-queue"]
+enables: ["monotonic-queue"]
 ---
 
 ## Problem

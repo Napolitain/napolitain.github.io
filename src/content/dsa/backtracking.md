@@ -5,6 +5,12 @@ date: 2026-03-06
 tags: ["backtracking", "recursion", "dfs", "tree"]
 draft: false
 visualization: "BacktrackingVisualization"
+family: "strategy"
+kind: "technique"
+difficulty: "intermediate"
+prerequisites: ["dfs-depth-first-search", "tree-fundamentals"]
+related: ["dynamic-programming", "stack"]
+enables: []
 ---
 
 ## Problem

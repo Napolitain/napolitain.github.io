@@ -5,6 +5,12 @@ date: 2026-03-06
 tags: ["segment-tree", "tree", "range-query", "divide-and-conquer"]
 draft: false
 visualization: "SegmentTreeVisualization"
+family: "range-query"
+kind: "data-structure"
+difficulty: "advanced"
+prerequisites: ["tree-fundamentals", "prefix-sum"]
+related: ["prefix-sum", "difference-array", "fenwick-tree", "sparse-table", "euler-tour-technique", "binary-lifting", "binary-search-tree"]
+enables: ["euler-tour-technique", "binary-lifting"]
 ---
 
 ## Problem

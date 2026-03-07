@@ -5,6 +5,12 @@ date: 2026-03-05
 tags: ["heap", "priority-queue", "tree", "sorting", "array"]
 draft: false
 visualization: "HeapVisualization"
+family: "tree"
+kind: "data-structure"
+difficulty: "intermediate"
+prerequisites: ["tree-fundamentals"]
+related: ["binary-search-tree", "dijkstra", "minimum-spanning-tree", "greedy", "treap"]
+enables: ["dijkstra", "minimum-spanning-tree", "treap"]
 ---
 
 ## Problem

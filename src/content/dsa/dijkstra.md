@@ -5,6 +5,12 @@ date: 2026-03-05
 tags: ["graphs", "shortest-path", "greedy", "priority-queue"]
 draft: false
 visualization: "DijkstraVisualization"
+family: "graph"
+kind: "algorithm"
+difficulty: "intermediate"
+prerequisites: ["graph-fundamentals", "bfs-breadth-first-search", "heap", "greedy"]
+related: ["minimum-spanning-tree", "heap", "zero-one-bfs"]
+enables: []
 ---
 
 ## Problem

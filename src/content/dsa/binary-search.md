@@ -5,6 +5,12 @@ date: 2026-03-05
 tags: ["binary-search", "divide-and-conquer", "array"]
 draft: false
 visualization: "BinarySearchVisualization"
+family: "search"
+kind: "technique"
+difficulty: "intro"
+prerequisites: []
+related: ["binary-search-tree", "merge-sort", "quick-sort"]
+enables: ["binary-search-tree", "segment-tree"]
 ---
 
 ## Problem

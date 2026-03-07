@@ -1,6 +1,5 @@
 <script lang="ts">
   import Badge from '@/components/ui/badge.svelte';
-  import { cn } from '@/lib/utils';
 
   export let tags: string[] = [];
   export let selectedTags: string[] = [];

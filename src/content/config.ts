@@ -1,5 +1,11 @@
 import { defineCollection, z } from 'astro:content';
 
+import {
+  dsaDifficultyValues,
+  dsaFamilyValues,
+  dsaKindValues,
+} from '../lib/dsa-meta';
+
 const blog = defineCollection({
   type: 'content',
   schema: z.object({
@@ -22,6 +28,12 @@ const dsa = defineCollection({
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
     visualization: z.string().optional(),
+    family: z.enum(dsaFamilyValues),
+    kind: z.enum(dsaKindValues),
+    difficulty: z.enum(dsaDifficultyValues),
+    prerequisites: z.array(z.string()).default([]),
+    related: z.array(z.string()).default([]),
+    enables: z.array(z.string()).default([]),
   }),
 });
 
