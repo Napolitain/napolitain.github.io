@@ -1,6 +1,6 @@
 ---
 title: "LSM Tree"
-description: "Trade read complexity for write throughput by buffering writes in memory and organizing on-disk data as sorted runs that compact in the background."
+description: "Trade read complexity for write throughput by buffering writes in memory, flushing sorted runs, and compacting them in the background."
 date: 2026-03-07
 tags: ["lsm-tree", "storage", "database", "rare"]
 draft: false
@@ -15,63 +15,149 @@ enables: []
 
 ## Problem
 
-B+ Trees are strong when reads and ordered updates dominate, but some workloads are overwhelmingly write-heavy.
+B+ Trees are excellent when reads and ordered updates dominate, but some workloads are overwhelmingly write-heavy.
 
-If every insert must immediately rewrite or rebalance page structures, write throughput suffers.
+If every insert immediately modifies page-organized on-disk structure, write amplification and random I/O can become the bottleneck.
 
-## Core idea
+## Intuition
 
-An LSM Tree separates the write path into stages:
+An LSM Tree delays expensive on-disk organization.
 
-1. write to an in-memory sorted structure such as a skip list
-2. append to a write-ahead log for durability
-3. flush the memtable into immutable sorted files (SSTables)
-4. compact files in the background into larger, cleaner levels
+Instead of maintaining one perfectly updated tree at all times, it stages the write path:
 
-Instead of eagerly maintaining one perfect on-disk tree, the system batches and reorganizes writes later.
+1. accept writes into an in-memory sorted structure
+2. append them to a write-ahead log for durability
+3. flush full memory buffers into immutable sorted files
+4. compact those files later in large sequential batches
 
-## Why it matters
+So the design trades **eager organization** for **batched organization**.
 
-LSM Trees are the canonical storage-engine answer when writes dominate.
+## Core components
 
-They appear in systems like RocksDB, LevelDB, Cassandra, and many modern key-value stores.
+- **WAL**: append-only durability log
+- **memtable**: in-memory sorted structure, often a skip list
+- **immutable memtable**: waiting to flush
+- **SSTables**: immutable sorted files on disk
+- **Bloom filters / indexes**: help avoid checking every SSTable on reads
+- **compaction**: background merge process that rewrites and cleans overlapping runs
 
-## Read trade-off
+## Write path
 
-The price of write speed is that reads may need to check:
+```
+put(key, value):
+    append (key, value) to WAL
+    memtable.insert(key, value)
 
-- the memtable
-- recent SSTables
-- lower levels
+    if memtable is full:
+        freeze memtable as immutable
+        create new empty memtable
+        flush immutable memtable to a new SSTable
+```
 
-That is why Bloom filters, compaction strategy, and layout policy matter so much in LSM-based engines.
+The foreground write is cheap because it mostly touches memory and the end of the WAL.
 
-## Complexity intuition
+## Read path
 
-Exact costs depend on the compaction policy, but the design goal is:
+```
+get(key):
+    if key is in memtable:
+        return newest value
 
-- cheap sequential writes
-- background amortization of sort/merge work
-- acceptable read amplification managed by filters and leveling
+    if key is in immutable memtables:
+        return newest value
+
+    for each relevant SSTable from newest to oldest:
+        if Bloom filter says definitely absent:
+            continue
+        if on-disk index may contain key:
+            search the SSTable
+            if found:
+                return value
+
+    return NOT_FOUND
+```
+
+Reads are harder than writes because the newest value may exist in several layers.
+
+## Compaction
+
+Compaction is the background merge engine that keeps the system from degenerating into infinitely many tiny sorted files.
+
+```
+compact(selectedTables):
+    stream the selected SSTables in key order
+    keep only the newest visible version of each key
+    write merged output into larger SSTables
+    delete old input tables
+```
+
+This is basically external merge work plus version cleanup.
+
+## Leveled vs. tiered compaction
+
+| Policy | Shape | Strength | Weakness |
+|---|---|---|---|
+| Leveled | Each level has bounded overlap | Better point reads, lower space amplification | More write amplification |
+| Tiered / size-tiered | Several runs per level before merge | Better write throughput | More read amplification |
+
+This is the same recurring systems trade-off: write now and clean later, or organize more aggressively up front.
+
+## Worked example
+
+Suppose key `user:7` is updated three times.
+
+1. newest value lives in the memtable
+2. old values still exist in one or more SSTables
+3. reads must search newest structures first
+4. compaction eventually merges those files and discards stale versions
+
+So an LSM Tree is not just a tree. It is a pipeline of sorted structures across time.
+
+## Complexity and trade-offs
+
+Exact costs depend on compaction policy, but the qualitative picture is stable.
+
+| Operation | Typical story |
+|---|---|
+| Write | Very fast foreground path, usually close to append + memory insert |
+| Point read | May touch several levels, but Bloom filters cut many misses |
+| Range scan | Good sequential behavior, but may need to merge overlapping runs |
+| Space | Extra space is needed during compaction and while multiple versions coexist |
+
+The key systems terms are:
+
+- **write amplification**: how much extra rewriting compaction creates
+- **read amplification**: how many structures a read may need to inspect
+- **space amplification**: how much extra storage is consumed by duplicates and overlap
+
+## LSM Tree vs. B+ Tree
+
+| Question | LSM Tree | B+ Tree |
+|---|---|---|
+| Write-heavy workload | Usually better | Often worse |
+| Point reads | Can be good, but depends on filters and levels | Very predictable |
+| Range scans | Good, but may merge multiple runs | Excellent ordered leaf scans |
+| Core cost | Background compaction | Page updates and rebalancing |
 
 ## Key takeaways
 
-- LSM Trees optimize for write throughput by buffering and compacting
-- Skip lists and sorted-run merges are central building blocks
-- Reads get harder, so Bloom filters and compaction policy become first-class concerns
-- This is one of the most important systems data structures in modern storage engines
+- An LSM Tree is built around **buffering, flushing, and compaction**.
+- The foreground write path is cheap because it writes sequentially and updates memory first.
+- Reads are harder, which is why **Bloom filters**, indexes, and compaction policy matter so much.
+- Compaction is the hidden algorithmic heart of the structure.
+- LSM Trees are the natural choice when write throughput matters enough to justify more complex read behavior.
 
 ## Practice problems
 
 | Problem | Difficulty | Key idea |
 |---|---|---|
-| [LSM Tree overview](https://en.wikipedia.org/wiki/Log-structured_merge-tree) | 🔴 Hard | Memtables, SSTables, compaction |
-| [RocksDB overview](https://github.com/facebook/rocksdb/wiki/RocksDB-Overview) | 🔴 Hard | Real LSM implementation trade-offs |
-| [LevelDB impl notes](https://github.com/google/leveldb/blob/main/doc/impl.md) | 🔴 Hard | Sorted runs plus background merging |
+| [LSM Tree overview](https://en.wikipedia.org/wiki/Log-structured_merge-tree) | Hard | Memtables, SSTables, and compaction |
+| [RocksDB overview](https://github.com/facebook/rocksdb/wiki/RocksDB-Overview) | Hard | Real storage-engine trade-offs |
+| [LevelDB implementation notes](https://github.com/google/leveldb/blob/main/doc/impl.md) | Hard | Sorted runs plus background merging |
 
 ## Relation to other topics
 
-- **Skip List** is a common memtable implementation
-- **Bloom Filter & Cuckoo Filter** explain how reads can skip many SSTables cheaply
-- **External Merge Sort** captures the merge-heavy flavor of compaction work
-- **B+ Tree** is the classic ordered-index alternative when the workload trade-offs differ
+- **Skip List** is a common memtable implementation.
+- **Bloom Filter & Cuckoo Filter** explain how reads can skip many SSTables cheaply.
+- **External Merge Sort** captures the merge-heavy flavor of compaction work.
+- **B+ Tree** is the classic ordered-index alternative when the workload trade-offs differ.
