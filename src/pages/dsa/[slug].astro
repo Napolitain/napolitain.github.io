@@ -1,10 +1,13 @@
 ---
 import ReadingProgress from '@/components/ReadingProgress.svelte';
+import DsaCompareBlock from '@/components/dsa/DsaCompareBlock.astro';
+import DsaNextStepRail from '@/components/dsa/DsaNextStepRail.astro';
 import DsaVisualization from '@/components/dsa/DsaVisualization.svelte';
 import TableOfContents from '@/components/TableOfContents.svelte';
 import Badge from '@/components/ui/badge.svelte';
 import Layout from '@/layouts/Layout.astro';
 import { buildDsaDirectory } from '@/lib/dsa';
+import { getDsaCompareBlock, getDsaNextStepRail } from '@/lib/dsa-page-ui';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import { ArrowLeft, Tag } from 'phosphor-svelte';
@@ -43,6 +46,8 @@ const familyPeers = topic.familyTopics.slice(0, 4);
 const relatedTopics = topic.relatedTopics.slice(0, 4);
 const enabledTopics = topic.enabledTopics.slice(0, 6);
 const prerequisiteTopics = topic.prerequisiteTopics.slice(0, 6);
+const compareBlock = getDsaCompareBlock(topic.slug, directory.topicBySlug);
+const nextStepRail = getDsaNextStepRail(topic, pathMemberships);
 ---
 
 <Layout
@@ -158,8 +163,22 @@ const prerequisiteTopics = topic.prerequisiteTopics.slice(0, 6);
         </div>
       </section>
 
-      <div class="prose prose-lg prose-slate dark:prose-invert max-w-3xl mx-auto font-serif">
-        <Content />
+      <div class="grid gap-10 xl:grid-cols-[minmax(0,1fr)_320px] items-start">
+        <div class="order-2 xl:order-1 min-w-0 space-y-10">
+          {compareBlock && (
+            <div class="max-w-3xl">
+              <DsaCompareBlock block={compareBlock} />
+            </div>
+          )}
+
+          <div class="prose prose-lg prose-slate dark:prose-invert max-w-3xl font-serif">
+            <Content />
+          </div>
+        </div>
+
+        <div class="order-1 xl:order-2">
+          <DsaNextStepRail rail={nextStepRail} />
+        </div>
       </div>
 
       {prerequisiteTopics.length > 0 && (
