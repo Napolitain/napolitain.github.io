@@ -436,11 +436,21 @@ export function buildDsaDirectory(entries: DsaEntry[]): DsaDirectoryData {
       .sort(compareTopics)
       .map(toTopicLink);
 
-    const allLinkedTitles = [
+    const pathIds = pathIdsBySlug.get(topic.slug) ?? [];
+    const pathSearchText = paths
+      .filter(path => pathIds.includes(path.id))
+      .flatMap(path => [path.title, path.description]);
+    const linkedSearchText = [
       ...prerequisiteTopics,
       ...relatedTopics,
       ...enabledTopics,
-    ].map(other => other.title);
+    ].flatMap(other => [
+      other.title,
+      other.description,
+      other.familyLabel,
+      other.kindLabel,
+      other.difficultyLabel,
+    ]);
 
     return {
       ...toTopicLink(topic),
@@ -457,14 +467,19 @@ export function buildDsaDirectory(entries: DsaEntry[]): DsaDirectoryData {
       relatedTopics,
       enabledTopics,
       familyTopics,
-      pathIds: pathIdsBySlug.get(topic.slug) ?? [],
+      pathIds,
       searchText: [
         topic.title,
+        topic.slug.replace(/-/g, ' '),
         topic.description,
         topic.tags.join(' '),
         familyMeta.label,
         familyMeta.description,
-        ...allLinkedTitles,
+        ...familyTrailLabels,
+        dsaKindMeta[topic.kind].label,
+        dsaDifficultyMeta[topic.difficulty].label,
+        ...pathSearchText,
+        ...linkedSearchText,
       ].join(' ').toLowerCase(),
     } satisfies DsaTopicCardData;
   });

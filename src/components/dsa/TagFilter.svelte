@@ -9,10 +9,11 @@
 <div class="space-y-4">
   <!-- Tag filters -->
   <div class="flex flex-wrap items-center gap-2">
-    <span class="text-sm font-medium text-muted-foreground mr-1">Tags:</span>
     {#each tags as tag}
       <button
+        type="button"
         class="cursor-pointer"
+        aria-pressed={selectedTags.includes(tag)}
         on:click={() => onToggle(tag)}
       >
         <Badge
