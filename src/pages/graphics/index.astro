@@ -1,0 +1,63 @@
+---
+import AtlasBreadcrumbs from '@/components/discovery/AtlasBreadcrumbs.astro';
+import RecentAtlasHistory from '@/components/discovery/RecentAtlasHistory.svelte';
+import GraphicsIndex from '@/components/graphics/GraphicsIndex.svelte';
+import Layout from '@/layouts/Layout.astro';
+import { buildGraphicsDirectory } from '@/lib/graphics';
+import { getCollection } from 'astro:content';
+
+const allTopics = await getCollection('graphics', ({ data }) => {
+  return import.meta.env.PROD ? data.draft !== true : true;
+});
+
+const directory = buildGraphicsDirectory(allTopics);
+---
+
+<Layout
+  title="Graphics Atlas - Napolitain"
+  description="Navigate graphics and image-processing algorithms by family, pipeline role, and WebGPU demonstration."
+>
+  <div class="min-h-screen">
+    <section class="px-8 pt-40 pb-20 mt-20">
+      <div class="max-w-6xl mx-auto text-center space-y-6">
+        <div class="text-left">
+          <AtlasBreadcrumbs sectionLabel="Graphics Atlas" sectionHref="/graphics" currentTitle="Overview" />
+        </div>
+        <p class="text-sm uppercase tracking-[0.4em] text-muted-foreground">Graphics & WebGPU</p>
+        <h1 class="text-5xl md:text-6xl font-bold">Graphics Atlas</h1>
+        <p class="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          Explore graphics algorithms as a connected pipeline instead of a flat catalog. Follow filters, masks, morphology, and WebGPU demos from one topic to the next.
+        </p>
+      </div>
+    </section>
+
+    <section class="pb-40 px-8">
+      <div class="max-w-6xl mx-auto space-y-10">
+        <RecentAtlasHistory
+          client:load
+          title="Recently viewed atlas topics"
+          description="Keep your last graphics and DSA stops visible while you explore the rendering and image-processing pipeline."
+        />
+        {directory.topics.length === 0 ? (
+          <div class="text-center py-20">
+            <p class="text-muted-foreground text-lg">No graphics topics yet. Check back soon!</p>
+          </div>
+        ) : (
+          <GraphicsIndex
+            client:load
+            topics={directory.topics}
+            families={directory.families}
+            paths={directory.paths}
+            stats={directory.stats}
+          />
+        )}
+      </div>
+    </section>
+
+    <footer class="py-16 px-8 border-t border-border">
+      <div class="max-w-6xl mx-auto text-center text-sm text-muted-foreground">
+        <p>© {new Date().getFullYear()} Napolitain. Built with Astro, Svelte & TypeScript.</p>
+      </div>
+    </footer>
+  </div>
+</Layout>

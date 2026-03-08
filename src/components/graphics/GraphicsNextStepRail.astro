@@ -1,0 +1,116 @@
+---
+import type { GraphicsNextStepRailData } from '@/lib/graphics-page-ui';
+
+interface Props {
+  rail: GraphicsNextStepRailData;
+}
+
+const { rail } = Astro.props;
+---
+
+<aside class="space-y-4 lg:sticky lg:top-28">
+  <section class="rounded-2xl border border-border bg-card p-5 space-y-3">
+    <p class="text-xs uppercase tracking-[0.2em] text-muted-foreground">Next-step rail</p>
+    <h2 class="text-lg font-semibold">Keep moving</h2>
+    <p class="text-sm text-muted-foreground">
+      Use the nearest useful follow-up instead of reopening the whole graphics atlas every time.
+    </p>
+  </section>
+
+  <section class="rounded-2xl border border-border bg-card p-5 space-y-3">
+    <p class="text-xs uppercase tracking-[0.2em] text-muted-foreground">Before this page</p>
+    {rail.isFoundational ? (
+      <p class="text-sm text-muted-foreground">
+        This topic is foundational enough to read on its own.
+      </p>
+    ) : (
+      <div class="space-y-2">
+        <p class="text-sm text-muted-foreground">
+          If this page feels dense, review one of these first.
+        </p>
+        <div class="space-y-2">
+          {rail.buildFirst.map(prerequisite => (
+            <a
+              href={`/graphics/${prerequisite.slug}`}
+              class="block rounded-xl border border-border/80 bg-background p-3 transition-colors hover:border-primary/40"
+            >
+              <p class="text-sm font-medium">{prerequisite.title}</p>
+              <p class="mt-1 text-xs text-muted-foreground">{prerequisite.familyLabel} - {prerequisite.kindLabel}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+  </section>
+
+  {rail.primaryPath && (
+    <section class="rounded-2xl border border-border bg-card p-5 space-y-3">
+      <p class="text-xs uppercase tracking-[0.2em] text-muted-foreground">Path position</p>
+      <div>
+        <h3 class="text-base font-semibold">{rail.primaryPath.path.title}</h3>
+        <p class="mt-1 text-sm text-muted-foreground">
+          Step {rail.primaryPath.stepNumber} of {rail.primaryPath.totalSteps}
+        </p>
+      </div>
+
+      <div class="space-y-2">
+        {rail.primaryPath.previous && (
+          <a
+            href={`/graphics/${rail.primaryPath.previous.slug}`}
+            class="block rounded-xl border border-border/80 bg-background p-3 transition-colors hover:border-primary/40"
+          >
+            <p class="text-xs uppercase tracking-[0.2em] text-muted-foreground">Previous</p>
+            <p class="mt-1 text-sm font-medium">{rail.primaryPath.previous.title}</p>
+          </a>
+        )}
+
+        <div class="rounded-xl border border-primary/30 bg-primary/5 p-3">
+          <p class="text-xs uppercase tracking-[0.2em] text-primary/80">Current</p>
+          <p class="mt-1 text-sm font-medium text-foreground">
+            {rail.primaryPath.path.steps[rail.primaryPath.stepNumber - 1]?.title}
+          </p>
+        </div>
+
+        {rail.primaryPath.next && (
+          <a
+            href={`/graphics/${rail.primaryPath.next.slug}`}
+            class="block rounded-xl border border-border/80 bg-background p-3 transition-colors hover:border-primary/40"
+          >
+            <p class="text-xs uppercase tracking-[0.2em] text-muted-foreground">Next</p>
+            <p class="mt-1 text-sm font-medium">{rail.primaryPath.next.title}</p>
+          </a>
+        )}
+      </div>
+    </section>
+  )}
+
+  {rail.bestNext && (
+    <section class="rounded-2xl border border-border bg-card p-5 space-y-3">
+      <p class="text-xs uppercase tracking-[0.2em] text-muted-foreground">Best next move</p>
+      <a
+        href={`/graphics/${rail.bestNext.slug}`}
+        class="block rounded-xl border border-primary/30 bg-primary/5 p-4 transition-colors hover:border-primary/50"
+      >
+        <p class="text-base font-semibold">{rail.bestNext.title}</p>
+        <p class="mt-2 text-sm text-muted-foreground">{rail.bestNext.description}</p>
+      </a>
+    </section>
+  )}
+
+  {rail.additionalNextTopics.length > 0 && (
+    <section class="rounded-2xl border border-border bg-card p-5 space-y-3">
+      <p class="text-xs uppercase tracking-[0.2em] text-muted-foreground">Also worth exploring</p>
+      <div class="space-y-2">
+        {rail.additionalNextTopics.map(nextTopic => (
+          <a
+            href={`/graphics/${nextTopic.slug}`}
+            class="block rounded-xl border border-border/80 bg-background p-3 transition-colors hover:border-primary/40"
+          >
+            <p class="text-sm font-medium">{nextTopic.title}</p>
+            <p class="mt-1 text-xs text-muted-foreground">{nextTopic.familyLabel} - {nextTopic.kindLabel}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+</aside>

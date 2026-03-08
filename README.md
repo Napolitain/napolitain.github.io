@@ -92,15 +92,32 @@ Update the default values in `.github/workflows/fetch-github-data.yml`:
 # Install dependencies
 npm install
 
+# Install the Playwright browser used for end-to-end verification
+npm run test:e2e:install
+
 # Start development server
 npm run dev
 
 # Build for production
 npm run build
 
+# Run end-to-end verification against the built site
+npm run test:e2e
+
+# Open the last Playwright HTML report
+npm run test:e2e:report
+
 # Preview production build
 npm run preview
 ```
+
+### Copilot CLI verification skill
+
+This repository includes a Copilot CLI skill at `.github/skills/playwright-verification`.
+
+- Run `/skills reload` in Copilot CLI after pulling the latest changes.
+- Ask Copilot to use `/playwright-verification` when you want lint/build/browser verification or failure triage for this site.
+- The skill is tuned for this repository's critical flows: main-route navigation, DSA atlas navigation plus BFS animation checks, arcade game interactions, search, and theme persistence.
 
 ## 🔒 Privacy & Security
 

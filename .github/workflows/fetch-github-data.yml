@@ -10,8 +10,11 @@ on:
       - main
     paths:
       - '.github/workflows/fetch-github-data.yml'
+      - 'e2e/**'
       - 'src/**'
       - 'package.json'
+      - 'package-lock.json'
+      - 'playwright.config.ts'
       - 'astro.config.mjs'
 
 permissions:
@@ -43,13 +46,19 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install Playwright browser
+        run: npm run test:e2e:install -- --with-deps
+
       - name: Fetch GitHub data
         run: node .github/scripts/fetch-github-data.cjs
 
-      - name: Build static site with embedded GitHub data
+      - name: Lint repository
+        run: npm run lint
+
+      - name: Build site and run Playwright verification
         env:
           GITHUB_PAGES: 'true'
-        run: npm run build
+        run: npm run test:e2e
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

@@ -1,4 +1,6 @@
 ---
+import AtlasBreadcrumbs from '@/components/discovery/AtlasBreadcrumbs.astro';
+import RecentAtlasHistory from '@/components/discovery/RecentAtlasHistory.svelte';
 import ReadingProgress from '@/components/ReadingProgress.svelte';
 import DsaCompareBlock from '@/components/dsa/DsaCompareBlock.astro';
 import DsaNextStepRail from '@/components/dsa/DsaNextStepRail.astro';
@@ -7,10 +9,12 @@ import TableOfContents from '@/components/TableOfContents.svelte';
 import Badge from '@/components/ui/badge.svelte';
 import Layout from '@/layouts/Layout.astro';
 import { buildDsaDirectory } from '@/lib/dsa';
+import { getBlogPostsForAtlasTopic } from '@/lib/discovery';
 import { getDsaCompareBlock, getDsaNextStepRail } from '@/lib/dsa-page-ui';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import { ArrowLeft, Tag } from 'phosphor-svelte';
+import RelatedPosts from '@/components/RelatedPosts.svelte';
 
 export async function getStaticPaths() {
   const entries = await getCollection('dsa', ({ data }) => {
@@ -48,6 +52,10 @@ const enabledTopics = topic.enabledTopics.slice(0, 6);
 const prerequisiteTopics = topic.prerequisiteTopics.slice(0, 6);
 const compareBlock = getDsaCompareBlock(topic.slug, directory.topicBySlug);
 const nextStepRail = getDsaNextStepRail(topic, pathMemberships);
+const blogEntries = await getCollection('blog', ({ data }) => {
+  return import.meta.env.PROD ? data.draft !== true : true;
+});
+const relatedBlogPosts = getBlogPostsForAtlasTopic(topic, blogEntries);
 ---
 
 <Layout
@@ -59,6 +67,12 @@ const nextStepRail = getDsaNextStepRail(topic, pathMemberships);
     <TableOfContents client:load />
 
     <div class="max-w-5xl mx-auto px-6 pt-20">
+      <AtlasBreadcrumbs
+        sectionLabel="DSA Atlas"
+        sectionHref="/dsa"
+        currentTitle={entry.data.title}
+        familyTrailLabels={topic.familyTrailLabels}
+      />
       <a
         href="/dsa"
         class="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-12"
@@ -177,7 +191,15 @@ const nextStepRail = getDsaNextStepRail(topic, pathMemberships);
         </div>
 
         <div class="order-1 xl:order-2">
-          <DsaNextStepRail rail={nextStepRail} />
+          <div class="space-y-6">
+            <DsaNextStepRail rail={nextStepRail} />
+            <RecentAtlasHistory
+              client:load
+              currentItem={{ href: `/dsa/${topic.slug}`, title: topic.title, section: 'dsa' }}
+              title="Recently viewed atlas topics"
+              description="Keep the last atlas pages you opened nearby while you move through prerequisites and next steps."
+            />
+          </div>
         </div>
       </div>
 
@@ -309,6 +331,13 @@ const nextStepRail = getDsaNextStepRail(topic, pathMemberships);
           </div>
         </section>
       )}
+
+      <RelatedPosts
+        client:load
+        title="From the blog"
+        description="Pair the atlas with recent writing from the rest of the site when you want a broader engineering perspective alongside the topic graph."
+        posts={relatedBlogPosts}
+      />
     </article>
 
     <footer class="py-16 px-8 border-t border-border mt-20">

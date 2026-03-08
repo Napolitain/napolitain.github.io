@@ -36,3 +36,5 @@ pids
 
 # Screenshots for testing
 screenshots/
+playwright-report/
+test-results/

@@ -7,7 +7,11 @@ import Badge from '@/components/ui/badge.svelte';
 import RelatedPosts from '@/components/RelatedPosts.svelte';
 import ReadingProgress from '@/components/ReadingProgress.svelte';
 import TableOfContents from '@/components/TableOfContents.svelte';
+import DiscoveryCardGrid from '@/components/discovery/DiscoveryCardGrid.astro';
 import { getReadingTime, getRelatedPosts } from '@/lib/blog-utils';
+import { getBlogAtlasSuggestions } from '@/lib/discovery';
+import { buildDsaDirectory } from '@/lib/dsa';
+import { buildGraphicsDirectory } from '@/lib/graphics';
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection('blog', ({ data }) => {
@@ -38,6 +42,15 @@ function formatDate(date: Date): string {
 
 const readingTime = getReadingTime(entry.body);
 const relatedPosts = getRelatedPosts(entry, allPosts);
+const [dsaEntries, graphicsEntries] = await Promise.all([
+  getCollection('dsa', ({ data }) => (import.meta.env.PROD ? data.draft !== true : true)),
+  getCollection('graphics', ({ data }) => (import.meta.env.PROD ? data.draft !== true : true)),
+]);
+const atlasSuggestions = getBlogAtlasSuggestions(
+  entry,
+  buildDsaDirectory(dsaEntries),
+  buildGraphicsDirectory(graphicsEntries),
+);
 
 // Schema.org JSON-LD
 const schema = {
@@ -122,6 +135,14 @@ const schema = {
         <Content />
       </div>
 
+      <div class="mt-20">
+        <DiscoveryCardGrid
+          title="Keep exploring across the site"
+          description="Use this post as a jumping-off point into the DSA atlas, the graphics atlas, or the dedicated discovery page when you want a more structured next step."
+          items={atlasSuggestions}
+        />
+      </div>
+
       <RelatedPosts client:load posts={relatedPosts.map(post => ({
         title: post.data.title,
         description: post.data.description,
@@ -138,7 +159,6 @@ const schema = {
         <p>© {new Date().getFullYear()} Napolitain. Built with Astro, Svelte & TypeScript.</p>
       </div>
     </footer>
-  </div>
   </div>
 </Layout>
 

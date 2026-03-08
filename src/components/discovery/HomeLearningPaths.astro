@@ -1,0 +1,30 @@
+---
+import { getCollection } from 'astro:content';
+
+import DiscoveryCardGrid from '@/components/discovery/DiscoveryCardGrid.astro';
+import { getHomepageDiscoveryCards } from '@/lib/discovery';
+import { buildDsaDirectory } from '@/lib/dsa';
+import { buildGraphicsDirectory } from '@/lib/graphics';
+
+const [dsaEntries, graphicsEntries] = await Promise.all([
+  getCollection('dsa', ({ data }) => (import.meta.env.PROD ? data.draft !== true : true)),
+  getCollection('graphics', ({ data }) => (import.meta.env.PROD ? data.draft !== true : true)),
+]);
+
+const items = getHomepageDiscoveryCards(
+  buildDsaDirectory(dsaEntries),
+  buildGraphicsDirectory(graphicsEntries),
+);
+---
+
+<section id="learn" class="px-8 py-24 border-y border-border/60 bg-card/30">
+  <div class="max-w-6xl mx-auto">
+    <DiscoveryCardGrid
+      title="Start learning with a path, not a blank slate"
+      description="Pick a curated route into the DSA and graphics atlases, or jump straight into unified search when you want to browse the whole site from one place."
+      items={items}
+      ctaHref="/search"
+      ctaLabel="Open discovery"
+    />
+  </div>
+</section>

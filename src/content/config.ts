@@ -5,6 +5,11 @@ import {
   dsaFamilyValues,
   dsaKindValues,
 } from '../lib/dsa-meta';
+import {
+  graphicsDifficultyValues,
+  graphicsFamilyValues,
+  graphicsKindValues,
+} from '../lib/graphics-meta';
 
 const blog = defineCollection({
   type: 'content',
@@ -37,4 +42,22 @@ const dsa = defineCollection({
   }),
 });
 
-export const collections = { blog, dsa };
+const graphics = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    date: z.coerce.date(),
+    tags: z.array(z.string()).default([]),
+    draft: z.boolean().default(false),
+    visualization: z.string().optional(),
+    family: z.enum(graphicsFamilyValues),
+    kind: z.enum(graphicsKindValues),
+    difficulty: z.enum(graphicsDifficultyValues),
+    prerequisites: z.array(z.string()).default([]),
+    related: z.array(z.string()).default([]),
+    enables: z.array(z.string()).default([]),
+  }),
+});
+
+export const collections = { blog, dsa, graphics };

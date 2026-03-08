@@ -1,0 +1,10 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import ArcadeApp from '@/components/arcade/ArcadeApp';
+---
+
+<Layout title="Arcade — Napolitain" description="Play arcade games directly on napolitain.github.io.">
+  <main id="main-content" class="min-h-screen">
+    <ArcadeApp client:load />
+  </main>
+</Layout>

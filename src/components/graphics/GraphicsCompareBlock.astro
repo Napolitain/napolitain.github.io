@@ -1,0 +1,50 @@
+---
+import type { GraphicsCompareBlockData } from '@/lib/graphics-page-ui';
+
+interface Props {
+  block: GraphicsCompareBlockData;
+}
+
+const { block } = Astro.props;
+const columnsClass = block.items.length > 2 ? 'lg:grid-cols-2' : '';
+---
+
+<section class="rounded-2xl border border-border bg-card p-6 space-y-6">
+  <div class="space-y-2">
+    <p class="text-xs uppercase tracking-[0.2em] text-muted-foreground">Choose this over that</p>
+    <h2 class="text-2xl font-semibold">{block.title}</h2>
+    <p class="text-sm text-muted-foreground">{block.description}</p>
+  </div>
+
+  <div class:list={['grid gap-4', columnsClass]}>
+    {block.items.map(item => (
+      <div class="rounded-2xl border border-border/80 bg-background p-5 space-y-3">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="inline-flex items-center rounded-full border border-border px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
+            {item.badge}
+          </span>
+          {item.href && (
+            <a href={item.href} class="text-sm font-medium text-primary transition-colors hover:text-primary/80">
+              Open topic
+            </a>
+          )}
+        </div>
+
+        <h3 class="text-lg font-semibold">{item.label}</h3>
+
+        <div class="space-y-2 text-sm text-muted-foreground">
+          <p>
+            <span class="font-medium text-foreground">Choose this when:</span>
+            {' '}
+            {item.whenToChoose}
+          </p>
+          <p>
+            <span class="font-medium text-foreground">Choose something else when:</span>
+            {' '}
+            {item.insteadChoose}
+          </p>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>

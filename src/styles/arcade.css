@@ -1,0 +1,192 @@
+
+:root {
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  --motion-duration-drop: 320ms;
+  --motion-duration-pop: 140ms;
+  --motion-duration-merge: 220ms;
+  --motion-duration-slide-hint: 420ms;
+  --motion-duration-snake-step: 120ms;
+  --motion-duration-click: 180ms;
+  --motion-duration-control-press: 120ms;
+  --motion-ease-emphasized: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-ease-smooth: cubic-bezier(0.2, 0, 0, 1);
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background-color: #020617;
+}
+
+@keyframes draw-circle {
+  from {
+    stroke-dashoffset: 252;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes draw-line {
+  from {
+    stroke-dashoffset: 74;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes motion-drop {
+  from {
+    transform: translateY(-24%);
+    opacity: 0.7;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes tile-pop {
+  0% {
+    transform: scale(0.92);
+  }
+  70% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes tile-merge-pulse {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes tile-slide-hint {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(8%);
+  }
+}
+
+@keyframes snake-step-pulse {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.06);
+    filter: brightness(1.1);
+  }
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
+@keyframes click-feedback-pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(148, 163, 184, 0.35);
+  }
+  100% {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 10px rgba(148, 163, 184, 0);
+  }
+}
+
+.mark-circle {
+  stroke-dasharray: 252;
+  stroke-dashoffset: 252;
+  animation: draw-circle 320ms ease-out forwards;
+}
+
+.mark-line {
+  stroke-dasharray: 74;
+  stroke-dashoffset: 74;
+  animation: draw-line 180ms ease-out forwards;
+}
+
+.mark-line-delay {
+  animation-delay: 120ms;
+}
+
+.motion-drop {
+  animation: motion-drop var(--motion-duration-drop) var(--motion-ease-emphasized);
+  transform-origin: center top;
+}
+
+.motion-tile-pop {
+  animation: tile-pop var(--motion-duration-pop) var(--motion-ease-emphasized);
+}
+
+.motion-tile-merge {
+  animation: tile-merge-pulse var(--motion-duration-merge) var(--motion-ease-emphasized);
+}
+
+.motion-tile-slide-hint {
+  animation: tile-slide-hint var(--motion-duration-slide-hint) var(--motion-ease-smooth) 2;
+}
+
+.motion-snake-step {
+  animation: snake-step-pulse var(--motion-duration-snake-step) var(--motion-ease-emphasized);
+}
+
+.motion-click-pulse {
+  animation: click-feedback-pulse var(--motion-duration-click) var(--motion-ease-smooth);
+}
+
+.motion-control-press {
+  transition:
+    transform var(--motion-duration-control-press) var(--motion-ease-smooth),
+    filter var(--motion-duration-control-press) var(--motion-ease-smooth);
+}
+
+.motion-control-press:active,
+.motion-control-press[data-pressed='true'] {
+  transform: scale(0.96);
+  filter: brightness(0.95);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mark-circle,
+  .mark-line {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+
+  .motion-drop,
+  .motion-tile-pop,
+  .motion-tile-merge,
+  .motion-tile-slide-hint,
+  .motion-snake-step,
+  .motion-click-pulse {
+    animation: none;
+    transform: none;
+    filter: none;
+    box-shadow: none;
+    opacity: 1;
+  }
+
+  .motion-control-press {
+    transition: none;
+  }
+
+  .motion-control-press:active,
+  .motion-control-press[data-pressed='true'] {
+    transform: none;
+    filter: none;
+  }
+}

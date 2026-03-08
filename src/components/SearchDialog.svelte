@@ -96,6 +96,10 @@
         </button>
       </div>
       <div id="pagefind-container" class="p-4 max-h-[60vh] overflow-y-auto"></div>
+      <div class="flex items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm">
+        <span class="text-muted-foreground">Need more room for discovery?</span>
+        <a href="/search" class="font-medium text-primary hover:underline">Open the full search page</a>
+      </div>
     </div>
   </div>
 {/if}

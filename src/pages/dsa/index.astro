@@ -1,4 +1,6 @@
 ---
+import AtlasBreadcrumbs from '@/components/discovery/AtlasBreadcrumbs.astro';
+import RecentAtlasHistory from '@/components/discovery/RecentAtlasHistory.svelte';
 import DsaIndex from '@/components/dsa/DsaIndex.svelte';
 import Layout from '@/layouts/Layout.astro';
 import { buildDsaDirectory } from '@/lib/dsa';
@@ -18,6 +20,9 @@ const directory = buildDsaDirectory(allTopics);
   <div class="min-h-screen">
     <section class="px-8 pt-40 pb-20 mt-20">
       <div class="max-w-6xl mx-auto text-center space-y-6">
+        <div class="text-left">
+          <AtlasBreadcrumbs sectionLabel="DSA Atlas" sectionHref="/dsa" currentTitle="Overview" />
+        </div>
         <p class="text-sm uppercase tracking-[0.4em] text-muted-foreground">Data structures & algorithms</p>
         <h1 class="text-5xl md:text-6xl font-bold">DSA Atlas</h1>
         <p class="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
@@ -27,7 +32,12 @@ const directory = buildDsaDirectory(allTopics);
     </section>
 
     <section class="pb-40 px-8">
-      <div class="max-w-6xl mx-auto">
+      <div class="max-w-6xl mx-auto space-y-10">
+        <RecentAtlasHistory
+          client:load
+          title="Recently viewed atlas topics"
+          description="Keep your last DSA and graphics visits close while you continue exploring the atlas."
+        />
         {directory.topics.length === 0 ? (
           <div class="text-center py-20">
             <p class="text-muted-foreground text-lg">No DSA topics yet. Check back soon!</p>

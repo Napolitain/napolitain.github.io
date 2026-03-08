@@ -1,0 +1,122 @@
+---
+import { getCollection } from 'astro:content';
+
+import HomeLearningPaths from '@/components/discovery/HomeLearningPaths.astro';
+import DiscoveryCardGrid from '@/components/discovery/DiscoveryCardGrid.astro';
+import RecentAtlasHistory from '@/components/discovery/RecentAtlasHistory.svelte';
+import RelatedPosts from '@/components/RelatedPosts.svelte';
+import SearchPage from '@/components/discovery/SearchPage.svelte';
+import Layout from '@/layouts/Layout.astro';
+import { getReadingTime } from '@/lib/blog-utils';
+
+const collectionCards = [
+  {
+    href: '/blog',
+    eyebrow: 'Writing',
+    title: 'Blog',
+    description: 'Read essays, technical notes, and opinionated engineering writing.',
+    meta: 'Chronological archive',
+    badges: ['Posts', 'Tags', 'RSS'],
+  },
+  {
+    href: '/dsa',
+    eyebrow: 'Learning atlas',
+    title: 'DSA Atlas',
+    description: 'Browse data structures and algorithms by family, prerequisites, and what each topic unlocks next.',
+    meta: 'Interactive map',
+    badges: ['Paths', 'Prerequisites', 'Visualizations'],
+  },
+  {
+    href: '/graphics',
+    eyebrow: 'Learning atlas',
+    title: 'Graphics Atlas',
+    description: 'Explore image-processing, rendering, and WebGPU topics as connected pipelines instead of isolated tricks.',
+    meta: 'Interactive demos',
+    badges: ['WebGPU', 'Pipelines', 'Operators'],
+  },
+  {
+    href: '/arcade',
+    eyebrow: 'Interactive',
+    title: 'Mini Arcade',
+    description: 'Play browser games built directly into the site when you want a hands-on break from the reading.',
+    meta: 'Games showcase',
+    badges: ['React', 'Canvas', 'Gameplay'],
+  },
+];
+
+const recentPosts = (await getCollection('blog', ({ data }) => (import.meta.env.PROD ? data.draft !== true : true)))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3)
+  .map(post => ({
+    title: post.data.title,
+    description: post.data.description,
+    date: post.data.date,
+    tags: post.data.tags,
+    slug: post.slug,
+    readingTime: getReadingTime(post.body),
+  }));
+
+const initialQuery = Astro.url.searchParams.get('q') ?? '';
+---
+
+<Layout
+  title="Search and Discover - Napolitain"
+  description="Search blog posts, atlas topics, and interactive demos from one dedicated discovery page."
+>
+  <div class="min-h-screen">
+    <section class="px-8 pt-40 pb-16">
+      <div class="max-w-6xl mx-auto space-y-6 text-center">
+        <p class="text-sm uppercase tracking-[0.4em] text-muted-foreground">Discovery</p>
+        <h1 class="text-5xl md:text-6xl font-bold">Search and discover the whole site</h1>
+        <p class="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          Use one page to search across writing, data structures and algorithms, graphics topics, and interactive experiments.
+        </p>
+      </div>
+    </section>
+
+    <section class="px-8 pb-12">
+      <div class="max-w-6xl mx-auto">
+        <SearchPage client:load initialQuery={initialQuery} />
+      </div>
+    </section>
+
+    <section class="px-8 pb-12">
+      <div class="max-w-6xl mx-auto">
+        <RecentAtlasHistory
+          client:load
+          title="Recently viewed atlas topics"
+          description="Keep your last DSA and graphics stops visible while you explore the broader site."
+        />
+      </div>
+    </section>
+
+    <section class="px-8 pb-12">
+      <div class="max-w-6xl mx-auto">
+        <DiscoveryCardGrid
+          title="Browse by collection"
+          description="Jump directly into the section that matches your mood: writing, atlases, or interactive experiments."
+          items={collectionCards}
+        />
+      </div>
+    </section>
+
+    <HomeLearningPaths />
+
+    <section class="px-8 pb-24 pt-12">
+      <div class="max-w-6xl mx-auto">
+        <RelatedPosts
+          client:load
+          title="Recent writing"
+          description="If you want an editorial voice alongside the atlases, start with the latest posts from the blog."
+          posts={recentPosts}
+        />
+      </div>
+    </section>
+
+    <footer class="py-16 px-8 border-t border-border">
+      <div class="max-w-6xl mx-auto text-center text-sm text-muted-foreground">
+        <p>© {new Date().getFullYear()} Napolitain. Built with Astro, Svelte & TypeScript.</p>
+      </div>
+    </footer>
+  </div>
+</Layout>

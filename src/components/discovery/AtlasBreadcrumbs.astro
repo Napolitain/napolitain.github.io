@@ -1,0 +1,35 @@
+---
+interface Props {
+  sectionLabel: string;
+  sectionHref: string;
+  currentTitle: string;
+  familyTrailLabels?: string[];
+}
+
+const {
+  sectionLabel,
+  sectionHref,
+  currentTitle,
+  familyTrailLabels = [],
+} = Astro.props;
+---
+
+<nav aria-label="Breadcrumb" class="mb-6">
+  <ol class="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+    <li>
+      <a href="/" class="transition-colors hover:text-primary">Home</a>
+    </li>
+    <li aria-hidden="true">/</li>
+    <li>
+      <a href={sectionHref} class="transition-colors hover:text-primary">{sectionLabel}</a>
+    </li>
+    {familyTrailLabels.map(label => (
+      <>
+        <li aria-hidden="true">/</li>
+        <li>{label}</li>
+      </>
+    ))}
+    <li aria-hidden="true">/</li>
+    <li class="text-foreground" aria-current="page">{currentTitle}</li>
+  </ol>
+</nav>
