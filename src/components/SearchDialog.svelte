@@ -1,50 +1,106 @@
 <script lang="ts">
+  import { tick } from 'svelte';
+
+  declare global {
+    interface Window {
+      PagefindUI?: new (options: Record<string, unknown>) => PagefindUIInstance;
+    }
+  }
+
+  interface PagefindUIInstance {
+    destroy?: () => void;
+  }
+
   let open = $state(false);
   let loaded = $state(false);
+  let pagefind: PagefindUIInstance | undefined;
 
-  function openSearch() {
-    if (!loaded) {
-      // Dynamically load Pagefind
-      const script = document.createElement('script');
-      script.src = '/pagefind/pagefind-ui.js';
-      script.onload = () => {
-        loaded = true;
-        open = true;
-        initPagefind();
-      };
-      document.head.appendChild(script);
-
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = '/pagefind/pagefind-ui.css';
-      document.head.appendChild(link);
-    } else {
-      open = true;
-      setTimeout(() => {
-        const input = document.querySelector<HTMLInputElement>('.pagefind-ui__search-input');
-        input?.focus();
-      }, 50);
+  function ensureStylesheet(href: string, attributeName: string) {
+    if (document.querySelector(`link[${attributeName}="true"]`)) {
+      return;
     }
+
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = href;
+    link.setAttribute(attributeName, 'true');
+    document.head.appendChild(link);
+  }
+
+  function loadScript(src: string, attributeName: string) {
+    return new Promise<void>((resolve, reject) => {
+      const existing = document.querySelector<HTMLScriptElement>(`script[${attributeName}="true"]`);
+
+      if (existing) {
+        if (window.PagefindUI) {
+          resolve();
+          return;
+        }
+
+        existing.addEventListener('load', () => resolve(), { once: true });
+        existing.addEventListener('error', () => reject(new Error(`Failed to load ${src}`)), { once: true });
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = src;
+      script.async = true;
+      script.setAttribute(attributeName, 'true');
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error(`Failed to load ${src}`));
+      document.head.appendChild(script);
+    });
+  }
+
+  function focusInput(retries = 0) {
+    const input = document.querySelector<HTMLInputElement>('#pagefind-container .pagefind-ui__search-input');
+
+    if (input) {
+      input.focus();
+      return;
+    }
+
+    if (retries < 20) {
+      window.setTimeout(() => focusInput(retries + 1), 100);
+    }
+  }
+
+  async function initPagefind() {
+    await tick();
+
+    const container = document.querySelector<HTMLElement>('#pagefind-container');
+    if (!container || !window.PagefindUI) {
+      return;
+    }
+
+    pagefind?.destroy?.();
+    container.innerHTML = '';
+
+    pagefind = new window.PagefindUI({
+      element: '#pagefind-container',
+      showSubResults: true,
+      showImages: false,
+    });
+
+    focusInput();
+  }
+
+  async function openSearch() {
+    ensureStylesheet('/pagefind/pagefind-ui.css', 'data-pagefind-search-dialog-style');
+
+    if (!loaded) {
+      await loadScript('/pagefind/pagefind-ui.js', 'data-pagefind-search-dialog-script');
+      loaded = true;
+    }
+
+    open = true;
+    await initPagefind();
   }
 
   function closeSearch() {
     open = false;
-  }
-
-  function initPagefind() {
-    setTimeout(() => {
-      // @ts-ignore — Pagefind is loaded dynamically
-      if (window.PagefindUI) {
-        // @ts-ignore
-        new window.PagefindUI({
-          element: '#pagefind-container',
-          showSubResults: true,
-          showImages: false,
-        });
-        const input = document.querySelector<HTMLInputElement>('.pagefind-ui__search-input');
-        input?.focus();
-      }
-    }, 50);
+    pagefind?.destroy?.();
+    pagefind = undefined;
   }
 
   function handleKeydown(e: KeyboardEvent) {

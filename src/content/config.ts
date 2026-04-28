@@ -6,6 +6,11 @@ import {
   dsaKindValues,
 } from '../lib/dsa-meta';
 import {
+  systemDesignDifficultyValues,
+  systemDesignFamilyValues,
+  systemDesignKindValues,
+} from '../lib/system-design-meta';
+import {
   graphicsDifficultyValues,
   graphicsFamilyValues,
   graphicsKindValues,
@@ -60,4 +65,21 @@ const graphics = defineCollection({
   }),
 });
 
-export const collections = { blog, dsa, graphics };
+const systemDesign = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    date: z.coerce.date(),
+    tags: z.array(z.string()).default([]),
+    draft: z.boolean().default(false),
+    family: z.enum(systemDesignFamilyValues),
+    kind: z.enum(systemDesignKindValues),
+    difficulty: z.enum(systemDesignDifficultyValues),
+    prerequisites: z.array(z.string()).default([]),
+    related: z.array(z.string()).default([]),
+    enables: z.array(z.string()).default([]),
+  }),
+});
+
+export const collections = { blog, dsa, graphics, 'system-design': systemDesign };

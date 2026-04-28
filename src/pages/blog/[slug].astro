@@ -12,6 +12,7 @@ import { getReadingTime, getRelatedPosts } from '@/lib/blog-utils';
 import { getBlogAtlasSuggestions } from '@/lib/discovery';
 import { buildDsaDirectory } from '@/lib/dsa';
 import { buildGraphicsDirectory } from '@/lib/graphics';
+import { buildSystemDesignDirectory } from '@/lib/system-design';
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection('blog', ({ data }) => {
@@ -42,14 +43,16 @@ function formatDate(date: Date): string {
 
 const readingTime = getReadingTime(entry.body);
 const relatedPosts = getRelatedPosts(entry, allPosts);
-const [dsaEntries, graphicsEntries] = await Promise.all([
+const [dsaEntries, graphicsEntries, systemDesignEntries] = await Promise.all([
   getCollection('dsa', ({ data }) => (import.meta.env.PROD ? data.draft !== true : true)),
   getCollection('graphics', ({ data }) => (import.meta.env.PROD ? data.draft !== true : true)),
+  getCollection('system-design', ({ data }) => (import.meta.env.PROD ? data.draft !== true : true)),
 ]);
 const atlasSuggestions = getBlogAtlasSuggestions(
   entry,
   buildDsaDirectory(dsaEntries),
   buildGraphicsDirectory(graphicsEntries),
+  buildSystemDesignDirectory(systemDesignEntries),
 );
 
 // Schema.org JSON-LD

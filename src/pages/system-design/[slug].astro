@@ -1,0 +1,344 @@
+---
+import AtlasBreadcrumbs from '@/components/discovery/AtlasBreadcrumbs.astro';
+import RecentAtlasHistory from '@/components/discovery/RecentAtlasHistory.svelte';
+import ReadingProgress from '@/components/ReadingProgress.svelte';
+import TableOfContents from '@/components/TableOfContents.svelte';
+import Badge from '@/components/ui/badge.svelte';
+import Layout from '@/layouts/Layout.astro';
+import { buildSystemDesignDirectory } from '@/lib/system-design';
+import { getBlogPostsForAtlasTopic } from '@/lib/discovery';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import { ArrowLeft, Tag } from 'phosphor-svelte';
+import RelatedPosts from '@/components/RelatedPosts.svelte';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('system-design', ({ data }) => {
+    return import.meta.env.PROD ? data.draft !== true : true;
+  });
+
+  return entries.map(entry => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'system-design'>;
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+
+const allTopics = await getCollection('system-design', ({ data }) => {
+  return import.meta.env.PROD ? data.draft !== true : true;
+});
+
+const directory = buildSystemDesignDirectory(allTopics);
+const topic = directory.topicBySlug.get(entry.slug);
+
+if (!topic) {
+  throw new Error(`Unknown system design topic: ${entry.slug}`);
+}
+
+const pathMemberships = directory.paths.filter(path => topic.pathIds.includes(path.id));
+const familyPeers = topic.familyTopics.slice(0, 4);
+const relatedTopics = topic.relatedTopics.slice(0, 4);
+const enabledTopics = topic.enabledTopics.slice(0, 6);
+const prerequisiteTopics = topic.prerequisiteTopics.slice(0, 6);
+const blogEntries = await getCollection('blog', ({ data }) => {
+  return import.meta.env.PROD ? data.draft !== true : true;
+});
+const relatedBlogPosts = getBlogPostsForAtlasTopic(topic, blogEntries);
+---
+
+<Layout
+  title={`${entry.data.title} - System Design - Napolitain`}
+  description={entry.data.description}
+>
+  <div class="min-h-screen">
+    <ReadingProgress client:load />
+    <TableOfContents client:load />
+
+    <div class="max-w-5xl mx-auto px-6 pt-20">
+      <AtlasBreadcrumbs
+        sectionLabel="System Design Atlas"
+        sectionHref="/system-design"
+        currentTitle={entry.data.title}
+        familyTrailLabels={topic.familyTrailLabels}
+      />
+      <a
+        href="/system-design"
+        class="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-12"
+      >
+        <ArrowLeft client:load size={20} />
+        Back to the system design atlas
+      </a>
+    </div>
+
+    <article class="max-w-5xl mx-auto px-6 pb-24">
+      <header class="max-w-3xl mx-auto mb-14 space-y-6">
+        <div class="flex flex-wrap gap-2">
+          {topic.familyTrailLabels.map((label, index) => (
+            <Badge client:load variant={index === topic.familyTrailLabels.length - 1 ? 'default' : 'secondary'} class="text-xs">
+              {label}
+            </Badge>
+          ))}
+          <Badge client:load variant="secondary" class="text-xs">
+            {topic.kindLabel}
+          </Badge>
+          <Badge client:load variant="secondary" class="text-xs">
+            {topic.difficultyLabel}
+          </Badge>
+        </div>
+
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight font-serif">
+          {entry.data.title}
+        </h1>
+
+        <p class="text-lg text-muted-foreground leading-relaxed font-serif">
+          {entry.data.description}
+        </p>
+
+        {topic.familyParentLabel && (
+          <p class="rounded-xl border border-border bg-card px-4 py-3 text-sm text-muted-foreground">
+            <span class="font-medium text-foreground">{topic.familyLabel}</span>
+            {' '}
+            sits under
+            {' '}
+            <span class="font-medium text-foreground">{topic.familyParentLabel}</span>
+            , so the page stays concrete about local mechanics without losing the larger distributed-systems context.
+          </p>
+        )}
+
+        {entry.data.tags.length > 0 && (
+          <div class="flex items-center gap-2">
+            <Tag client:load size={16} class="text-muted-foreground" />
+            <div class="flex flex-wrap gap-2">
+              {entry.data.tags.map((tag: string) => (
+                <Badge client:load variant="secondary" class="text-xs">
+                  {tag}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        )}
+      </header>
+
+      <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4 mb-14">
+        <div class="rounded-2xl border border-border bg-card p-5">
+          <p class="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">Family</p>
+          <p class="text-lg font-semibold">{topic.familyTrailLabels.join(' → ')}</p>
+          <p class="text-sm text-muted-foreground mt-2">{topic.familyDescription}</p>
+        </div>
+
+        <div class="rounded-2xl border border-border bg-card p-5">
+          <p class="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">Builds on</p>
+          <p class="text-lg font-semibold">{topic.prerequisiteTopics.length === 0 ? 'Standalone' : `${topic.prerequisiteTopics.length} topic${topic.prerequisiteTopics.length === 1 ? '' : 's'}`}</p>
+          <p class="text-sm text-muted-foreground mt-2">
+            {topic.prerequisiteTopics.length === 0
+              ? 'You can read this directly and use it as the starting point for the new track.'
+              : 'These pages provide the mental model or mechanism that this design assumes.'}
+          </p>
+        </div>
+
+        <div class="rounded-2xl border border-border bg-card p-5">
+          <p class="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">Related directions</p>
+          <p class="text-lg font-semibold">{topic.relatedTopics.length}</p>
+          <p class="text-sm text-muted-foreground mt-2">
+            Nearby topics help compare alternative mechanisms without flattening everything into one answer.
+          </p>
+        </div>
+
+        <div class="rounded-2xl border border-border bg-card p-5">
+          <p class="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">Learning paths</p>
+          <p class="text-lg font-semibold">{pathMemberships.length}</p>
+          <p class="text-sm text-muted-foreground mt-2">
+            Follow a curated path when you want the surrounding systems context instead of a single isolated deep dive.
+          </p>
+        </div>
+      </section>
+
+      <div class="grid gap-10 xl:grid-cols-[minmax(0,1fr)_320px] items-start">
+        <div class="order-2 xl:order-1 min-w-0 space-y-10">
+          <div class="prose prose-lg prose-slate dark:prose-invert max-w-3xl font-serif">
+            <Content />
+          </div>
+        </div>
+
+        <div class="order-1 xl:order-2">
+          <div class="space-y-6">
+            {pathMemberships.length > 0 && (
+              <section class="rounded-2xl border border-border bg-card p-5 space-y-4">
+                <div class="space-y-2">
+                  <h2 class="text-lg font-semibold">Included paths</h2>
+                  <p class="text-sm text-muted-foreground">
+                    Use these routes when you want this page to stay anchored inside a larger systems-learning progression.
+                  </p>
+                </div>
+
+                <div class="space-y-4">
+                  {pathMemberships.map(path => (
+                    <div class="rounded-xl border border-border/80 px-4 py-4">
+                      <h3 class="font-medium">{path.title}</h3>
+                      <p class="mt-2 text-sm text-muted-foreground">{path.description}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            <RecentAtlasHistory
+              client:load
+              currentItem={{ href: `/system-design/${topic.slug}`, title: topic.title, section: 'system-design' }}
+              title="Recently viewed atlas topics"
+              description="Keep the last atlas pages you opened nearby while you move between DSA, system design, and graphics."
+            />
+          </div>
+        </div>
+      </div>
+
+      {prerequisiteTopics.length > 0 && (
+        <section class="mt-16 space-y-6">
+          <div>
+            <h2 class="text-2xl font-semibold">Build on these first</h2>
+            <p class="text-sm text-muted-foreground mt-2">
+              These pages supply the mechanism or vocabulary that this design assumes.
+            </p>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {prerequisiteTopics.map(prerequisite => (
+              <a href={`/system-design/${prerequisite.slug}`} class="block rounded-2xl border border-border bg-card p-5 transition-colors hover:border-primary/40 hover:shadow-sm">
+                <div class="flex flex-wrap gap-2 mb-3">
+                  <Badge client:load variant="outline" class="text-[11px]">{prerequisite.familyLabel}</Badge>
+                  <Badge client:load variant="secondary" class="text-[11px]">{prerequisite.kindLabel}</Badge>
+                </div>
+                <h3 class="text-base font-semibold">{prerequisite.title}</h3>
+                <p class="text-sm text-muted-foreground mt-2">{prerequisite.description}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {enabledTopics.length > 0 && (
+        <section class="mt-16 space-y-6">
+          <div>
+            <h2 class="text-2xl font-semibold">What this enables</h2>
+            <p class="text-sm text-muted-foreground mt-2">
+              Once the current design feels natural, these are the best next systems to tackle.
+            </p>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {enabledTopics.map(enabled => (
+              <a href={`/system-design/${enabled.slug}`} class="block rounded-2xl border border-border bg-card p-5 transition-colors hover:border-primary/40 hover:shadow-sm">
+                <div class="flex flex-wrap gap-2 mb-3">
+                  <Badge client:load variant="outline" class="text-[11px]">{enabled.familyLabel}</Badge>
+                  <Badge client:load variant="secondary" class="text-[11px]">{enabled.kindLabel}</Badge>
+                </div>
+                <h3 class="text-base font-semibold">{enabled.title}</h3>
+                <p class="text-sm text-muted-foreground mt-2">{enabled.description}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {relatedTopics.length > 0 && (
+        <section class="mt-16 space-y-6">
+          <div>
+            <h2 class="text-2xl font-semibold">Related directions</h2>
+            <p class="text-sm text-muted-foreground mt-2">
+              These topics live nearby conceptually, even if they are not strict prerequisites.
+            </p>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {relatedTopics.map(related => (
+              <a href={`/system-design/${related.slug}`} class="block rounded-2xl border border-border bg-card p-5 transition-colors hover:border-primary/40 hover:shadow-sm">
+                <div class="flex flex-wrap gap-2 mb-3">
+                  <Badge client:load variant="outline" class="text-[11px]">{related.familyLabel}</Badge>
+                  <Badge client:load variant="secondary" class="text-[11px]">{related.kindLabel}</Badge>
+                </div>
+                <h3 class="text-base font-semibold">{related.title}</h3>
+                <p class="text-sm text-muted-foreground mt-2">{related.description}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {familyPeers.length > 0 && (
+        <section class="mt-16 space-y-6">
+          <div>
+            <h2 class="text-2xl font-semibold">More from {topic.familyLabel}</h2>
+            <p class="text-sm text-muted-foreground mt-2">
+              Stay in the same family when you want to compare parallel mechanisms inside one systems concern.
+            </p>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {familyPeers.map(peer => (
+              <a href={`/system-design/${peer.slug}`} class="block rounded-2xl border border-border bg-card p-5 transition-colors hover:border-primary/40 hover:shadow-sm">
+                <div class="flex flex-wrap gap-2 mb-3">
+                  <Badge client:load variant="outline" class="text-[11px]">{peer.familyLabel}</Badge>
+                  <Badge client:load variant="secondary" class="text-[11px]">{peer.kindLabel}</Badge>
+                </div>
+                <h3 class="text-base font-semibold">{peer.title}</h3>
+                <p class="text-sm text-muted-foreground mt-2">{peer.description}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {pathMemberships.length > 0 && (
+        <section class="mt-16 space-y-6">
+          <div>
+            <h2 class="text-2xl font-semibold">Paths that include this topic</h2>
+            <p class="text-sm text-muted-foreground mt-2">
+              Follow one of these sequences if you want a guided next step instead of open-ended browsing.
+            </p>
+          </div>
+
+          <div class="grid gap-4 lg:grid-cols-2">
+            {pathMemberships.map(path => (
+              <div class="rounded-2xl border border-border bg-card p-5 space-y-4">
+                <div>
+                  <h3 class="text-lg font-semibold">{path.title}</h3>
+                  <p class="text-sm text-muted-foreground mt-2">{path.description}</p>
+                </div>
+
+                <div class="flex flex-wrap gap-2">
+                  {path.steps.map(step => (
+                    <a
+                      href={`/system-design/${step.slug}`}
+                      class={`rounded-full border px-3 py-1.5 text-xs transition-colors ${step.slug === topic.slug ? 'border-primary bg-primary text-primary-foreground' : 'border-border hover:border-primary/40'}`}
+                    >
+                      {step.title}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <RelatedPosts
+        client:load
+        title="From the blog"
+        description="Pair the atlas with the broader engineering writing on the site when you want editorial context around the systems mechanisms."
+        posts={relatedBlogPosts}
+      />
+    </article>
+
+    <footer class="py-16 px-8 border-t border-border mt-20">
+      <div class="max-w-6xl mx-auto text-center text-sm text-muted-foreground">
+        <p>© {new Date().getFullYear()} Napolitain. Built with Astro, Svelte & TypeScript.</p>
+      </div>
+    </footer>
+  </div>
+</Layout>

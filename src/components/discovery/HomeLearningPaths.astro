@@ -5,15 +5,18 @@ import DiscoveryCardGrid from '@/components/discovery/DiscoveryCardGrid.astro';
 import { getHomepageDiscoveryCards } from '@/lib/discovery';
 import { buildDsaDirectory } from '@/lib/dsa';
 import { buildGraphicsDirectory } from '@/lib/graphics';
+import { buildSystemDesignDirectory } from '@/lib/system-design';
 
-const [dsaEntries, graphicsEntries] = await Promise.all([
+const [dsaEntries, graphicsEntries, systemDesignEntries] = await Promise.all([
   getCollection('dsa', ({ data }) => (import.meta.env.PROD ? data.draft !== true : true)),
   getCollection('graphics', ({ data }) => (import.meta.env.PROD ? data.draft !== true : true)),
+  getCollection('system-design', ({ data }) => (import.meta.env.PROD ? data.draft !== true : true)),
 ]);
 
 const items = getHomepageDiscoveryCards(
   buildDsaDirectory(dsaEntries),
   buildGraphicsDirectory(graphicsEntries),
+  buildSystemDesignDirectory(systemDesignEntries),
 );
 ---
 
@@ -21,7 +24,7 @@ const items = getHomepageDiscoveryCards(
   <div class="max-w-6xl mx-auto">
     <DiscoveryCardGrid
       title="Start learning with a path, not a blank slate"
-      description="Pick a curated route into the DSA and graphics atlases, or jump straight into unified search when you want to browse the whole site from one place."
+      description="Pick a curated route into the DSA, system design, or graphics atlases, or jump straight into unified search when you want to browse the whole site from one place."
       items={items}
       ctaHref="/search"
       ctaLabel="Open discovery"

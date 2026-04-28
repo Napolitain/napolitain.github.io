@@ -7,8 +7,8 @@
   const STORAGE_KEY = 'atlas-recent-history';
 
   export let title = 'Recently viewed atlas topics';
-  export let description = 'Jump back into the last DSA and graphics topics you opened.';
-  export let section: 'all' | 'dsa' | 'graphics' = 'all';
+  export let description = 'Jump back into the last DSA, system design, and graphics topics you opened.';
+  export let section: 'all' | 'dsa' | 'graphics' | 'system-design' = 'all';
   export let currentItem: AtlasHistoryItemInput | undefined;
   export let limit = 6;
 

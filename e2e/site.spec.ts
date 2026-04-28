@@ -27,6 +27,7 @@ test('home page renders core entry points', async ({ page }) => {
   await expect(page.getByRole('button', { name: /switch to dark mode/i })).toBeVisible();
   await expect(page.getByRole('heading', { level: 2, name: /start learning with a path/i })).toBeVisible();
   await expect(page.locator('a[href="/dsa?path=graph-toolkit"]').first()).toBeVisible();
+  await expect(page.locator('a[href="/system-design?path=traffic-control-core"]').first()).toBeVisible();
   await expect(page.locator('a[href="/search"]').filter({ hasText: /search the whole site/i }).first()).toBeVisible();
 });
 
@@ -40,6 +41,23 @@ test('main sections and DSA topic navigation work', async ({ page }) => {
   await page.locator('a[href="/graphics"]').first().click();
   await expect(page).toHaveURL(/\/graphics\/?$/);
   await expect(page.getByRole('heading', { level: 1, name: 'Graphics Atlas' })).toBeVisible();
+
+  await page.goto('/system-design');
+  await page.waitForLoadState('networkidle');
+  await expect(page).toHaveURL(/\/system-design\/?$/);
+  await expect(page.getByRole('heading', { level: 1, name: 'System Design Atlas' })).toBeVisible();
+
+  const systemDesignSearchInput = page.getByRole('searchbox', { name: /search system design topics/i });
+  await systemDesignSearchInput.fill('token bucket');
+  await expect.poll(() => new URL(page.url()).searchParams.get('q')).toBe('token bucket');
+
+  const rateLimiterLink = page.locator('a[href="/system-design/designing-a-rate-limiter"]').first();
+  await expect(rateLimiterLink).toBeVisible();
+  await rateLimiterLink.click();
+
+  await expect(page).toHaveURL(/\/system-design\/designing-a-rate-limiter\/?$/);
+  await expect(page.getByRole('heading', { level: 1, name: /Designing a Rate Limiter/i })).toBeVisible();
+  await expect(page.getByRole('navigation', { name: 'Breadcrumb' })).toContainText('System Design Atlas');
 
   await page.goto('/dsa');
   await page.waitForLoadState('networkidle');

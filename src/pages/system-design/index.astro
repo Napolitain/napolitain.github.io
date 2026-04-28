@@ -1,0 +1,63 @@
+---
+import AtlasBreadcrumbs from '@/components/discovery/AtlasBreadcrumbs.astro';
+import RecentAtlasHistory from '@/components/discovery/RecentAtlasHistory.svelte';
+import SystemDesignIndex from '@/components/system-design/SystemDesignIndex.svelte';
+import Layout from '@/layouts/Layout.astro';
+import { buildSystemDesignDirectory } from '@/lib/system-design';
+import { getCollection } from 'astro:content';
+
+const allTopics = await getCollection('system-design', ({ data }) => {
+  return import.meta.env.PROD ? data.draft !== true : true;
+});
+
+const directory = buildSystemDesignDirectory(allTopics);
+---
+
+<Layout
+  title="System Design Atlas - Napolitain"
+  description="Study production-grade system design topics by family, trade-off, and what each design unlocks next."
+>
+  <div class="min-h-screen">
+    <section class="px-8 pt-40 pb-20 mt-20">
+      <div class="max-w-6xl mx-auto text-center space-y-6">
+        <div class="text-left">
+          <AtlasBreadcrumbs sectionLabel="System Design Atlas" sectionHref="/system-design" currentTitle="Overview" />
+        </div>
+        <p class="text-sm uppercase tracking-[0.4em] text-muted-foreground">System design</p>
+        <h1 class="text-5xl md:text-6xl font-bold">System Design Atlas</h1>
+        <p class="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          Learn production systems by mechanism and trade-off, not by memorizing one canned answer per interview prompt.
+        </p>
+      </div>
+    </section>
+
+    <section class="pb-40 px-8">
+      <div class="max-w-6xl mx-auto space-y-10">
+        <RecentAtlasHistory
+          client:load
+          title="Recently viewed atlas topics"
+          description="Keep your last DSA, system design, and graphics stops close while you move between implementation details and broader architecture."
+        />
+        {directory.topics.length === 0 ? (
+          <div class="text-center py-20">
+            <p class="text-muted-foreground text-lg">No system design topics yet. Check back soon!</p>
+          </div>
+        ) : (
+          <SystemDesignIndex
+            client:load
+            topics={directory.topics}
+            families={directory.families}
+            paths={directory.paths}
+            stats={directory.stats}
+          />
+        )}
+      </div>
+    </section>
+
+    <footer class="py-16 px-8 border-t border-border">
+      <div class="max-w-6xl mx-auto text-center text-sm text-muted-foreground">
+        <p>© {new Date().getFullYear()} Napolitain. Built with Astro, Svelte & TypeScript.</p>
+      </div>
+    </footer>
+  </div>
+</Layout>

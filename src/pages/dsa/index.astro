@@ -33,10 +33,37 @@ const directory = buildDsaDirectory(allTopics);
 
     <section class="pb-40 px-8">
       <div class="max-w-6xl mx-auto space-y-10">
+        <section class="rounded-3xl border border-border bg-card p-6 md:p-8">
+          <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div class="max-w-3xl space-y-3">
+              <p class="text-xs uppercase tracking-[0.3em] text-muted-foreground">New learning track</p>
+              <h2 class="text-2xl font-semibold">System design now sits alongside the DSA atlas</h2>
+              <p class="text-sm md:text-base text-muted-foreground leading-relaxed">
+                If you want to move from algorithmic building blocks into production architecture, start the new system design atlas with a deep dive on designing a rate limiter at scale.
+              </p>
+            </div>
+
+            <div class="flex flex-col gap-3 sm:flex-row">
+              <a
+                href="/system-design"
+                class="inline-flex items-center justify-center rounded-full border border-border px-4 py-2 text-sm font-medium transition-colors hover:border-primary/40 hover:text-primary"
+              >
+                Open system design atlas
+              </a>
+              <a
+                href="/system-design/designing-a-rate-limiter"
+                class="inline-flex items-center justify-center rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+              >
+                Read rate limiter deep dive
+              </a>
+            </div>
+          </div>
+        </section>
+
         <RecentAtlasHistory
           client:load
           title="Recently viewed atlas topics"
-          description="Keep your last DSA and graphics visits close while you continue exploring the atlas."
+          description="Keep your last DSA, system design, and graphics visits close while you continue exploring the atlas."
         />
         {directory.topics.length === 0 ? (
           <div class="text-center py-20">

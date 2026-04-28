@@ -135,9 +135,9 @@
 <section class="rounded-3xl border border-border bg-card p-6 md:p-8 shadow-sm">
   <div class="space-y-4 mb-6">
     <p class="text-xs uppercase tracking-[0.3em] text-muted-foreground">Unified search</p>
-    <h2 class="text-2xl md:text-3xl font-semibold text-foreground">Search blog posts, atlas topics, and demos together</h2>
+    <h2 class="text-2xl md:text-3xl font-semibold text-foreground">Search posts, atlases, and demos together</h2>
     <p class="max-w-3xl text-sm md:text-base text-muted-foreground">
-      This page uses the same Pagefind index as the keyboard search modal, but keeps the results visible so you can browse, refine, and jump between sections without losing context.
+      This page uses the same Pagefind index as the keyboard search modal, but keeps the results visible so you can browse, refine, and jump between system design, DSA, graphics, blog posts, and demos without losing context.
     </p>
   </div>
 

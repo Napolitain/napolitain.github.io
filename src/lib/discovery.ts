@@ -3,24 +3,31 @@ import type { CollectionEntry } from 'astro:content';
 import { getReadingTime } from './blog-utils';
 import type { DsaDirectoryData, DsaLearningPath, DsaTopicCardData } from './dsa';
 import type { GraphicsDirectoryData, GraphicsLearningPath, GraphicsTopicCardData } from './graphics';
+import type {
+  SystemDesignDirectoryData,
+  SystemDesignLearningPath,
+  SystemDesignTopicCardData,
+} from './system-design';
 
-type AtlasSection = 'dsa' | 'graphics';
+type AtlasSection = 'dsa' | 'graphics' | 'system-design';
 
-type PathWithSteps = DsaLearningPath | GraphicsLearningPath;
-type TopicWithTags = DsaTopicCardData | GraphicsTopicCardData;
+type PathWithSteps = DsaLearningPath | GraphicsLearningPath | SystemDesignLearningPath;
+type TopicWithTags = DsaTopicCardData | GraphicsTopicCardData | SystemDesignTopicCardData;
 type AtlasTopicForBlogLinks = Pick<
-  DsaTopicCardData | GraphicsTopicCardData,
+  DsaTopicCardData | GraphicsTopicCardData | SystemDesignTopicCardData,
   'title' | 'description' | 'tags' | 'familyLabel' | 'kindLabel' | 'difficultyLabel'
 >;
 
 const SECTION_LABELS: Record<AtlasSection, string> = {
   dsa: 'DSA Atlas',
   graphics: 'Graphics Atlas',
+  'system-design': 'System Design Atlas',
 };
 
 const DEFAULT_PATH_IDS: Record<AtlasSection, string[]> = {
   dsa: ['graph-toolkit', 'range-query-toolkit'],
   graphics: ['filtering-stack', 'raster-pipeline'],
+  'system-design': ['traffic-control-core', 'global-policy-enforcement'],
 };
 
 const STOPWORDS = new Set([
@@ -216,17 +223,19 @@ function toBlogPostPreview(entry: CollectionEntry<'blog'>): BlogPostPreview {
 export function getHomepageDiscoveryCards(
   dsaDirectory: DsaDirectoryData,
   graphicsDirectory: GraphicsDirectoryData,
+  systemDesignDirectory: SystemDesignDirectoryData,
 ): DiscoveryCardLink[] {
   return [
     ...selectPathCards('dsa', dsaDirectory.paths, dsaDirectory.topicBySlug, new Set(), 2),
+    ...selectPathCards('system-design', systemDesignDirectory.paths, systemDesignDirectory.topicBySlug, new Set(), 2),
     ...selectPathCards('graphics', graphicsDirectory.paths, graphicsDirectory.topicBySlug, new Set(), 2),
     {
       href: '/search',
       eyebrow: 'Discovery',
       title: 'Search the whole site',
-      description: 'Search blog posts, atlas topics, graphics demos, and experiments from one place instead of jumping between sections.',
+      description: 'Search blog posts, system design, atlas topics, graphics demos, and experiments from one place instead of jumping between sections.',
       meta: 'Unified search',
-      badges: ['Blog', 'DSA', 'Graphics'],
+      badges: ['Blog', 'DSA', 'System Design', 'Graphics'],
     },
   ];
 }
@@ -235,6 +244,7 @@ export function getBlogAtlasSuggestions(
   entry: CollectionEntry<'blog'>,
   dsaDirectory: DsaDirectoryData,
   graphicsDirectory: GraphicsDirectoryData,
+  systemDesignDirectory: SystemDesignDirectoryData,
 ): DiscoveryCardLink[] {
   const sourceTokens = buildTokenSet([
     entry.data.title,
@@ -245,14 +255,15 @@ export function getBlogAtlasSuggestions(
 
   return [
     ...selectPathCards('dsa', dsaDirectory.paths, dsaDirectory.topicBySlug, sourceTokens, 2),
+    ...selectPathCards('system-design', systemDesignDirectory.paths, systemDesignDirectory.topicBySlug, sourceTokens, 2),
     ...selectPathCards('graphics', graphicsDirectory.paths, graphicsDirectory.topicBySlug, sourceTokens, 2),
     {
       href: '/search',
       eyebrow: 'Discovery',
       title: 'Search across the whole site',
-      description: 'Jump from writing into the atlases, demos, and other content when you want a faster way to connect the dots.',
+      description: 'Jump from writing into the system design, DSA, graphics, demos, and other content when you want a faster way to connect the dots.',
       meta: 'Unified search',
-      badges: ['Ctrl+K', 'Pagefind'],
+      badges: ['Ctrl+K', 'Pagefind', 'Atlases'],
     },
   ];
 }
