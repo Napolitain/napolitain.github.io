@@ -8,8 +8,8 @@ family: "traffic-management"
 kind: "end-to-end-design"
 difficulty: "advanced"
 prerequisites: []
-related: ["idempotency-and-retries", "feature-flags-control-plane"]
-enables: ["global-quotas", "load-shedding"]
+related: ["token-bucket-gcra-and-virtual-time", "idempotency-and-retries", "feature-flags-control-plane"]
+enables: ["feedback-control-for-autoscaling-and-load-shedding", "global-quotas", "load-shedding"]
 ---
 
 ## Problem

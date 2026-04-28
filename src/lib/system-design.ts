@@ -95,12 +95,16 @@ const systemDesignPathDefinitions = [
   {
     id: 'traffic-control-core',
     title: 'Traffic control core',
-    description: 'Start with a production-grade rate limiter, then expand into retries, circuit breaking, and load shedding as the system design track grows.',
+    description: 'Start with bucket math, then move into rate limiting, reliability controls, feedback loops, and saturation management.',
     slugs: [
+      'token-bucket-gcra-and-virtual-time',
       'designing-a-rate-limiter',
       'idempotency-and-retries',
       'circuit-breakers',
+      'feedback-control-for-autoscaling-and-load-shedding',
+      'anti-windup-hysteresis-and-oscillation',
       'load-shedding',
+      'global-quotas',
     ],
   },
   {
@@ -111,6 +115,19 @@ const systemDesignPathDefinitions = [
       'designing-a-rate-limiter',
       'feature-flags-control-plane',
       'distributed-locking',
+      'global-quotas',
+    ],
+  },
+  {
+    id: 'control-loops-stability',
+    title: 'Control loops and stability',
+    description: 'Connect integrators, PI-style controllers, hysteresis, anti-windup, and oscillation detection to the distributed systems that use them.',
+    slugs: [
+      'token-bucket-gcra-and-virtual-time',
+      'designing-a-rate-limiter',
+      'feedback-control-for-autoscaling-and-load-shedding',
+      'anti-windup-hysteresis-and-oscillation',
+      'load-shedding',
       'global-quotas',
     ],
   },

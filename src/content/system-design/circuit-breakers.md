@@ -8,8 +8,8 @@ family: "reliability"
 kind: "building-block"
 difficulty: "advanced"
 prerequisites: ["idempotency-and-retries"]
-related: ["designing-a-rate-limiter", "load-shedding"]
-enables: ["load-shedding"]
+related: ["designing-a-rate-limiter", "anti-windup-hysteresis-and-oscillation", "load-shedding"]
+enables: ["feedback-control-for-autoscaling-and-load-shedding", "load-shedding"]
 ---
 
 ## Problem

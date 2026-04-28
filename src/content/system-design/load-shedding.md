@@ -8,7 +8,7 @@ family: "traffic-management"
 kind: "end-to-end-design"
 difficulty: "advanced"
 prerequisites: ["circuit-breakers"]
-related: ["designing-a-rate-limiter", "global-quotas", "idempotency-and-retries"]
+related: ["designing-a-rate-limiter", "feedback-control-for-autoscaling-and-load-shedding", "anti-windup-hysteresis-and-oscillation", "global-quotas", "idempotency-and-retries"]
 enables: []
 ---
 

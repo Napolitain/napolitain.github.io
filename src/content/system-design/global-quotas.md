@@ -8,7 +8,7 @@ family: "traffic-management"
 kind: "end-to-end-design"
 difficulty: "advanced"
 prerequisites: ["designing-a-rate-limiter", "distributed-locking"]
-related: ["feature-flags-control-plane", "load-shedding"]
+related: ["feature-flags-control-plane", "feedback-control-for-autoscaling-and-load-shedding", "load-shedding"]
 enables: []
 ---
 
