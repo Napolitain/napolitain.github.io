@@ -7,12 +7,7 @@ import Badge from '@/components/ui/badge.svelte';
 import RelatedPosts from '@/components/RelatedPosts.svelte';
 import ReadingProgress from '@/components/ReadingProgress.svelte';
 import TableOfContents from '@/components/TableOfContents.svelte';
-import DiscoveryCardGrid from '@/components/discovery/DiscoveryCardGrid.astro';
 import { getReadingTime, getRelatedPosts } from '@/lib/blog-utils';
-import { getBlogAtlasSuggestions } from '@/lib/discovery';
-import { buildDsaDirectory } from '@/lib/dsa';
-import { buildGraphicsDirectory } from '@/lib/graphics';
-import { buildSystemDesignDirectory } from '@/lib/system-design';
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection('blog', ({ data }) => {
@@ -43,17 +38,6 @@ function formatDate(date: Date): string {
 
 const readingTime = getReadingTime(entry.body);
 const relatedPosts = getRelatedPosts(entry, allPosts);
-const [dsaEntries, graphicsEntries, systemDesignEntries] = await Promise.all([
-  getCollection('dsa', ({ data }) => (import.meta.env.PROD ? data.draft !== true : true)),
-  getCollection('graphics', ({ data }) => (import.meta.env.PROD ? data.draft !== true : true)),
-  getCollection('system-design', ({ data }) => (import.meta.env.PROD ? data.draft !== true : true)),
-]);
-const atlasSuggestions = getBlogAtlasSuggestions(
-  entry,
-  buildDsaDirectory(dsaEntries),
-  buildGraphicsDirectory(graphicsEntries),
-  buildSystemDesignDirectory(systemDesignEntries),
-);
 
 // Schema.org JSON-LD
 const schema = {
@@ -136,14 +120,6 @@ const schema = {
     <!-- Article Content -->
       <div class="prose prose-lg prose-slate dark:prose-invert max-w-3xl mx-auto font-serif">
         <Content />
-      </div>
-
-      <div class="mt-20">
-        <DiscoveryCardGrid
-          title="Keep exploring across the site"
-          description="Use this post as a jumping-off point into the DSA atlas, the graphics atlas, or the dedicated discovery page when you want a more structured next step."
-          items={atlasSuggestions}
-        />
       </div>
 
       <RelatedPosts client:load posts={relatedPosts.map(post => ({
