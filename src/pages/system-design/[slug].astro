@@ -1,5 +1,6 @@
 ---
 import AtlasBreadcrumbs from '@/components/discovery/AtlasBreadcrumbs.astro';
+import DiagramRenderer from '@/components/DiagramRenderer.astro';
 import RecentAtlasHistory from '@/components/discovery/RecentAtlasHistory.svelte';
 import ReadingProgress from '@/components/ReadingProgress.svelte';
 import TableOfContents from '@/components/TableOfContents.svelte';
@@ -342,3 +343,4 @@ const relatedBlogPosts = getBlogPostsForAtlasTopic(topic, blogEntries);
     </footer>
   </div>
 </Layout>
+<DiagramRenderer />

@@ -4,6 +4,7 @@ import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import { Calendar, Tag, ArrowLeft, Clock } from 'phosphor-svelte';
 import Badge from '@/components/ui/badge.svelte';
+import DiagramRenderer from '@/components/DiagramRenderer.astro';
 import RelatedPosts from '@/components/RelatedPosts.svelte';
 import ReadingProgress from '@/components/ReadingProgress.svelte';
 import TableOfContents from '@/components/TableOfContents.svelte';
@@ -140,45 +141,4 @@ const schema = {
     </footer>
   </div>
 </Layout>
-
-<script>
-  import mermaid from 'mermaid';
-
-  mermaid.initialize({ 
-    startOnLoad: false, 
-    theme: 'base',
-    themeVariables: {
-      fontFamily: 'Inter, sans-serif',
-      primaryColor: '#f4f4f5', // zinc-100
-      primaryTextColor: '#18181b', // zinc-900
-      primaryBorderColor: '#e4e4e7', // zinc-200
-      lineColor: '#71717a', // zinc-500
-      secondaryColor: '#fafafa', // zinc-50
-      tertiaryColor: '#ffffff', // white
-    }
-  });
-
-  async function renderMermaid() {
-    // Target the pre element directly, as Shiki puts the language there
-    const graphs = document.querySelectorAll('pre[data-language="mermaid"]');
-    
-    for (const graph of graphs) {
-      const content = graph.textContent;
-      
-      if (content) {
-        const div = document.createElement('div');
-        div.classList.add('mermaid');
-        div.textContent = content;
-        div.style.textAlign = 'center';
-        graph.replaceWith(div);
-      }
-    }
-
-    await mermaid.run({
-      querySelector: '.mermaid'
-    });
-  }
-
-  renderMermaid();
-  document.addEventListener('astro:page-load', renderMermaid);
-</script>
+<DiagramRenderer />

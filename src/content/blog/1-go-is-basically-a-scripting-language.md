@@ -25,36 +25,82 @@ If the point of a scripting language is that you get a fast feedback loop and lo
 
 This is roughly what the modern typed Node.js workflow looks like:
 
-```mermaid
-graph TB
+```d2
+direction: right
 
-subgraph "Development"
-    A[Code .ts] --> B[npm install]
-    B --> C[npx tsc]
-    C --> D[node dist/rectangle.js]
-end
+development: {
+  label: "Development"
 
-subgraph "Production"
-    A --> E[npm install]
-    E --> F[npx tsc --noEmit]
-    F --> G[npx esbuild rectangle.ts --bundle --minify]
-    G --> H[node rectangle.min.cjs]
-end
+  source: "Code .ts"
+  install: "npm install"
+  compile: "npx tsc"
+  run: "node dist/rectangle.js"
+
+  source -> install: {
+    style.animated: true
+  }
+  install -> compile: {
+    style.animated: true
+  }
+  compile -> run: {
+    style.animated: true
+  }
+}
+
+production: {
+  label: "Production"
+
+  source: "Code .ts"
+  install: "npm install"
+  typecheck: "npx tsc --noEmit"
+  bundle: "npx esbuild rectangle.ts --bundle --minify"
+  run: "node rectangle.min.cjs"
+
+  source -> install: {
+    style.animated: true
+  }
+  install -> typecheck: {
+    style.animated: true
+  }
+  typecheck -> bundle: {
+    style.animated: true
+  }
+  bundle -> run: {
+    style.animated: true
+  }
+}
 ```
 
 And this is Go:
 
-```mermaid
-graph TB
+```d2
+direction: right
 
-subgraph "Development"
-    A[Code .go] --> B[go run rectangle.go]
-end
+development: {
+  label: "Development"
 
-subgraph "Production"
-    A --> C[go build -o rectangle]
-    C --> D[./rectangle]
-end
+  source: "Code .go"
+  run: "go run rectangle.go"
+
+  source -> run: {
+    style.animated: true
+  }
+}
+
+production: {
+  label: "Production"
+
+  source: "Code .go"
+  build: "go build -o rectangle"
+  run: "./rectangle"
+
+  source -> build: {
+    style.animated: true
+  }
+  build -> run: {
+    style.animated: true
+  }
+}
 ```
 
 That is why I call Go a scripting language. Not because it lacks a compiler, but because the compiler is cheap enough that it stops being the point.

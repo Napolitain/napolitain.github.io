@@ -67,13 +67,31 @@ Same final result. More risk. More labor. Zero gain.
 
 If the branch is going to become one squashed commit in main, then rebasing it first was pure waste.
 
-```mermaid
-flowchart LR
-    A["Feature work<br/>B1 -> B2 -> B3"] --> B["Rebase<br/>B1' -> B2' -> B3'"]
-    B --> C["Resolve conflicts again"]
-    C --> D["Force push"]
-    D --> E["Squash merge"]
-    E --> F["One final commit<br/>S1"]
+```d2
+direction: right
+
+work: "Feature work\nB1 -> B2 -> B3"
+rebase: "Rebase\nB1' -> B2' -> B3'"
+conflicts: "Resolve conflicts again"
+force: "Force push"
+squash: "Squash merge"
+final: "One final commit\nS1"
+
+work -> rebase: {
+  style.animated: true
+}
+rebase -> conflicts: {
+  style.animated: true
+}
+conflicts -> force: {
+  style.animated: true
+}
+force -> squash: {
+  style.animated: true
+}
+squash -> final: {
+  style.animated: true
+}
 ```
 
 ## If you do not squash, you kept linear garbage
@@ -108,19 +126,50 @@ If your branch has three commits and all three collide with incoming changes, yo
 
 Rebase does not remove complexity. It spreads the same complexity across multiple artificial steps and calls that "clean."
 
-```mermaid
-flowchart LR
-    subgraph Merge
-        M1["Feature branch diverged"] --> M2["Resolve conflicts once"] --> M3["Done"]
-    end
+```d2
+direction: right
 
-    subgraph Rebase
-        R1["Replay B1"] --> R2["Resolve conflicts"]
-        R2 --> R3["Replay B2"]
-        R3 --> R4["Resolve conflicts"]
-        R4 --> R5["Replay B3"]
-        R5 --> R6["Resolve conflicts"]
-    end
+merge: {
+  label: "Merge"
+
+  diverged: "Feature branch diverged"
+  once: "Resolve conflicts once"
+  done: "Done"
+
+  diverged -> once: {
+    style.animated: true
+  }
+  once -> done: {
+    style.animated: true
+  }
+}
+
+rebase: {
+  label: "Rebase"
+
+  replay1: "Replay B1"
+  conflict1: "Resolve conflicts"
+  replay2: "Replay B2"
+  conflict2: "Resolve conflicts"
+  replay3: "Replay B3"
+  conflict3: "Resolve conflicts"
+
+  replay1 -> conflict1: {
+    style.animated: true
+  }
+  conflict1 -> replay2: {
+    style.animated: true
+  }
+  replay2 -> conflict2: {
+    style.animated: true
+  }
+  conflict2 -> replay3: {
+    style.animated: true
+  }
+  replay3 -> conflict3: {
+    style.animated: true
+  }
+}
 ```
 
 ## Conclusion

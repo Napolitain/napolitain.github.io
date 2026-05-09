@@ -5,6 +5,7 @@ import ReadingProgress from '@/components/ReadingProgress.svelte';
 import DsaCompareBlock from '@/components/dsa/DsaCompareBlock.astro';
 import DsaNextStepRail from '@/components/dsa/DsaNextStepRail.astro';
 import DsaVisualization from '@/components/dsa/DsaVisualization.svelte';
+import DiagramRenderer from '@/components/DiagramRenderer.astro';
 import TableOfContents from '@/components/TableOfContents.svelte';
 import Badge from '@/components/ui/badge.svelte';
 import Layout from '@/layouts/Layout.astro';
@@ -347,3 +348,4 @@ const relatedBlogPosts = getBlogPostsForAtlasTopic(topic, blogEntries);
     </footer>
   </div>
 </Layout>
+<DiagramRenderer />

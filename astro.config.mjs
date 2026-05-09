@@ -3,6 +3,7 @@ import react from '@astrojs/react';
 import svelte from '@astrojs/svelte';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
+import remarkPrerenderD2 from './src/lib/remark-prerender-d2.mjs';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 
@@ -10,7 +11,7 @@ import rehypeKatex from 'rehype-katex';
 export default defineConfig({
   site: 'https://napolitain.github.io',
   markdown: {
-    remarkPlugins: [remarkMath],
+    remarkPlugins: [remarkMath, remarkPrerenderD2],
     rehypePlugins: [rehypeKatex],
     shikiConfig: {
       themes: {
