@@ -7,9 +7,12 @@ import remarkPrerenderD2 from './src/lib/remark-prerender-d2.mjs';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 
+import cloudflare from "@astrojs/cloudflare";
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://napolitain.github.io',
+
   markdown: {
     remarkPlugins: [remarkMath, remarkPrerenderD2],
     rehypePlugins: [rehypeKatex],
@@ -21,7 +24,9 @@ export default defineConfig({
       wrap: true,
     },
   },
+
   integrations: [svelte(), react(), sitemap()],
+
   vite: {
     plugins: [tailwindcss()],
     resolve: {
@@ -29,5 +34,7 @@ export default defineConfig({
         '@': '/src'
       }
     }
-  }
+  },
+
+  adapter: cloudflare()
 });
